@@ -1,0 +1,7 @@
+package com.vuelosjanbi.planeRevisionEmployee.infrastructure.adapters.out;
+
+import com.vuelosjanbi.planeRevisionEmployee.infrastructure.repository.PlaneRevisionEmployeeRepository;
+
+public class MySQLPlaneRevisionEmployeeRepository implements PlaneRevisionEmployeeRepository {
+
+}
