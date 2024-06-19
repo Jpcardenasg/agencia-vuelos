@@ -67,7 +67,6 @@ public class CountryConsoleAdapter {
 
                 case 4:
                     System.out.println("List of Countries:");
-                    countries = countryService.getAllCountries();
                     countries.forEach(country -> {
                         System.out.printf("ID: %d =, Name: %s\n", country.getCountryId(), country.getCountryName());
                     });
