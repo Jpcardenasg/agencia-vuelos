@@ -1,20 +1,20 @@
-package com.vuelosjanbi.airline.application.ports.out;
+package com.vuelosjanbi.airport.application.ports.out;
 
 import java.util.List;
 import java.util.Optional;
 
 import com.vuelosjanbi.airline.domain.models.Airline;
 
-public interface AirlineRepositoryPort {
+public interface AirportRepositoryPort {
 
   Airline save(Airline airline);
 
-  void deleteById(Long airlineId);
+  Airline update(Airline airline);
+
+  void delete(Long airlineId);
 
   List<Airline> findAll();
 
   Optional<Airline> findById(Long airlineId);
-
-  Optional<Airline> findByName(String airlineName);
 
 }

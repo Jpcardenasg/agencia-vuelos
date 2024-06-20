@@ -28,7 +28,7 @@ public class MySQLCountryRepository implements CountryRepository {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "INSERT INTO country VALUES(?)";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setString(1, country.getCountryName());
+                statement.setString(1, country.getName());
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -41,8 +41,8 @@ public class MySQLCountryRepository implements CountryRepository {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "UPDATE country SET name = ? WHERE id = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setString(1, country.getCountryName());
-                statement.setInt(2, country.getCountryId());
+                statement.setString(1, country.getName());
+                statement.setLong(2, country.getId());
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -72,7 +72,7 @@ public class MySQLCountryRepository implements CountryRepository {
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
                         Country country = new Country(
-                                resultSet.getInt("id"),
+                                resultSet.getLong("id"),
                                 resultSet.getString("name"));
                         countries.add(country);
                     }

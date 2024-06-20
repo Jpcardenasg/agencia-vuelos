@@ -40,7 +40,7 @@ public class CountryConsoleAdapter {
                 case 2:
                     System.out.println("Choose the country you want to modify:");
                     countries.forEach(country -> {
-                        System.out.printf("ID: %d =, Name: %s\n", country.getCountryId(), country.getCountryName());
+                        System.out.printf("ID: %d =, Name: %s\n", country.getId(), country.getName());
                     });
 
                     int updateCountryId = scanner.nextInt();
@@ -56,7 +56,7 @@ public class CountryConsoleAdapter {
                 case 3:
                     System.out.println("Choose the country you want to delete:");
                     countries.forEach(country -> {
-                        System.out.printf("ID: %d =, Name: %s\n", country.getCountryId(), country.getCountryName());
+                        System.out.printf("ID: %d =, Name: %s\n", country.getId(), country.getName());
                     });
 
                     int deleteCountryId = scanner.nextInt();
@@ -68,7 +68,7 @@ public class CountryConsoleAdapter {
                 case 4:
                     System.out.println("List of Countries:");
                     countries.forEach(country -> {
-                        System.out.printf("ID: %d =, Name: %s\n", country.getCountryId(), country.getCountryName());
+                        System.out.printf("ID: %d =, Name: %s\n", country.getId(), country.getName());
                     });
 
                     break;

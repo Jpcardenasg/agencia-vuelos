@@ -42,7 +42,7 @@ public class MySQLCityRepository implements CityRepository {
             String query = "UPDATE city SET name = ? WHERE id = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, city.getCityName());
-                statement.setInt(2, city.getCityId());
+                statement.setLong(2, city.getId());
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -72,7 +72,7 @@ public class MySQLCityRepository implements CityRepository {
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
                         City city = new City(
-                                resultSet.getInt("id"),
+                                resultSet.getLong("id"),
                                 resultSet.getString("name"));
                         cities.add(city);
                     }
