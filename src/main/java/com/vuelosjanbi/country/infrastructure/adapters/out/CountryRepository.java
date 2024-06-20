@@ -7,6 +7,6 @@ import com.vuelosjanbi.country.application.ports.CountryRepositoryPort;
 import com.vuelosjanbi.country.domain.models.Country;
 
 @Repository
-public interface CountryRepository extends JpaRepository<Country, Long>, CountryRepositoryPort {
+public interface CountryRepository extends JpaRepository<Country, String>, CountryRepositoryPort {
 
 }

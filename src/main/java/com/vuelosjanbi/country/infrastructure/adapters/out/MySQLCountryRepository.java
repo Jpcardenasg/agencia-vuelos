@@ -42,7 +42,7 @@ public class MySQLCountryRepository implements CountryRepository {
             String query = "UPDATE country SET name = ? WHERE id = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, country.getName());
-                statement.setLong(2, country.getId());
+                statement.setString(2, country.getId());
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -72,7 +72,7 @@ public class MySQLCountryRepository implements CountryRepository {
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
                         Country country = new Country(
-                                resultSet.getLong("id"),
+                                resultSet.getString("id"),
                                 resultSet.getString("name"));
                         countries.add(country);
                     }
