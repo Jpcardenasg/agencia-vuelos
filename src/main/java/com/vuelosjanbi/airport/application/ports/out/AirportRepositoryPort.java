@@ -9,9 +9,7 @@ public interface AirportRepositoryPort {
 
   Airline save(Airline airline);
 
-  Airline update(Airline airline);
-
-  void delete(Long airlineId);
+  void deleteById(Long airlineId);
 
   List<Airline> findAll();
 
