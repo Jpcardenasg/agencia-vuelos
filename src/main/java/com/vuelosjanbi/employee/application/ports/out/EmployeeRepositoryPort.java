@@ -3,6 +3,7 @@ package com.vuelosjanbi.employee.application.ports.out;
 import java.util.List;
 import java.util.Optional;
 
+import com.vuelosjanbi.crewRole.domain.models.CrewRole;
 import com.vuelosjanbi.employee.domain.models.Employee;
 
 public interface EmployeeRepositoryPort {
@@ -14,5 +15,8 @@ public interface EmployeeRepositoryPort {
 
   List<Employee> findAll();
 
-  List<Employee> findByCrewRole(Long crewRoleId);
+  List<Employee> findByRolId(Long id);
+
+  List<Employee> findByRol(CrewRole Rol);
+
 }

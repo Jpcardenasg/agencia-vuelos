@@ -2,7 +2,7 @@ package com.vuelosjanbi.flightConnection.domain.models;
 
 import com.vuelosjanbi.airport.domain.models.Airport;
 import com.vuelosjanbi.plane.domain.models.Plane;
-import com.vuelosjanbi.trip.domain.models.Trip;
+// import com.vuelosjanbi.trip.domain.models.Trip;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,14 +15,15 @@ public class FlightConnection {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
-  private String connection_number;
+  private String connectionNumber;
 
-  @ManyToOne
-  private Trip trip;
+  // TODO:Cambiar el tipo a trip
+  // @ManyToOne
+  private String trip;
   @ManyToOne
   private Plane plane;
   @ManyToOne
-  private Airport origin;
+  private Airport airport;
 
   public Long getId() {
     return id;
@@ -32,19 +33,19 @@ public class FlightConnection {
     this.id = id;
   }
 
-  public String getConnection_number() {
-    return connection_number;
+  public String getConnectionNumber() {
+    return connectionNumber;
   }
 
-  public void setConnection_number(String connection_number) {
-    this.connection_number = connection_number;
+  public void setConnectionNumber(String connectionNumber) {
+    this.connectionNumber = connectionNumber;
   }
 
-  public Trip getTrip() {
+  public String getTrip() {
     return trip;
   }
 
-  public void setTrip(Trip trip) {
+  public void setTrip(String trip) {
     this.trip = trip;
   }
 
@@ -56,12 +57,12 @@ public class FlightConnection {
     this.plane = plane;
   }
 
-  public Airport getOrigin() {
-    return origin;
+  public Airport getAirport() {
+    return airport;
   }
 
-  public void setOrigin(Airport origin) {
-    this.origin = origin;
+  public void setAirport(Airport airport) {
+    this.airport = airport;
   }
 
 }

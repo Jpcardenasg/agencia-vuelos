@@ -18,7 +18,7 @@ public class Employee {
   private String name;
 
   @ManyToOne
-  private CrewRole crewRole;
+  private CrewRole rol;
 
   @ManyToOne
   private Airline airline;
@@ -42,12 +42,12 @@ public class Employee {
     this.name = name;
   }
 
-  public CrewRole getCrewRole() {
-    return crewRole;
+  public CrewRole getRol() {
+    return rol;
   }
 
-  public void setCrewRole(CrewRole crewRole) {
-    this.crewRole = crewRole;
+  public void setRol(CrewRole crewRole) {
+    this.rol = crewRole;
   }
 
   public Airline getAirline() {

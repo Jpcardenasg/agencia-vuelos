@@ -4,7 +4,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 
 @Entity
 public class Customer {
@@ -14,8 +13,8 @@ public class Customer {
   private String name;
   private Integer age;
 
-  @OneToMany(mappedBy = "customer")
-  private Integer dni;
+  // @OneToMany(mappedBy = "customer")
+  private Integer idDocument;
 
   public Long getId() {
     return id;
@@ -41,12 +40,12 @@ public class Customer {
     this.age = age;
   }
 
-  public Integer getDni() {
-    return dni;
+  public Integer getIdDocument() {
+    return idDocument;
   }
 
-  public void setDni(Integer dni) {
-    this.dni = dni;
+  public void setIdDocument(Integer idDocument) {
+    this.idDocument = idDocument;
   }
 
 }

@@ -2,20 +2,15 @@ package com.vuelosjanbi.country.domain.models;
 
 import java.util.List;
 
-import javax.print.DocFlavor.STRING;
-
 import com.vuelosjanbi.city.domain.models.City;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
 public class Country {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
     private String name;
 

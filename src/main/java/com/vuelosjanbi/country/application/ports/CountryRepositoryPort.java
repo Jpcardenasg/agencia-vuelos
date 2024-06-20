@@ -9,11 +9,11 @@ public interface CountryRepositoryPort {
 
   Country save(Country country);
 
-  void deleteById(int countryId);
+  void deleteById(String countryId);
 
   List<Country> findAll();
 
-  Optional<Country> findById(Long countryId);
+  Optional<Country> findById(String countryId);
 
   Optional<Country> findByName(String countryName);
 
