@@ -7,11 +7,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+import com.vuelosjanbi.city.application.ports.CityRepositoryPort;
 import com.vuelosjanbi.city.domain.models.City;
-import com.vuelosjanbi.city.infrastructure.repository.CityRepository;
 
-public class MySQLCityRepository implements CityRepository {
+public class MySQLCityRepository implements CityRepositoryPort {
 
     private final String url;
     private final String username;
@@ -24,7 +25,7 @@ public class MySQLCityRepository implements CityRepository {
     }
 
     @Override
-    public void save(City city) {
+    public City save(City city) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "INSERT INTO city VALUES(?)";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -34,28 +35,15 @@ public class MySQLCityRepository implements CityRepository {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return city;
     }
 
     @Override
-    public void update(City city) {
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String query = "UPDATE city SET name = ? WHERE id = ?";
-            try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setString(1, city.getCityName());
-                statement.setLong(2, city.getId());
-                statement.executeUpdate();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void delete(int cityId) {
+    public void deleteById(Long cityId) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "DELETE FROM city WHERE id = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setInt(1, cityId);
+                statement.setLong(1, cityId);
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -84,5 +72,25 @@ public class MySQLCityRepository implements CityRepository {
         }
 
         return cities;
+    }
+
+    @Override
+    public Optional<City> findById(Long cityId) {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            String query = "SELECT * FROM city WHERE id = ?";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setLong(1, cityId);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        return Optional.of(new City(
+                                resultSet.getLong("id"),
+                                resultSet.getString("name")));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
     }
 }

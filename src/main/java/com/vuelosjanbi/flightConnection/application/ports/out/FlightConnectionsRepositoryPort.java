@@ -16,4 +16,6 @@ public interface FlightConnectionsRepositoryPort {
 
   List<FlightConnection> findAll();
 
+  List<FlightConnection> findByPlanePlate(String plate);
+
 }

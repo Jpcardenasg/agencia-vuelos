@@ -59,7 +59,7 @@ public class CityConsoleAdapter {
                         System.out.printf("ID: %d =, Name: %s\n", City.getId(), City.getCityName());
                     });
 
-                    int deleteCityId = scanner.nextInt();
+                    Long deleteCityId = scanner.nextLong();
                     scanner.nextLine();
 
                     CityService.deleteCity(deleteCityId);

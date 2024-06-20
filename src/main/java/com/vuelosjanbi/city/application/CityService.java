@@ -2,30 +2,30 @@ package com.vuelosjanbi.city.application;
 
 import java.util.List;
 
+import com.vuelosjanbi.city.application.ports.CityRepositoryPort;
 import com.vuelosjanbi.city.domain.models.City;
-import com.vuelosjanbi.city.infrastructure.repository.CityRepository;
 
 public class CityService {
-    private final CityRepository cityRepository;
+    private final CityRepositoryPort CityRepositoryPort;
 
-    public CityService(CityRepository cityRepository) {
-        this.cityRepository = cityRepository;
+    public CityService(CityRepositoryPort cityRepository) {
+        this.CityRepositoryPort = cityRepository;
     }
 
     public void createCity(City city) {
-        cityRepository.save(city);
+        CityRepositoryPort.save(city);
     }
 
     public void updateCity(City city) {
-        cityRepository.update(city);
+        CityRepositoryPort.save(city);
     }
 
-    public void deleteCity(int idCity) {
-        cityRepository.delete(idCity);
+    public void deleteCity(Long idCity) {
+        CityRepositoryPort.deleteById(idCity);
     }
 
     public List<City> getAllCities() {
-        return cityRepository.findAll();
+        return CityRepositoryPort.findAll();
     }
 
 }

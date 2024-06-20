@@ -12,7 +12,7 @@ public class Plane {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String plates;
+    private String plate;
     private Integer capacity;
     private LocalDate fabricationDate;
 
@@ -28,12 +28,12 @@ public class Plane {
         this.id = id;
     }
 
-    public String getPlates() {
-        return plates;
+    public String getPlate() {
+        return plate;
     }
 
-    public void setPlates(String plates) {
-        this.plates = plates;
+    public void setPlate(String plates) {
+        this.plate = plates;
     }
 
     public Integer getCapacity() {

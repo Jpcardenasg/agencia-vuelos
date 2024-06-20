@@ -1,15 +1,16 @@
 package com.vuelosjanbi.city.application.ports;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.vuelosjanbi.city.domain.models.City;
 
 public interface CityRepositoryPort {
   City save(City city);
 
-  void deleteById(int cityId);
+  void deleteById(Long cityId);
 
   List<City> findAll();
 
-  City findById(int cityId);
+  Optional<City> findById(Long cityId);
 }
