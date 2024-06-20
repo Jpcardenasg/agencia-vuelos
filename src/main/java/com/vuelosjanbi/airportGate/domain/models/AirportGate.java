@@ -13,7 +13,7 @@ public class AirportGate {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  private String gateNumber;
+  private String gate;
 
   @ManyToOne
   Airport airport;
@@ -26,12 +26,12 @@ public class AirportGate {
     this.id = id;
   }
 
-  public String getGateNumber() {
-    return gateNumber;
+  public String getGate() {
+    return gate;
   }
 
-  public void setGateNumber(String gateNumber) {
-    this.gateNumber = gateNumber;
+  public void setGate(String gateNumber) {
+    this.gate = gateNumber;
   }
 
   public Airport getAirport() {

@@ -3,16 +3,18 @@ package com.vuelosjanbi.airport.application.ports.out;
 import java.util.List;
 import java.util.Optional;
 
-import com.vuelosjanbi.airline.domain.models.Airline;
+import com.vuelosjanbi.airport.domain.models.Airport;
 
 public interface AirportRepositoryPort {
 
-  Airline save(Airline airline);
+  Airport save(Airport airport);
 
-  void deleteById(Long airlineId);
+  void deleteById(Long airportId);
 
-  List<Airline> findAll();
+  List<Airport> findAll();
 
-  Optional<Airline> findById(Long airlineId);
+  Optional<Airport> findById(Long airportId);
+
+  Optional<Airport> findByName(String name);
 
 }

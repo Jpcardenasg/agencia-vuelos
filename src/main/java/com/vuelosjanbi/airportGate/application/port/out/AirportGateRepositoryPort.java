@@ -14,4 +14,7 @@ public interface AirportGateRepositoryPort {
   List<AirportGate> findAll();
 
   Optional<AirportGate> findById(Long airportGateId);
+
+  Optional<AirportGate> findByGate(String gate);
+
 }
