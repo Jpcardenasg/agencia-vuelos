@@ -5,13 +5,16 @@ import java.util.List;
 import com.vuelosjanbi.city.domain.models.City;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
 public class Country {
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String name;
 
     @OneToMany(mappedBy = "country")
@@ -24,13 +27,8 @@ public class Country {
         this.name = countryName;
     }
 
-    public Country(String countryId, String countryName) {
+    public Country(Long countryId, String countryName) {
         this.id = countryId;
-        this.name = countryName;
-    }
-
-    public Country(int countryId, String countryName) {
-        this.id = String.valueOf(countryId);
         this.name = countryName;
     }
 
@@ -42,11 +40,11 @@ public class Country {
         this.name = countryName;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String countryId) {
+    public void setId(Long countryId) {
         this.id = countryId;
     }
 }

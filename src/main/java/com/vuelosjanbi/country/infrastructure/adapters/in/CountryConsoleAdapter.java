@@ -43,7 +43,7 @@ public class CountryConsoleAdapter {
                         System.out.printf("ID: %d =, Name: %s\n", country.getId(), country.getName());
                     });
 
-                    int updateCountryId = scanner.nextInt();
+                    Long updateCountryId = scanner.nextLong();
                     scanner.nextLine();
 
                     System.out.println("Type the new name of the country:");
@@ -59,7 +59,7 @@ public class CountryConsoleAdapter {
                         System.out.printf("ID: %d =, Name: %s\n", country.getId(), country.getName());
                     });
 
-                    int deleteCountryId = scanner.nextInt();
+                    Long deleteCountryId = scanner.nextLong();
                     scanner.nextLine();
 
                     countryService.deleteCountry(deleteCountryId);

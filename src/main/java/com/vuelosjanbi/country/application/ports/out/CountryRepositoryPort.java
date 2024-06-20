@@ -1,4 +1,4 @@
-package com.vuelosjanbi.country.application.ports;
+package com.vuelosjanbi.country.application.ports.out;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,11 +9,11 @@ public interface CountryRepositoryPort {
 
   Country save(Country country);
 
-  void deleteById(String countryId);
+  void deleteById(Long countryId);
 
   List<Country> findAll();
 
-  Optional<Country> findById(String countryId);
+  Optional<Country> findById(Long countryId);
 
   Optional<Country> findByName(String countryName);
 

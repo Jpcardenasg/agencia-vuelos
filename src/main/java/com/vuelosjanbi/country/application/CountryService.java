@@ -3,29 +3,29 @@ package com.vuelosjanbi.country.application;
 import java.util.List;
 
 import com.vuelosjanbi.country.domain.models.Country;
-import com.vuelosjanbi.country.infrastructure.repository.CountryRepository;
+import com.vuelosjanbi.country.application.ports.out.CountryRepositoryPort;
 
 public class CountryService {
-    private final CountryRepository countryRepository;
+    private final CountryRepositoryPort countryRepositoryPort;
 
-    public CountryService(CountryRepository countryRepository) {
-        this.countryRepository = countryRepository;
+    public CountryService(CountryRepositoryPort countryRepositoryPort) {
+        this.countryRepositoryPort = countryRepositoryPort;
     }
 
-    public void createCountry(Country country) {
-        countryRepository.save(country);
+    public Country createCountry(Country country) {
+        return countryRepositoryPort.save(country);
     }
 
-    public void updateCountry(Country country) {
-        countryRepository.update(country);
+    public Country updateCountry(Country country) {
+        return countryRepositoryPort.save(country);
     }
 
-    public void deleteCountry(int idCountry) {
-        countryRepository.delete(idCountry);
+    public void deleteCountry(Long idCountry) {
+        countryRepositoryPort.deleteById(idCountry);
     }
 
     public List<Country> getAllCountries() {
-        return countryRepository.findAll();
+        return countryRepositoryPort.findAll();
     }
 
 }
