@@ -13,6 +13,18 @@ public class Airline {
   private Long id;
   private String name;
 
+  public Airline() {
+  }
+
+  public Airline(String name) {
+    this.name = name;
+  }
+
+  public Airline(Long id, String name) {
+    this.id = id;
+    this.name = name;
+  }
+
   public Long getId() {
     return id;
   }

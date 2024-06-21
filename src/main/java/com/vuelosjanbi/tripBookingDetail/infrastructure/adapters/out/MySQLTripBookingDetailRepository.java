@@ -1,5 +1,9 @@
 package com.vuelosjanbi.tripBookingDetail.infrastructure.adapters.out;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,10 +13,28 @@ import com.vuelosjanbi.tripBookingDetail.domain.models.TripBookingDetail;
 
 public class MySQLTripBookingDetailRepository implements TripBookingDetailRepositoryPort {
 
+  private final String url;
+  private final String user;
+  private final String password;
+
+  MySQLTripBookingDetailRepository(String url, String user, String password) {
+    this.url = url;
+    this.user = user;
+    this.password = password;
+  }
+
   @Override
   public TripBookingDetail save(TripBookingDetail tripBookingDetail) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'save'");
+    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+      String query = "INSERT INTO trip_booking_detail (trip_booking_id, customer_id,flight_fare_id) VALUES (?, ?, ?)";
+      try (PreparedStatement statement = connection.prepareStatement(query)) {
+        statement.setLong(1, tripBookingDetail.getTripBooking().getId());
+        statement.setString(2, tripBookingDetail.getFlightFare().getId());
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return tripBookingDetail;
   }
 
   @Override
