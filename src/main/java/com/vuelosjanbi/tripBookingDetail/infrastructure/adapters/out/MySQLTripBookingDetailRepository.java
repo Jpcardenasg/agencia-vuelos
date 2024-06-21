@@ -29,7 +29,8 @@ public class MySQLTripBookingDetailRepository implements TripBookingDetailReposi
       String query = "INSERT INTO trip_booking_detail (trip_booking_id, customer_id,flight_fare_id) VALUES (?, ?, ?)";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         statement.setLong(1, tripBookingDetail.getTripBooking().getId());
-        statement.setString(2, tripBookingDetail.getFlightFare().getId());
+        statement.setString(2, tripBookingDetail.getCustomer().getId());
+        statement.setLong(3, tripBookingDetail.getFlightFare().getId());
       }
     } catch (SQLException e) {
       e.printStackTrace();
