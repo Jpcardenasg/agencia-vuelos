@@ -109,22 +109,23 @@ public class MySQLCountryRepository implements CountryRepositoryPort {
 
     @Override
     public List<Country> findAll() {
-        List<Country> countries = new ArrayList<>();
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "SELECT * FROM country";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 try (ResultSet resultSet = statement.executeQuery()) {
+                    List<Country> countries = new ArrayList<>();
                     while (resultSet.next()) {
                         Country country = new Country(
                                 resultSet.getLong("id"),
                                 resultSet.getString("name"));
                         countries.add(country);
                     }
+                    return countries;
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
+            return new ArrayList<>();
         }
-        return countries;
     }
 }

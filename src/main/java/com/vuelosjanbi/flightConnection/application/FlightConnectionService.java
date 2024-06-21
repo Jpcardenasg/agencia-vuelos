@@ -33,7 +33,7 @@ public class FlightConnectionService {
         return flightConnectionsRepositoryPort.findByPlaneId(planeId);
     }
 
-    public List<FlightConnection> getAllFlightsConnections() {
+    public List<FlightConnection> getAllFlightConnections() {
         return flightConnectionsRepositoryPort.findAll();
     }
 

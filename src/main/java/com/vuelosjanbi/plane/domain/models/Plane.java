@@ -1,11 +1,15 @@
 package com.vuelosjanbi.plane.domain.models;
 
-import java.time.LocalDate;
+import java.sql.Date;
+
+import com.vuelosjanbi.planeModel.domain.models.PlaneModel;
+import com.vuelosjanbi.planeStatus.domain.models.PlaneStatus;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Plane {
@@ -14,11 +18,20 @@ public class Plane {
     private Long id;
     private String plate;
     private Integer capacity;
-    private LocalDate fabricationDate;
+    private Date fabricationDate;
 
-    // FK KEYS
-    private Integer status;
-    private Integer model;
+    @ManyToOne
+    private PlaneStatus status;
+    @ManyToOne
+    private PlaneModel model;
+
+    public Plane(String plate, Integer capacity, Date fabricationDate, PlaneStatus status, PlaneModel model) {
+        this.plate = plate;
+        this.capacity = capacity;
+        this.fabricationDate = fabricationDate;
+        this.status = status;
+        this.model = model;
+    }
 
     public Long getId() {
         return id;
@@ -44,27 +57,27 @@ public class Plane {
         this.capacity = capacity;
     }
 
-    public LocalDate getFabricationDate() {
+    public Date getFabricationDate() {
         return fabricationDate;
     }
 
-    public void setFabricationDate(LocalDate fabricationDate) {
+    public void setFabricationDate(Date fabricationDate) {
         this.fabricationDate = fabricationDate;
     }
 
-    public Integer getStatus() {
+    public PlaneStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Integer status) {
+    public void setStatus(PlaneStatus status) {
         this.status = status;
     }
 
-    public Integer getModel() {
+    public PlaneModel getModel() {
         return model;
     }
 
-    public void setModel(Integer model) {
+    public void setModel(PlaneModel model) {
         this.model = model;
     }
 

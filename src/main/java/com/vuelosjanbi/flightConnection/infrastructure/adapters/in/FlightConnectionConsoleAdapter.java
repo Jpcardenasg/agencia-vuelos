@@ -15,7 +15,7 @@ public class FlightConnectionConsoleAdapter {
 
     public void start() {
         Scanner scanner = new Scanner(System.in);
-        List<FlightConnection> flightsConnections = flightConnectionService.getAllFlightsConnections();
+        List<FlightConnection> flightsConnections = flightConnectionService.getAllFlightConnections();
 
         while (true) {
             System.out.println("1. Create Connection.");

@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.vuelosjanbi.flightConnection.domain.models.FlightConnection;
 
 public interface FlightConnectionsRepositoryPort {
+
   FlightConnection save(FlightConnection flightConnection);
 
   void deleteById(Long id);
