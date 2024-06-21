@@ -10,6 +10,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 @Entity
 public class Plane {
@@ -18,20 +20,14 @@ public class Plane {
     private Long id;
     private String plate;
     private Integer capacity;
+
+    @Temporal(TemporalType.DATE)
     private Date fabricationDate;
 
     @ManyToOne
     private PlaneStatus status;
     @ManyToOne
     private PlaneModel model;
-
-    public Plane(String plate, Integer capacity, Date fabricationDate, PlaneStatus status, PlaneModel model) {
-        this.plate = plate;
-        this.capacity = capacity;
-        this.fabricationDate = fabricationDate;
-        this.status = status;
-        this.model = model;
-    }
 
     public Long getId() {
         return id;

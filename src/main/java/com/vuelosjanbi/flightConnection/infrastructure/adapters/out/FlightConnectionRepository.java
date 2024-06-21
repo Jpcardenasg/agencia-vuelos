@@ -8,6 +8,5 @@ import com.vuelosjanbi.flightConnection.domain.models.FlightConnection;
 
 @Repository
 public interface FlightConnectionRepository
-                extends JpaRepository<FlightConnection, Long>, FlightConnectionsRepositoryPort {
-
+        extends JpaRepository<FlightConnection, Long>, FlightConnectionsRepositoryPort {
 }

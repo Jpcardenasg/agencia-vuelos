@@ -9,13 +9,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.vuelosjanbi.plane.application.ports.out.PlaneRepositoryPort;
 import com.vuelosjanbi.plane.domain.models.Plane;
+import com.vuelosjanbi.planeModel.application.ports.out.PlaneModelRepositoryPort;
+import com.vuelosjanbi.planeStatus.application.ports.out.PlaneStatusRepositoryPort;
 
 public class MySQLPlaneRepository implements PlaneRepositoryPort {
     private final String url;
     private final String username;
     private final String password;
+
+    @Autowired
+    PlaneStatusRepositoryPort planeStatusRepositoryPort;
+
+    @Autowired
+    PlaneModelRepository planeModelRepositoryPort;
 
     public MySQLPlaneRepository(String url, String username, String password) {
         this.url = url;
@@ -32,7 +42,7 @@ public class MySQLPlaneRepository implements PlaneRepositoryPort {
                 statement.setInt(2, plane.getCapacity());
                 statement.setDate(3, plane.getFabricationDate());
                 statement.setLong(4, plane.getStatus().getId());
-                statement.setLong(4, plane.getModel().getId());
+                statement.setLong(5, plane.getModel().getId());
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -43,13 +53,15 @@ public class MySQLPlaneRepository implements PlaneRepositoryPort {
 
     public Plane update(Plane plane) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String query = "UPDATE plane SET description = ?, details = ?, value = ? WHERE id = ?";
+            String query = "UPDATE plane SET plate = ?, capacity = ?, fabricationDate = ?, status_id = ?, model_id = ? WHERE id = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
-                // statement.setString(1, plane.getDescription());
-                // statement.setString(2, plane.getDetails());
-                // statement.setDouble(3, plane.getValue());
-                // statement.setLong(4, plane.getId());
-                // statement.executeUpdate();
+                statement.setString(1, plane.getPlate());
+                statement.setInt(2, plane.getCapacity());
+                statement.setDate(3, plane.getFabricationDate());
+                statement.setLong(4, plane.getStatus().getId());
+                statement.setLong(5, plane.getModel().getId());
+                statement.setLong(6, plane.getId());
+                statement.executeUpdate();
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -78,11 +90,15 @@ public class MySQLPlaneRepository implements PlaneRepositoryPort {
                 statement.setLong(1, planeId);
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
-                        // Plane plane = new Plane(
-                        // resultSet.getString("description"),
-                        // resultSet.getString("details"),
-                        // resultSet.getDouble("value"));
-                        // return Optional.of(plane);
+                        Plane plane = new Plane();
+                        plane.setId(resultSet.getLong("id"));
+                        plane.setPlate(resultSet.getString("plate"));
+                        plane.setCapacity(resultSet.getInt("capacity"));
+                        plane.setFabricationDate(resultSet.getDate("fabrication_date"));
+                        plane.setStatus(
+                                planeStatusRepositoryPort.findById(resultSet.getLong("status_id")).orElse(null));
+                        plane.setModel(planeModelRepositoryPort.findById(resultSet.getLong("model_id")));
+                        return Optional.of(plane);
                     }
                 }
             }
@@ -100,12 +116,15 @@ public class MySQLPlaneRepository implements PlaneRepositoryPort {
                 try (ResultSet resultSet = statement.executeQuery()) {
                     List<Plane> planes = new ArrayList<>();
                     while (resultSet.next()) {
-                        // Plane plane = new Plane(
-                        // resultSet.getLong("id"),
-                        // resultSet.getString("description"),
-                        // resultSet.getString("details"),
-                        // resultSet.getDouble("value"));
-                        // planes.add(plane);
+                        Plane plane = new Plane();
+                        plane.setId(resultSet.getLong("id"));
+                        plane.setPlate(resultSet.getString("plate"));
+                        plane.setCapacity(resultSet.getInt("capacity"));
+                        plane.setFabricationDate(resultSet.getDate("fabrication_date"));
+                        plane.setStatus(
+                                planeStatusRepositoryPort.findById(resultSet.getLong("status_id")).orElse(null));
+                        plane.setModel(planeModelRepositoryPort.findById(resultSet.getLong("model_id")));
+                        planes.add(plane);
                     }
                     return planes;
                 }
