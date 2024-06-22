@@ -1,6 +1,7 @@
 package com.vuelosjanbi.customer.infrastructure.adapters.out;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.vuelosjanbi.customer.application.ports.out.CustomerRepositoryPort;
 import com.vuelosjanbi.customer.domain.models.Customer;
@@ -14,7 +15,7 @@ public class MySQLCustomerRepository implements CustomerRepositoryPort {
   }
 
   @Override
-  public Customer findById(String id) {
+  public Optional<Customer> findById(String id) {
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'findById'");
   }

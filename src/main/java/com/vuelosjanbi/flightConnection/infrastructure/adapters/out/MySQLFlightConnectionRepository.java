@@ -9,10 +9,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
-import com.vuelosjanbi.flightConnection.application.ports.out.FlightConnectionsRepositoryPort;
+import com.vuelosjanbi.flightConnection.application.ports.out.FlightConnectionRepositoryPort;
 import com.vuelosjanbi.flightConnection.domain.models.FlightConnection;
 
-public class MySQLFlightConnectionRepository implements FlightConnectionsRepositoryPort {
+public class MySQLFlightConnectionRepository implements FlightConnectionRepositoryPort {
 
   private final String url;
   private final String username;
@@ -92,22 +92,22 @@ public class MySQLFlightConnectionRepository implements FlightConnectionsReposit
 
   @Override
   public List<FlightConnection> findAll() {
-    List<FlightConnection> flightConnections = new ArrayList<>();
     try (Connection connection = DriverManager.getConnection(url, username, password)) {
       String query = "SELECT * FROM flightConnection";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         try (ResultSet resultSet = statement.executeQuery()) {
+          List<FlightConnection> flightConnections = new ArrayList<>();
           while (resultSet.next()) {
             flightConnections.add(new FlightConnection(resultSet.getLong("id"),
                 resultSet.getString("connectionNumber")));
           }
+          return flightConnections;
         }
       }
-
     } catch (SQLException e) {
       e.printStackTrace();
+      return new ArrayList<>();
     }
-    return flightConnections;
   }
 
   @Override

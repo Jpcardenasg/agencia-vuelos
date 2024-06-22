@@ -75,7 +75,6 @@ public class MySQLAirlineRepository implements AirlineRepositoryPort {
 
   @Override
   public Optional<Airline> findById(Long airlineId) {
-    Airline airline = new Airline();
     try (Connection connection = DriverManager.getConnection(url, username, password)) {
       String query = "SELECT * FROM airline WHERE id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -83,6 +82,7 @@ public class MySQLAirlineRepository implements AirlineRepositoryPort {
         statement.execute();
         try (ResultSet resultSet = statement.getResultSet()) {
           if (resultSet.next()) {
+            Airline airline = new Airline();
             airline.setId(resultSet.getLong("id"));
             airline.setName(resultSet.getString("name"));
             return Optional.of(airline);
@@ -97,7 +97,7 @@ public class MySQLAirlineRepository implements AirlineRepositoryPort {
 
   @Override
   public Optional<Airline> findByName(String airlineName) {
-    try (Connection connection = DriverManager.getConnection(airlineName, airlineName, airlineName)) {
+    try (Connection connection = DriverManager.getConnection(url, username, password)) {
       String query = "SELECT * FROM airline WHERE name = ?";
       try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
         preparedStatement.setString(1, airlineName);

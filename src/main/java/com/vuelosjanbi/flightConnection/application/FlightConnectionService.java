@@ -3,13 +3,13 @@ package com.vuelosjanbi.flightConnection.application;
 import java.util.List;
 import java.util.Optional;
 
-import com.vuelosjanbi.flightConnection.application.ports.out.FlightConnectionsRepositoryPort;
+import com.vuelosjanbi.flightConnection.application.ports.out.FlightConnectionRepositoryPort;
 import com.vuelosjanbi.flightConnection.domain.models.FlightConnection;
 
 public class FlightConnectionService {
-    private final FlightConnectionsRepositoryPort flightConnectionsRepositoryPort;
+    private final FlightConnectionRepositoryPort flightConnectionsRepositoryPort;
 
-    public FlightConnectionService(FlightConnectionsRepositoryPort flightConnectionsRepositoryPort) {
+    public FlightConnectionService(FlightConnectionRepositoryPort flightConnectionsRepositoryPort) {
         this.flightConnectionsRepositoryPort = flightConnectionsRepositoryPort;
     }
 

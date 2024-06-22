@@ -11,8 +11,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.vuelosjanbi.plane.application.ports.out.PlaneRepositoryPort;
 import com.vuelosjanbi.plane.domain.models.Plane;
+import com.vuelosjanbi.plane.application.ports.out.PlaneRepositoryPort;
 import com.vuelosjanbi.planeModel.application.ports.out.PlaneModelRepositoryPort;
 import com.vuelosjanbi.planeStatus.application.ports.out.PlaneStatusRepositoryPort;
 
@@ -25,7 +25,7 @@ public class MySQLPlaneRepository implements PlaneRepositoryPort {
     PlaneStatusRepositoryPort planeStatusRepositoryPort;
 
     @Autowired
-    PlaneModelRepository planeModelRepositoryPort;
+    PlaneModelRepositoryPort planeModelRepositoryPort;
 
     public MySQLPlaneRepository(String url, String username, String password) {
         this.url = url;
@@ -97,7 +97,7 @@ public class MySQLPlaneRepository implements PlaneRepositoryPort {
                         plane.setFabricationDate(resultSet.getDate("fabrication_date"));
                         plane.setStatus(
                                 planeStatusRepositoryPort.findById(resultSet.getLong("status_id")).orElse(null));
-                        plane.setModel(planeModelRepositoryPort.findById(resultSet.getLong("model_id")));
+                        plane.setModel(planeModelRepositoryPort.findById(resultSet.getLong("model_id")).orElse(null));
                         return Optional.of(plane);
                     }
                 }
@@ -123,7 +123,7 @@ public class MySQLPlaneRepository implements PlaneRepositoryPort {
                         plane.setFabricationDate(resultSet.getDate("fabrication_date"));
                         plane.setStatus(
                                 planeStatusRepositoryPort.findById(resultSet.getLong("status_id")).orElse(null));
-                        plane.setModel(planeModelRepositoryPort.findById(resultSet.getLong("model_id")));
+                        plane.setModel(planeModelRepositoryPort.findById(resultSet.getLong("model_id")).orElse(null));
                         planes.add(plane);
                     }
                     return planes;

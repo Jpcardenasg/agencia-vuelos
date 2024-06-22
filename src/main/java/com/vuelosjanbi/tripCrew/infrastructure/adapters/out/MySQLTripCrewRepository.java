@@ -12,7 +12,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.vuelosjanbi.employee.application.ports.out.EmployeeRepositoryPort;
-import com.vuelosjanbi.flightConnection.application.ports.out.FlightConnectionsRepositoryPort;
+import com.vuelosjanbi.flightConnection.application.ports.out.FlightConnectionRepositoryPort;
 import com.vuelosjanbi.tripCrew.application.ports.out.TripCrewRepositoryPort;
 import com.vuelosjanbi.tripCrew.domain.models.TripCrew;
 import com.vuelosjanbi.tripCrew.domain.models.TripCrewId;
@@ -33,7 +33,7 @@ public class MySQLTripCrewRepository implements TripCrewRepositoryPort {
   EmployeeRepositoryPort employeeRepositoryPort;
 
   @Autowired
-  FlightConnectionsRepositoryPort flightConnectionRepositoryPort;
+  FlightConnectionRepositoryPort flightConnectionRepositoryPort;
 
   @Override
   public TripCrew save(TripCrew tripCrew) {

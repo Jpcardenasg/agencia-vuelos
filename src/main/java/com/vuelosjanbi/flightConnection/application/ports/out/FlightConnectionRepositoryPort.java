@@ -5,7 +5,7 @@ import java.util.Optional;
 
 import com.vuelosjanbi.flightConnection.domain.models.FlightConnection;
 
-public interface FlightConnectionsRepositoryPort {
+public interface FlightConnectionRepositoryPort {
 
   FlightConnection save(FlightConnection flightConnection);
 
