@@ -1,6 +1,6 @@
 package com.vuelosjanbi.trip.domain.models;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,9 +14,9 @@ public class Trip {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private LocalDate trip_date;
+  private Date tripDate;
 
-  private double price_trip;
+  private double tripPrice;
 
   public Long getId() {
     return id;
@@ -26,20 +26,20 @@ public class Trip {
     this.id = id;
   }
 
-  public LocalDate getTrip_date() {
-    return trip_date;
+  public double getTripPrice() {
+    return tripPrice;
   }
 
-  public void setTrip_date(LocalDate trip_date) {
-    this.trip_date = trip_date;
+  public void setTripPrice(double priceTrip) {
+    this.tripPrice = priceTrip;
   }
 
-  public double getPrice_trip() {
-    return price_trip;
+  public Date getTripDate() {
+    return tripDate;
   }
 
-  public void setPrice_trip(double price_trip) {
-    this.price_trip = price_trip;
+  public void setTripDate(Date tripDate) {
+    this.tripDate = tripDate;
   }
 
 }

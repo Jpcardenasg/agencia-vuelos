@@ -1,6 +1,6 @@
 package com.vuelosjanbi.tripBooking.domain.models;
 
-import java.time.LocalDate;
+import java.sql.Date;
 
 import com.vuelosjanbi.trip.domain.models.Trip;
 
@@ -16,7 +16,7 @@ public class TripBooking {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private LocalDate date;
+  private Date date;
 
   private Trip trip;
 
@@ -28,11 +28,11 @@ public class TripBooking {
     this.id = id;
   }
 
-  public LocalDate getDate() {
+  public Date getDate() {
     return date;
   }
 
-  public void setDate(LocalDate date) {
+  public void setDate(Date date) {
     this.date = date;
   }
 
