@@ -13,4 +13,6 @@ public interface CityRepositoryPort {
   List<City> findAll();
 
   Optional<City> findById(Long cityId);
+
+  List<City> findCitiesByCountryId(Long countryId);
 }

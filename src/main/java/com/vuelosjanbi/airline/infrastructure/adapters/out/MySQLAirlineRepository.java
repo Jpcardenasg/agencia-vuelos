@@ -2,11 +2,16 @@ package com.vuelosjanbi.airline.infrastructure.adapters.out;
 
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.ArrayList;
 
 import java.sql.Connection;
 import com.vuelosjanbi.airline.application.ports.out.AirlineRepositoryPort;
 import com.vuelosjanbi.airline.domain.models.Airline;
+import com.vuelosjanbi.employee.application.ports.out.EmployeeRepositoryPort;
+
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,6 +22,9 @@ public class MySQLAirlineRepository implements AirlineRepositoryPort {
   private final String url;
   private final String username;
   private final String password;
+
+  @Autowired
+  EmployeeRepositoryPort employeeRepositoryPort;
 
   MySQLAirlineRepository(String url, String username, String password) {
     this.url = url;
@@ -63,6 +71,7 @@ public class MySQLAirlineRepository implements AirlineRepositoryPort {
             Airline airline = new Airline();
             airline.setId(resultSet.getLong("id"));
             airline.setName(resultSet.getString("name"));
+            airline.setEmployees(null);
             airlines.add(airline);
           }
         }
@@ -85,6 +94,7 @@ public class MySQLAirlineRepository implements AirlineRepositoryPort {
             Airline airline = new Airline();
             airline.setId(resultSet.getLong("id"));
             airline.setName(resultSet.getString("name"));
+            airline.setEmployees(null);
             return Optional.of(airline);
           }
         }

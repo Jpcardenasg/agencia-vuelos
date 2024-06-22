@@ -17,4 +17,6 @@ public interface AirportRepositoryPort {
 
   Optional<Airport> findByName(String name);
 
+  List<Airport> findAirportsByCityId(Long cityId);
+
 }

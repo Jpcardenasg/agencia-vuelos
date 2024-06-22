@@ -9,8 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.vuelosjanbi.city.application.ports.CityRepositoryPort;
 import com.vuelosjanbi.city.domain.models.City;
+import com.vuelosjanbi.country.application.ports.out.CountryRepositoryPort;
 
 public class MySQLCityRepository implements CityRepositoryPort {
 
@@ -18,18 +21,23 @@ public class MySQLCityRepository implements CityRepositoryPort {
     private final String username;
     private final String password;
 
+    @Autowired
+    private CountryRepositoryPort countryRepositoryPort;
+
     public MySQLCityRepository(String url, String username, String password) {
         this.url = url;
         this.username = username;
         this.password = password;
+
     }
 
     @Override
     public City save(City city) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String query = "INSERT INTO city VALUES(?)";
+            String query = "INSERT INTO city (name,country_id) VALUES(?,?)";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setString(1, city.getCityName());
+                statement.setString(1, city.getName());
+                statement.setLong(2, city.getCountry().getId());
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -59,9 +67,10 @@ public class MySQLCityRepository implements CityRepositoryPort {
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 try (ResultSet resultSet = statement.executeQuery()) {
                     while (resultSet.next()) {
-                        City city = new City(
-                                resultSet.getLong("id"),
-                                resultSet.getString("name"));
+                        City city = new City();
+                        city.setId(resultSet.getLong("id"));
+                        city.setName(resultSet.getString("name"));
+                        city.setCountry(countryRepositoryPort.findById(resultSet.getLong("country_id")).orElse(null));
                         cities.add(city);
                     }
                 }
@@ -82,9 +91,10 @@ public class MySQLCityRepository implements CityRepositoryPort {
                 statement.setLong(1, cityId);
                 try (ResultSet resultSet = statement.executeQuery()) {
                     if (resultSet.next()) {
-                        return Optional.of(new City(
-                                resultSet.getLong("id"),
-                                resultSet.getString("name")));
+                        City city = new City();
+                        city.setId(resultSet.getLong("id"));
+                        city.setName(resultSet.getString("name"));
+                        return Optional.of(city);
                     }
                 }
             }
@@ -92,5 +102,29 @@ public class MySQLCityRepository implements CityRepositoryPort {
             e.printStackTrace();
         }
         return Optional.empty();
+    }
+
+    @Override
+    public List<City> findCitiesByCountryId(Long countryId) {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            String query = "SELECT * FROM city WHERE country_id = ?";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setLong(1, countryId);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    List<City> cities = new ArrayList<>();
+                    while (resultSet.next()) {
+                        City city = new City();
+                        city.setId(resultSet.getLong("id"));
+                        city.setName(resultSet.getString("name"));
+                        city.setCountry(countryRepositoryPort.findById(resultSet.getLong("country_id")).orElse(null));
+                        cities.add(city);
+                    }
+                    return cities;
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
 }

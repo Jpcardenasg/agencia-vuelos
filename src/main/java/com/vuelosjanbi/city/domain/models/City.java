@@ -17,7 +17,7 @@ public class City {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String cityName;
+    private String name;
 
     @ManyToOne
     private Country country;
@@ -26,12 +26,12 @@ public class City {
     private List<Airport> airports;
 
     public City(String cityName) {
-        this.cityName = cityName;
+        this.name = cityName;
     }
 
     public City(Long id, String cityName) {
         this.id = id;
-        this.cityName = cityName;
+        this.name = cityName;
     }
 
     public City() {
@@ -45,12 +45,12 @@ public class City {
         this.id = id;
     }
 
-    public String getCityName() {
-        return cityName;
+    public String getName() {
+        return name;
     }
 
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
+    public void setName(String cityName) {
+        this.name = cityName;
     }
 
     public List<Airport> getAirports() {
@@ -59,6 +59,14 @@ public class City {
 
     public void setAirports(List<Airport> airports) {
         this.airports = airports;
+    }
+
+    public Country getCountry() {
+        return country;
+    }
+
+    public void setCountry(Country country) {
+        this.country = country;
     }
 
 }

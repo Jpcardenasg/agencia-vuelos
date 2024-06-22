@@ -1,9 +1,14 @@
 package com.vuelosjanbi.airline.domain.models;
 
+import java.util.List;
+
+import com.vuelosjanbi.employee.domain.models.Employee;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Airline {
@@ -12,6 +17,9 @@ public class Airline {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
   private String name;
+
+  @OneToMany(mappedBy = "airline")
+  private List<Employee> employees;
 
   public Airline() {
   }
@@ -39,6 +47,14 @@ public class Airline {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public List<Employee> getEmployees() {
+    return employees;
+  }
+
+  public void setEmployees(List<Employee> employees) {
+    this.employees = employees;
   }
 
 }

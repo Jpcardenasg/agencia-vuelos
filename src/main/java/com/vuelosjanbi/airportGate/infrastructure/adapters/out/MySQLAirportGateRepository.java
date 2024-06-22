@@ -2,6 +2,9 @@ package com.vuelosjanbi.airportGate.infrastructure.adapters.out;
 
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.ArrayList;
 
 import java.sql.Connection;
@@ -9,6 +12,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import com.vuelosjanbi.airport.application.ports.out.AirportRepositoryPort;
 import com.vuelosjanbi.airportGate.application.port.out.AirportGateRepositoryPort;
 import com.vuelosjanbi.airportGate.domain.models.AirportGate;
 
@@ -17,6 +22,9 @@ public class MySQLAirportGateRepository implements AirportGateRepositoryPort {
   private final String url;
   private final String user;
   private final String password;
+
+  @Autowired
+  AirportRepositoryPort airportRepositoryPort;
 
   public MySQLAirportGateRepository(String url, String user, String password) {
     this.url = url;
@@ -27,9 +35,10 @@ public class MySQLAirportGateRepository implements AirportGateRepositoryPort {
   @Override
   public AirportGate save(AirportGate airportGate) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
-      String query = "INSERT INTO airport_gate (gate) VALUES (?)";
+      String query = "INSERT INTO airport_gate (gate,airport_id) VALUES (?,?)";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         statement.setString(1, airportGate.getGate());
+        statement.setLong(2, airportGate.getAirport().getId());
         statement.executeUpdate();
       }
     } catch (SQLException e) {
@@ -62,6 +71,7 @@ public class MySQLAirportGateRepository implements AirportGateRepositoryPort {
             AirportGate airportGate = new AirportGate();
             airportGate.setId(resultSet.getLong("id"));
             airportGate.setGate(resultSet.getString("gate"));
+            airportGate.setAirport(airportRepositoryPort.findById(resultSet.getLong("airport_id")).orElse(null));
             airportGates.add(airportGate);
           }
         }
@@ -83,6 +93,7 @@ public class MySQLAirportGateRepository implements AirportGateRepositoryPort {
             AirportGate airportGate = new AirportGate();
             airportGate.setId(resultSet.getLong("id"));
             airportGate.setGate(resultSet.getString("gate"));
+            airportGate.setAirport(airportRepositoryPort.findById(resultSet.getLong("airport_id")).orElse(null));
             return Optional.of(airportGate);
           }
         }
@@ -104,6 +115,7 @@ public class MySQLAirportGateRepository implements AirportGateRepositoryPort {
             AirportGate airportGate = new AirportGate();
             airportGate.setId(resultSet.getLong("id"));
             airportGate.setGate(resultSet.getString("gate"));
+            airportGate.setAirport(airportRepositoryPort.findById(resultSet.getLong("airport_id")).orElse(null));
             return Optional.of(airportGate);
           }
         }

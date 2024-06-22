@@ -2,10 +2,14 @@ package com.vuelosjanbi.airport.infrastructure.adapters.out;
 
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.ArrayList;
 
 import com.vuelosjanbi.airport.application.ports.out.AirportRepositoryPort;
 import com.vuelosjanbi.airport.domain.models.Airport;
+import com.vuelosjanbi.city.application.ports.CityRepositoryPort;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -19,6 +23,9 @@ public class MySQLAirportRepository implements AirportRepositoryPort {
   private final String user;
   private final String password;
 
+  @Autowired
+  CityRepositoryPort cityRepositoryPort;
+
   public MySQLAirportRepository(String url, String user, String password) {
     this.url = url;
     this.user = user;
@@ -28,9 +35,10 @@ public class MySQLAirportRepository implements AirportRepositoryPort {
   @Override
   public Airport save(Airport airport) {
     try (Connection connection = DriverManager.getConnection(user, url, password)) {
-      String query = "INSERT INTO airport (name) VALUES (?)";
+      String query = "INSERT INTO airport (name,city_id) VALUES (?,?)";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         statement.setString(1, airport.getName());
+        statement.setLong(2, airport.getCity().getId());
         statement.executeUpdate();
       }
     } catch (SQLException e) {
@@ -63,6 +71,7 @@ public class MySQLAirportRepository implements AirportRepositoryPort {
           Airport airport = new Airport();
           airport.setId(resulSet.getLong("id"));
           airport.setName(resulSet.getString("name"));
+          airport.setCity(cityRepositoryPort.findById(resulSet.getLong("city_id")).orElse(null));
           airports.add(airport);
         }
 
@@ -85,6 +94,7 @@ public class MySQLAirportRepository implements AirportRepositoryPort {
           Airport airport = new Airport();
           airport.setId(resultSet.getLong("id"));
           airport.setName(resultSet.getString("name"));
+          airport.setCity(cityRepositoryPort.findById(resultSet.getLong("city_id")).orElse(null));
           return Optional.of(airport);
         }
       }
@@ -105,6 +115,7 @@ public class MySQLAirportRepository implements AirportRepositoryPort {
           Airport airport = new Airport();
           airport.setId(resultSet.getLong("id"));
           airport.setName(resultSet.getString("name"));
+          airport.setCity(cityRepositoryPort.findById(resultSet.getLong("city_id")).orElse(null));
           return Optional.of(airport);
         }
       }
@@ -114,4 +125,26 @@ public class MySQLAirportRepository implements AirportRepositoryPort {
     return Optional.empty();
   }
 
+  @Override
+  public List<Airport> findAirportsByCityId(Long cityId) {
+    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+      String query = "SELECT * FROM airport WHERE city_id = ?";
+      try (PreparedStatement statement = connection.prepareStatement(query)) {
+        statement.setLong(1, cityId);
+        ResultSet resultSet = statement.executeQuery();
+        List<Airport> airports = new ArrayList<>();
+        while (resultSet.next()) {
+          Airport airport = new Airport();
+          airport.setId(resultSet.getLong("id"));
+          airport.setName(resultSet.getString("name"));
+          airport.setCity(cityRepositoryPort.findById(resultSet.getLong("city_id")).orElse(null));
+          airports.add(airport);
+        }
+        return airports;
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      return new ArrayList<>();
+    }
+  }
 }

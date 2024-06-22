@@ -40,7 +40,7 @@ public class CityConsoleAdapter {
                 case 2:
                     System.out.println("Choose the City you want to modify:");
                     cities.forEach(City -> {
-                        System.out.printf("ID: %d =, Name: %s\n", City.getId(), City.getCityName());
+                        System.out.printf("ID: %d =, Name: %s\n", City.getId(), City.getName());
                     });
 
                     Long updateCityId = scanner.nextLong();
@@ -56,7 +56,7 @@ public class CityConsoleAdapter {
                 case 3:
                     System.out.println("Choose the City you want to delete:");
                     cities.forEach(City -> {
-                        System.out.printf("ID: %d =, Name: %s\n", City.getId(), City.getCityName());
+                        System.out.printf("ID: %d =, Name: %s\n", City.getId(), City.getName());
                     });
 
                     Long deleteCityId = scanner.nextLong();
@@ -68,7 +68,7 @@ public class CityConsoleAdapter {
                 case 4:
                     System.out.println("List of Cities:");
                     cities.forEach(City -> {
-                        System.out.printf("ID: %d =, Name: %s\n", City.getId(), City.getCityName());
+                        System.out.printf("ID: %d =, Name: %s\n", City.getId(), City.getName());
                     });
 
                     break;
