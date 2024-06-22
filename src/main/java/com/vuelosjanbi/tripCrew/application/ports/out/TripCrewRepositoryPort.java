@@ -13,7 +13,7 @@ public interface TripCrewRepositoryPort {
 
   Optional<TripCrew> findById(TripCrewId id);
 
-  void deleteById(Long id);
+  void deleteById(TripCrew id);
 
   List<TripCrew> findAll();
 

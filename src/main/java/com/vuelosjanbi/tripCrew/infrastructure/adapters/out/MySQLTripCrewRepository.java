@@ -80,11 +80,12 @@ public class MySQLTripCrewRepository implements TripCrewRepositoryPort {
   }
 
   @Override
-  public void deleteById(Long id) {
+  public void deleteById(TripCrew id) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
-      String query = "DELETE FROM trip_crew WHERE id = ?";
+      String query = "DELETE FROM trip_crew WHERE id = ? AND flight_connection_id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setLong(1, id);
+        statement.setLong(1, id.getId().getEmployee());
+        statement.setLong(2, id.getId().getFlightConnection());
         statement.executeUpdate();
       }
     } catch (SQLException e) {
