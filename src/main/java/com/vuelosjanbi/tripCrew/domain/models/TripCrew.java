@@ -3,29 +3,29 @@ package com.vuelosjanbi.tripCrew.domain.models;
 import com.vuelosjanbi.employee.domain.models.Employee;
 import com.vuelosjanbi.flightConnection.domain.models.FlightConnection;
 
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 
 @Entity
 public class TripCrew {
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  @EmbeddedId
+  private TripCrewId id;
 
   @ManyToOne
+  @MapsId("employee")
   private Employee employee;
 
   @ManyToOne
+  @MapsId("flightConnection")
   private FlightConnection flightConnection;
 
-  public Long getId() {
+  public TripCrewId getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(TripCrewId id) {
     this.id = id;
   }
 

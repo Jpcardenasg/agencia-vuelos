@@ -13,7 +13,7 @@ public interface TripBookingDetailRepositoryPort {
 
   Optional<TripBookingDetail> findByCustomer(Customer customer);
 
-  Optional<TripBookingDetail> findByCustomerId(Customer customer);
+  Optional<TripBookingDetail> findByCustomerId(String customerId);
 
   Optional<TripBookingDetail> findById(Long id);
 

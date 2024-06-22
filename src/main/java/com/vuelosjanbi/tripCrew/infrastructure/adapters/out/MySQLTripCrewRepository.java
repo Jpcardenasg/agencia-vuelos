@@ -15,6 +15,7 @@ import com.vuelosjanbi.employee.application.ports.out.EmployeeRepositoryPort;
 import com.vuelosjanbi.flightConnection.application.ports.out.FlightConnectionsRepositoryPort;
 import com.vuelosjanbi.tripCrew.application.ports.out.TripCrewRepositoryPort;
 import com.vuelosjanbi.tripCrew.domain.models.TripCrew;
+import com.vuelosjanbi.tripCrew.domain.models.TripCrewId;
 
 public class MySQLTripCrewRepository implements TripCrewRepositoryPort {
 
@@ -50,18 +51,27 @@ public class MySQLTripCrewRepository implements TripCrewRepositoryPort {
   }
 
   @Override
-  public Optional<TripCrew> findById(Long id) {
+  public Optional<TripCrew> findById(TripCrewId id) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
-      String query = "SELECT * FROM trip_crew WHERE id = ?";
+      String query = "SELECT * FROM trip_crew WHERE employee_id = ? AND flight_connection_id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setLong(1, id);
+        statement.setLong(1, id.getEmployee());
+        statement.setLong(2, id.getFlightConnection());
         statement.execute();
-        if (statement.getResultSet().next()) {
-          TripCrew tripCrew = new TripCrew();
-          tripCrew.setId(statement.getResultSet().getLong("id"));
-          return Optional.of(tripCrew);
-        } else {
-          return Optional.empty();
+        try (ResultSet resultSet = statement.getResultSet()) {
+          if (resultSet.next()) {
+            TripCrew tripCrew = new TripCrew();
+            TripCrewId tripCrewId = new TripCrewId();
+            tripCrewId.setEmployee(resultSet.getLong("employee_id"));
+            tripCrewId.setFlightConnection(resultSet.getLong("flight_connection_id"));
+            tripCrew.setId(tripCrewId);
+            tripCrew.setEmployee(employeeRepositoryPort.findById(resultSet.getLong("employee_id")).orElse(null));
+            tripCrew.setFlightConnection(
+                flightConnectionRepositoryPort.findById(resultSet.getLong("flight_connection_id")).orElse(null));
+            return Optional.of(tripCrew);
+          } else {
+            return Optional.empty();
+          }
         }
       }
     } catch (SQLException e) {
@@ -91,7 +101,10 @@ public class MySQLTripCrewRepository implements TripCrewRepositoryPort {
         try (ResultSet resultSet = statement.executeQuery()) {
           while (resultSet.next()) {
             TripCrew tripCrew = new TripCrew();
-            tripCrew.setId(resultSet.getLong("id"));
+            TripCrewId tripCrewId = new TripCrewId();
+            tripCrewId.setEmployee(statement.getResultSet().getLong("employee_id"));
+            tripCrewId.setFlightConnection(statement.getResultSet().getLong("flight_connection_id"));
+            tripCrew.setId(tripCrewId);
             tripCrew.setEmployee(employeeRepositoryPort.findById(resultSet.getLong("employee_id")).orElse(null));
             tripCrew.setFlightConnection(
                 flightConnectionRepositoryPort.findById(resultSet.getLong("flight_connection_id")).orElse(null));

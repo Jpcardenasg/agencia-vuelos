@@ -2,8 +2,6 @@ package com.vuelosjanbi.trip.domain.models;
 
 import java.time.LocalDate;
 
-import com.vuelosjanbi.employee.domain.models.Employee;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
