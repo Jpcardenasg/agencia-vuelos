@@ -7,26 +7,26 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class TripCrewId implements Serializable {
-  private Long employee;
-  private Long flightConnection;
+  private Long employeeId;
+  private Long flightConnectionId;
 
   public TripCrewId() {
   }
 
-  public Long getEmployee() {
-    return employee;
+  public Long getEmployeeId() {
+    return employeeId;
   }
 
-  public void setEmployee(Long employeeId) {
-    this.employee = employeeId;
+  public void setEmployeeId(Long employeeId) {
+    this.employeeId = employeeId;
   }
 
-  public Long getFlightConnection() {
-    return flightConnection;
+  public Long getFlightConnectionId() {
+    return flightConnectionId;
   }
 
-  public void setFlightConnection(Long flightConnectionId) {
-    this.flightConnection = flightConnectionId;
+  public void setFlightConnectionId(Long flightConnectionId) {
+    this.flightConnectionId = flightConnectionId;
   }
 
   @Override
@@ -36,13 +36,13 @@ public class TripCrewId implements Serializable {
     if (o == null || getClass() != o.getClass())
       return false;
     TripCrewId that = (TripCrewId) o;
-    return Objects.equals(employee, that.employee) &&
-        Objects.equals(flightConnection, that.flightConnection);
+    return Objects.equals(employeeId, that.employeeId) &&
+        Objects.equals(flightConnectionId, that.flightConnectionId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(employee, flightConnection);
+    return Objects.hash(employeeId, flightConnectionId);
   }
 
 }

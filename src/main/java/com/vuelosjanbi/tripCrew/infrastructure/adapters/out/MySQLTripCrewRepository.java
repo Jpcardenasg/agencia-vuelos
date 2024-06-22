@@ -55,15 +55,15 @@ public class MySQLTripCrewRepository implements TripCrewRepositoryPort {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "SELECT * FROM trip_crew WHERE employee_id = ? AND flight_connection_id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setLong(1, id.getEmployee());
-        statement.setLong(2, id.getFlightConnection());
+        statement.setLong(1, id.getEmployeeId());
+        statement.setLong(2, id.getFlightConnectionId());
         statement.execute();
         try (ResultSet resultSet = statement.getResultSet()) {
           if (resultSet.next()) {
             TripCrew tripCrew = new TripCrew();
             TripCrewId tripCrewId = new TripCrewId();
-            tripCrewId.setEmployee(resultSet.getLong("employee_id"));
-            tripCrewId.setFlightConnection(resultSet.getLong("flight_connection_id"));
+            tripCrewId.setEmployeeId(resultSet.getLong("employee_id"));
+            tripCrewId.setFlightConnectionId(resultSet.getLong("flight_connection_id"));
             tripCrew.setId(tripCrewId);
             tripCrew.setEmployee(employeeRepositoryPort.findById(resultSet.getLong("employee_id")).orElse(null));
             tripCrew.setFlightConnection(
@@ -84,8 +84,8 @@ public class MySQLTripCrewRepository implements TripCrewRepositoryPort {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "DELETE FROM trip_crew WHERE id = ? AND flight_connection_id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setLong(1, id.getId().getEmployee());
-        statement.setLong(2, id.getId().getFlightConnection());
+        statement.setLong(1, id.getId().getEmployeeId());
+        statement.setLong(2, id.getId().getFlightConnectionId());
         statement.executeUpdate();
       }
     } catch (SQLException e) {
@@ -103,8 +103,8 @@ public class MySQLTripCrewRepository implements TripCrewRepositoryPort {
           while (resultSet.next()) {
             TripCrew tripCrew = new TripCrew();
             TripCrewId tripCrewId = new TripCrewId();
-            tripCrewId.setEmployee(statement.getResultSet().getLong("employee_id"));
-            tripCrewId.setFlightConnection(statement.getResultSet().getLong("flight_connection_id"));
+            tripCrewId.setEmployeeId(statement.getResultSet().getLong("employee_id"));
+            tripCrewId.setFlightConnectionId(statement.getResultSet().getLong("flight_connection_id"));
             tripCrew.setId(tripCrewId);
             tripCrew.setEmployee(employeeRepositoryPort.findById(resultSet.getLong("employee_id")).orElse(null));
             tripCrew.setFlightConnection(
