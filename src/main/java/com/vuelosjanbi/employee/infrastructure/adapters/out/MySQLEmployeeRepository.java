@@ -169,11 +169,11 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
   }
 
   @Override
-  public List<Employee> findEmployeesByAirlineId(String airlineId) {
+  public List<Employee> findByAirlineId(Long airlineId) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "SELECT * FROM employee WHERE airline_id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setString(1, airlineId);
+        statement.setLong(1, airlineId);
         try (ResultSet result = statement.executeQuery()) {
           List<Employee> employees = new ArrayList<>();
           while (result.next()) {

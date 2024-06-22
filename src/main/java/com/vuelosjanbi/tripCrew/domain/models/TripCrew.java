@@ -14,11 +14,11 @@ public class TripCrew {
   private TripCrewId id;
 
   @ManyToOne
-  @MapsId("employee")
+  @MapsId("employeeId")
   private Employee employee;
 
   @ManyToOne
-  @MapsId("flightConnection")
+  @MapsId("flightConnectionId")
   private FlightConnection flightConnection;
 
   public TripCrewId getId() {

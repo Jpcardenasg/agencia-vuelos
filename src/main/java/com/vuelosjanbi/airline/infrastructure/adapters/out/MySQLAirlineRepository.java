@@ -72,7 +72,7 @@ public class MySQLAirlineRepository implements AirlineRepositoryPort {
             airline.setId(resultSet.getLong("id"));
             airline.setName(resultSet.getString("name"));
             airline.setEmployees(
-                employeeRepositoryPort.findEmployeesByAirlineId(resultSet.getString("airline_id")));
+                employeeRepositoryPort.findByAirlineId(resultSet.getLong("airline_id")));
             airlines.add(airline);
           }
         }
@@ -96,7 +96,7 @@ public class MySQLAirlineRepository implements AirlineRepositoryPort {
             airline.setId(resultSet.getLong("id"));
             airline.setName(resultSet.getString("name"));
             airline.setEmployees(
-                employeeRepositoryPort.findEmployeesByAirlineId(resultSet.getString("airline_id")));
+                employeeRepositoryPort.findByAirlineId(resultSet.getLong("airline_id")));
             return Optional.of(airline);
           }
         }
@@ -120,7 +120,7 @@ public class MySQLAirlineRepository implements AirlineRepositoryPort {
             airline.setId(resultSet.getLong("id"));
             airline.setName(resultSet.getString("name"));
             airline.setEmployees(
-                employeeRepositoryPort.findEmployeesByAirlineId(resultSet.getString("airline_id")));
+                employeeRepositoryPort.findByAirlineId(resultSet.getLong("airline_id")));
             return Optional.of(airline);
           }
         }

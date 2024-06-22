@@ -19,6 +19,6 @@ public interface EmployeeRepositoryPort {
 
   List<Employee> findByRol(CrewRole Rol);
 
-  List<Employee> findEmployeesByAirlineId(String airlineId);
+  List<Employee> findByAirlineId(Long airlineId);
 
 }
