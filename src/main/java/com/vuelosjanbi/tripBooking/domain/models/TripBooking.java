@@ -8,6 +8,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class TripBooking {
@@ -18,6 +19,7 @@ public class TripBooking {
 
   private Date date;
 
+  @ManyToOne
   private Trip trip;
 
   public Long getId() {

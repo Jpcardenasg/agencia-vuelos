@@ -4,11 +4,13 @@ import java.util.List;
 
 import com.vuelosjanbi.tripBookingDetail.domain.models.TripBookingDetail;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
+@Entity
 public class FlightFare {
 
     @Id
@@ -20,6 +22,9 @@ public class FlightFare {
 
     @OneToMany(mappedBy = "flightFare")
     private List<TripBookingDetail> tripBookingDetails;
+
+    public FlightFare() {
+    }
 
     public FlightFare(Long id, String description, String details, Double value) {
         this.id = id;

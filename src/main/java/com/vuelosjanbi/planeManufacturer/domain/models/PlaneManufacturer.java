@@ -18,7 +18,7 @@ public class PlaneManufacturer {
     private Long id;
     private String name;
 
-    @OneToMany(mappedBy = "manufacturer")
+    @OneToMany(mappedBy = "planeManufacturer")
     private List<PlaneModel> planeModels;
 
     public Long getId() {

@@ -24,6 +24,9 @@ public class FlightConnection {
   @ManyToOne
   private Airport airport;
 
+  public FlightConnection() {
+  }
+
   public FlightConnection(Long id, String connectionNumber) {
     this.id = id;
     this.connectionNumber = connectionNumber;
