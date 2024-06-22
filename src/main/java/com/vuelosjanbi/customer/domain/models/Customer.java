@@ -1,8 +1,11 @@
 package com.vuelosjanbi.customer.domain.models;
 
+import com.vuelosjanbi.documentType.domain.models.DocumentType;
+
 import jakarta.persistence.Entity;
 
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Customer {
@@ -11,8 +14,8 @@ public class Customer {
   private String name;
   private Integer age;
 
-  // @OneToMany(mappedBy = "customer")
-  private Integer idDocument;
+  @ManyToOne
+  private DocumentType documentType;
 
   public String getId() {
     return id;
@@ -38,12 +41,12 @@ public class Customer {
     this.age = age;
   }
 
-  public Integer getIdDocument() {
-    return idDocument;
+  public DocumentType getDocumentType() {
+    return documentType;
   }
 
-  public void setIdDocument(Integer idDocument) {
-    this.idDocument = idDocument;
+  public void setDocumentType(DocumentType documentType) {
+    this.documentType = documentType;
   }
 
 }
