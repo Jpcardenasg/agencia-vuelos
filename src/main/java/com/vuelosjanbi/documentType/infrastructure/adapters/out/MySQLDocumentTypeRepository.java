@@ -28,9 +28,15 @@ public class MySQLDocumentTypeRepository implements DocumentTypeRepositoryPort {
     public DocumentType save(DocumentType documentType) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "INSERT INTO document_type VALUES(?)";
-            try (PreparedStatement statement = connection.prepareStatement(query)) {
+            try (PreparedStatement statement = connection.prepareStatement(query,
+                    PreparedStatement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, documentType.getName());
                 statement.executeUpdate();
+                try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        documentType.setId(generatedKeys.getLong(1));
+                    }
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

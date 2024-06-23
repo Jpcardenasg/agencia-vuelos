@@ -27,10 +27,16 @@ public class MySQLCountryRepository implements CountryRepositoryPort {
     @Override
     public Country save(Country country) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String query = "INSERT INTO country VALUES(?)";
-            try (PreparedStatement statement = connection.prepareStatement(query)) {
+            String query = "INSERT INTO country (name) VALUES(?)";
+            try (PreparedStatement statement = connection.prepareStatement(query,
+                    PreparedStatement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, country.getName());
                 statement.executeUpdate();
+                try (ResultSet resultSet = statement.getGeneratedKeys()) {
+                    if (resultSet.next()) {
+                        country.setId(resultSet.getLong(1));
+                    }
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

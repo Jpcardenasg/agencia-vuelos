@@ -3,13 +3,10 @@ package com.vuelosjanbi.airport.infrastructure.adapters.out;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.ArrayList;
 
 import com.vuelosjanbi.airport.application.ports.out.AirportRepositoryPort;
 import com.vuelosjanbi.airport.domain.models.Airport;
-import com.vuelosjanbi.city.application.ports.CityRepositoryPort;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -23,9 +20,6 @@ public class MySQLAirportRepository implements AirportRepositoryPort {
   private final String user;
   private final String password;
 
-  @Autowired
-  CityRepositoryPort cityRepositoryPort;
-
   public MySQLAirportRepository(String url, String user, String password) {
     this.url = url;
     this.user = user;
@@ -35,10 +29,48 @@ public class MySQLAirportRepository implements AirportRepositoryPort {
   @Override
   public Airport save(Airport airport) {
     try (Connection connection = DriverManager.getConnection(user, url, password)) {
-      String query = "INSERT INTO airport (name,city_id) VALUES (?,?)";
+      String query;
+      if (airport.getCity() == null) {
+        query = "INSERT INTO airport (name) VALUES (?)";
+      } else {
+        query = "INSERT INTO airport (name, city_id) VALUES (?, ?)";
+      }
+      try (PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+        statement.setString(1, airport.getName());
+        if (airport.getCity() != null) {
+          statement.setLong(2, airport.getCity().getId());
+        }
+        statement.executeUpdate();
+        try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+          if (generatedKeys.next()) {
+            airport.setId(generatedKeys.getLong(1));
+          }
+        }
+      }
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return airport;
+  }
+
+  public Airport update(Airport airport) {
+    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+      String query;
+      if (airport.getCity() == null) {
+        query = "UPDATE airport SET name = ? WHERE id = ?";
+      } else {
+        query = "UPDATE airport SET name = ?, city_id = ? WHERE id = ?";
+      }
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         statement.setString(1, airport.getName());
-        statement.setLong(2, airport.getCity().getId());
+        if (airport.getCity() != null) {
+          statement.setLong(2, airport.getCity().getId());
+          statement.setLong(3, airport.getId());
+        } else {
+          statement.setLong(2, airport.getId());
+        }
+
         statement.executeUpdate();
       }
     } catch (SQLException e) {
@@ -71,7 +103,6 @@ public class MySQLAirportRepository implements AirportRepositoryPort {
           Airport airport = new Airport();
           airport.setId(resulSet.getLong("id"));
           airport.setName(resulSet.getString("name"));
-          airport.setCity(cityRepositoryPort.findById(resulSet.getLong("city_id")).orElse(null));
           airports.add(airport);
         }
 
@@ -94,7 +125,6 @@ public class MySQLAirportRepository implements AirportRepositoryPort {
           Airport airport = new Airport();
           airport.setId(resultSet.getLong("id"));
           airport.setName(resultSet.getString("name"));
-          airport.setCity(cityRepositoryPort.findById(resultSet.getLong("city_id")).orElse(null));
           return Optional.of(airport);
         }
       }
@@ -115,7 +145,6 @@ public class MySQLAirportRepository implements AirportRepositoryPort {
           Airport airport = new Airport();
           airport.setId(resultSet.getLong("id"));
           airport.setName(resultSet.getString("name"));
-          airport.setCity(cityRepositoryPort.findById(resultSet.getLong("city_id")).orElse(null));
           return Optional.of(airport);
         }
       }
@@ -137,7 +166,6 @@ public class MySQLAirportRepository implements AirportRepositoryPort {
           Airport airport = new Airport();
           airport.setId(resultSet.getLong("id"));
           airport.setName(resultSet.getString("name"));
-          airport.setCity(cityRepositoryPort.findById(resultSet.getLong("city_id")).orElse(null));
           airports.add(airport);
         }
         return airports;

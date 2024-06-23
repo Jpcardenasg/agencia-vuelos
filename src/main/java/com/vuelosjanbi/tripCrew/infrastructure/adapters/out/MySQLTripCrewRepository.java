@@ -29,12 +29,6 @@ public class MySQLTripCrewRepository implements TripCrewRepositoryPort {
     this.password = password;
   }
 
-  @Autowired
-  EmployeeRepositoryPort employeeRepositoryPort;
-
-  @Autowired
-  FlightConnectionRepositoryPort flightConnectionRepositoryPort;
-
   @Override
   public TripCrew save(TripCrew tripCrew) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
@@ -65,9 +59,6 @@ public class MySQLTripCrewRepository implements TripCrewRepositoryPort {
             tripCrewId.setEmployeeId(resultSet.getLong("employee_id"));
             tripCrewId.setFlightConnectionId(resultSet.getLong("flight_connection_id"));
             tripCrew.setId(tripCrewId);
-            tripCrew.setEmployee(employeeRepositoryPort.findById(resultSet.getLong("employee_id")).orElse(null));
-            tripCrew.setFlightConnection(
-                flightConnectionRepositoryPort.findById(resultSet.getLong("flight_connection_id")).orElse(null));
             return Optional.of(tripCrew);
           } else {
             return Optional.empty();
@@ -106,9 +97,6 @@ public class MySQLTripCrewRepository implements TripCrewRepositoryPort {
             tripCrewId.setEmployeeId(statement.getResultSet().getLong("employee_id"));
             tripCrewId.setFlightConnectionId(statement.getResultSet().getLong("flight_connection_id"));
             tripCrew.setId(tripCrewId);
-            tripCrew.setEmployee(employeeRepositoryPort.findById(resultSet.getLong("employee_id")).orElse(null));
-            tripCrew.setFlightConnection(
-                flightConnectionRepositoryPort.findById(resultSet.getLong("flight_connection_id")).orElse(null));
             tripCrews.add(tripCrew);
           }
           return tripCrews;

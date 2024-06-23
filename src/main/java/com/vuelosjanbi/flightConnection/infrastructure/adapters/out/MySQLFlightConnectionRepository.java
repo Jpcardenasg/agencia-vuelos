@@ -28,8 +28,30 @@ public class MySQLFlightConnectionRepository implements FlightConnectionReposito
   public FlightConnection save(FlightConnection flightConnection) {
     try (Connection connection = DriverManager.getConnection(url, username, password)) {
       String query = "INSERT INTO flightConnection VALUES(?)";
+      try (PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+        statement.setString(1, flightConnection.getConnectionNumber());
+        statement.executeUpdate();
+        try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+          if (generatedKeys.next()) {
+            flightConnection.setId(generatedKeys.getLong(1));
+          }
+        }
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return flightConnection;
+  }
+
+  public FlightConnection update(FlightConnection flightConnection) {
+    try (Connection connection = DriverManager.getConnection(url, username, password)) {
+      String query = "UPDATE flightConnection SET connectionNumber = ?,SET trip_id = ?,SET plane_id = ?, SET airport_id = ? WHERE id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         statement.setString(1, flightConnection.getConnectionNumber());
+        statement.setLong(2, flightConnection.getTrip().getId());
+        statement.setLong(3, flightConnection.getPlane().getId());
+        statement.setLong(4, flightConnection.getAirport().getId());
+        statement.setLong(5, flightConnection.getId());
         statement.executeUpdate();
       }
     } catch (SQLException e) {

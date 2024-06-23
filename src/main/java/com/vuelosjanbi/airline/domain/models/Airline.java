@@ -11,7 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class Airline {
+public class Airline implements java.io.Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

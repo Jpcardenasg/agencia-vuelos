@@ -1,5 +1,6 @@
 package com.vuelosjanbi.employee.infrastructure.adapters.out;
 
+import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -9,12 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.vuelosjanbi.airline.application.ports.out.AirlineRepositoryPort;
-
-import com.vuelosjanbi.airport.application.ports.out.AirportRepositoryPort;
-import com.vuelosjanbi.crewRole.application.ports.out.CrewRoleRepositoryport;
 import com.vuelosjanbi.crewRole.domain.models.CrewRole;
 import com.vuelosjanbi.employee.application.ports.out.EmployeeRepositoryPort;
 import com.vuelosjanbi.employee.domain.models.Employee;
@@ -25,11 +20,6 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
   private final String user;
   private final String password;
 
-  @Autowired
-  CrewRoleRepositoryport crewRoleRepositoryport;
-  AirlineRepositoryPort airlineRepositoryPort;
-  AirportRepositoryPort airportRepositoryPort;
-
   public MySQLEmployeeRepository(String url, String user, String password) {
     this.url = url;
     this.user = user;
@@ -38,18 +28,58 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
 
   @Override
   public Employee save(Employee employee) {
-    try (Connection connection = DriverManager.getConnection(url, user, password)) {
-      String query = "INSERT INTO employee (name, rol_id, airline_id, airport_id) VALUES (?, ?, ?, ?)";
-      try (PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
-        statement.setString(1, employee.getName());
-        statement.setLong(2, employee.getRol().getId());
-        statement.setLong(3, employee.getAirline().getId());
-        statement.setLong(4, employee.getAirport().getId());
-        statement.executeUpdate();
+    String tableName = "employee";
+    StringBuilder queryBuilder = new StringBuilder("INSERT INTO ");
+    queryBuilder.append(tableName).append(" (name");
+
+    StringBuilder placeholders = new StringBuilder("VALUES (?)");
+
+    List<Object> params = new ArrayList<>();
+    params.add(employee.getName());
+
+    Field[] fields = employee.getClass().getDeclaredFields();
+
+    for (Field field : fields) {
+      field.setAccessible(true);
+
+      if ("id".equals(field.getName())) {
+        continue;
       }
+      try {
+        Object value = field.get(employee);
+        if (value != null) {
+          queryBuilder.append(", ").append(field.getName());
+          placeholders.append(", ?");
+          params.add(value);
+        }
+      } catch (IllegalAccessException e) {
+        e.printStackTrace();
+      }
+    }
+    queryBuilder.append(") ").append(placeholders);
+
+    String query = queryBuilder.toString();
+
+    try (Connection connection = DriverManager.getConnection(url, user, password);
+        PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+
+      // Establecer los parámetros en la consulta preparada
+      for (int i = 0; i < params.size(); i++) {
+        statement.setObject(i + 1, params.get(i));
+      }
+
+      statement.executeUpdate();
+
+      try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+        if (generatedKeys.next()) {
+          employee.setId(generatedKeys.getLong(1));
+        }
+      }
+
     } catch (SQLException e) {
       e.printStackTrace();
     }
+
     return employee;
   }
 
@@ -64,9 +94,6 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
             Employee employee = new Employee();
             employee.setId(result.getLong("id"));
             employee.setName(result.getString("name"));
-            employee.setRol(crewRoleRepositoryport.findById(result.getLong("rol_id")).orElse(null));
-            employee.setAirline(airlineRepositoryPort.findById(result.getLong("airline_id")).orElse(null));
-            employee.setAirport(airportRepositoryPort.findById(result.getLong("airport_id")).orElse(null));
             return Optional.of(employee);
           }
           return Optional.empty();
@@ -102,9 +129,7 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
             Employee employee = new Employee();
             employee.setId(result.getLong("id"));
             employee.setName(result.getString("name"));
-            employee.setRol(crewRoleRepositoryport.findById(result.getLong("rol_id")).orElse(null));
-            employee.setAirline(airlineRepositoryPort.findById(result.getLong("airline_id")).orElse(null));
-            employee.setAirport(airportRepositoryPort.findById(result.getLong("airport_id")).orElse(null));
+
             employees.add(employee);
           }
           return employees;
@@ -128,9 +153,7 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
             Employee employee = new Employee();
             employee.setId(result.getLong("id"));
             employee.setName(result.getString("name"));
-            employee.setRol(crewRoleRepositoryport.findById(result.getLong("rol_id")).orElse(null));
-            employee.setAirline(airlineRepositoryPort.findById(result.getLong("airline_id")).orElse(null));
-            employee.setAirport(airportRepositoryPort.findById(result.getLong("airport_id")).orElse(null));
+
             employees.add(employee);
           }
           return employees;
@@ -154,9 +177,6 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
             Employee employee = new Employee();
             employee.setId(result.getLong("id"));
             employee.setName(result.getString("name"));
-            employee.setRol(crewRoleRepositoryport.findById(result.getLong("rol_id")).orElse(null));
-            employee.setAirline(airlineRepositoryPort.findById(result.getLong("airline_id")).orElse(null));
-            employee.setAirport(airportRepositoryPort.findById(result.getLong("airport_id")).orElse(null));
             employees.add(employee);
           }
           return employees;
@@ -169,7 +189,7 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
   }
 
   @Override
-  public List<Employee> findByAirlineId(Long airlineId) {
+  public List<Employee> findEmployeesByAirlineId(Long airlineId) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "SELECT * FROM employee WHERE airline_id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -180,9 +200,7 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
             Employee employee = new Employee();
             employee.setId(result.getLong("id"));
             employee.setName(result.getString("name"));
-            employee.setRol(crewRoleRepositoryport.findById(result.getLong("rol_id")).orElse(null));
-            employee.setAirline(airlineRepositoryPort.findById(result.getLong("airline_id")).orElse(null));
-            employee.setAirport(airportRepositoryPort.findById(result.getLong("airport_id")).orElse(null));
+
             employees.add(employee);
           }
           return employees;

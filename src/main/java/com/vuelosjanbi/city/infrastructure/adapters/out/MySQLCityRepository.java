@@ -9,20 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.vuelosjanbi.city.application.ports.CityRepositoryPort;
 import com.vuelosjanbi.city.domain.models.City;
-import com.vuelosjanbi.country.application.ports.out.CountryRepositoryPort;
 
 public class MySQLCityRepository implements CityRepositoryPort {
 
     private final String url;
     private final String username;
     private final String password;
-
-    @Autowired
-    private CountryRepositoryPort countryRepositoryPort;
 
     public MySQLCityRepository(String url, String username, String password) {
         this.url = url;
@@ -34,10 +28,47 @@ public class MySQLCityRepository implements CityRepositoryPort {
     @Override
     public City save(City city) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String query = "INSERT INTO city (name,country_id) VALUES(?,?)";
+            String query;
+            if (city.getCountry() == null) {
+                query = "INSERT INTO city (name) VALUES (?)";
+            } else {
+                query = "INSERT INTO city (name, country_id) VALUES (?, ?)";
+            }
+            try (PreparedStatement statement = connection.prepareStatement(query,
+                    PreparedStatement.RETURN_GENERATED_KEYS)) {
+                statement.setString(1, city.getName());
+                if (city.getCountry() != null) {
+                    statement.setLong(2, city.getCountry().getId());
+                }
+                statement.executeUpdate();
+                try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        city.setId(generatedKeys.getLong(1));
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return city;
+    }
+
+    public City update(City city) {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            String query;
+            if (city.getCountry() == null) {
+                query = "UPDATE city SET name = ? WHERE id = ?";
+            } else {
+                query = "UPDATE city SET name = ?, country_id = ? WHERE id = ?";
+            }
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, city.getName());
-                statement.setLong(2, city.getCountry().getId());
+                if (city.getCountry() != null) {
+                    statement.setLong(2, city.getCountry().getId());
+                    statement.setLong(3, city.getId());
+                } else {
+                    statement.setLong(3, city.getId());
+                }
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -70,7 +101,6 @@ public class MySQLCityRepository implements CityRepositoryPort {
                         City city = new City();
                         city.setId(resultSet.getLong("id"));
                         city.setName(resultSet.getString("name"));
-                        city.setCountry(countryRepositoryPort.findById(resultSet.getLong("country_id")).orElse(null));
                         cities.add(city);
                     }
                 }
@@ -116,7 +146,6 @@ public class MySQLCityRepository implements CityRepositoryPort {
                         City city = new City();
                         city.setId(resultSet.getLong("id"));
                         city.setName(resultSet.getString("name"));
-                        city.setCountry(countryRepositoryPort.findById(resultSet.getLong("country_id")).orElse(null));
                         cities.add(city);
                     }
                     return cities;
