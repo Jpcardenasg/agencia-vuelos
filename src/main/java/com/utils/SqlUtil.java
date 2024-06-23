@@ -31,16 +31,14 @@ public class SqlUtil {
       Field[] fields = object.getClass().getDeclaredFields();
 
       for (Field field : fields) {
-        field.setAccessible(true); 
+        field.setAccessible(true);
 
-    
         if ("id".equals(field.getName()) || "name".equals(field.getName())) {
           continue;
         }
 
         Object value = field.get(object);
         if (value != null) {
-          // Si el campo es un objeto y tiene un método getId(), obtener el ID
           if (isEntity(value)) {
             Field idField = value.getClass().getDeclaredField("id");
             System.out.println(idField);
@@ -50,7 +48,6 @@ public class SqlUtil {
             placeholders.append("?, ");
             params.add(idValue);
           } else {
-            // De lo contrario, solo agregar el valor directamente
             queryBuilder.append(field.getName()).append(", ");
             placeholders.append("?, ");
             params.add(value);
@@ -111,7 +108,6 @@ public class SqlUtil {
   }
 
   public static void main(String[] args) throws NoSuchFieldException, SecurityException {
-    // Crear un objeto de prueba
     Employee employee = new Employee();
     employee.setId(10L);
     employee.setName("John Doe");
@@ -119,7 +115,6 @@ public class SqlUtil {
     employee.setAirline(new Airline(1L, "Delta"));
 
     MySQLEmployeeRepository mySQLEmployeeRepository = new MySQLEmployeeRepository(url, user, password);
-    // Guardar el objeto en la base de datos
     Employee savedEmployee = SqlUtil.save(employee, "employee");
 
     System.out.println("Employee saved with ID: " + savedEmployee.getId());
