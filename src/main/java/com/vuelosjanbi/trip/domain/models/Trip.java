@@ -36,6 +36,13 @@ public class Trip {
   public Trip() {
   }
 
+  public Trip(Date tripDate, double tripPrice, Airport originAirport, Airport destinationAirport) {
+    this.tripDate = tripDate;
+    this.tripPrice = tripPrice;
+    this.originAirport = originAirport;
+    this.destinationAirport = destinationAirport;
+  }
+
   public Trip(Long id, Date tripDate, double tripPrice, List<FlightConnection> flightConnections,
       List<TripBooking> tripBookings) {
     this.id = id;
@@ -83,6 +90,28 @@ public class Trip {
 
   public void setTripBookings(List<TripBooking> tripBookings) {
     this.tripBookings = tripBookings;
+  }
+
+  public Airport getOriginAirport() {
+    return originAirport;
+  }
+
+  public void setOriginAirport(Airport originAirport) {
+    this.originAirport = originAirport;
+  }
+
+  public Airport getDestinationAirport() {
+    return destinationAirport;
+  }
+
+  public void setDestinationAirport(Airport destinationAirport) {
+    this.destinationAirport = destinationAirport;
+  }
+
+  @Override
+  public String toString() {
+    return String.format("Trip id: %d, Trip date: %s, Trip price: %.2f, Origin airport: %s, Destination airport: %s",
+        id, tripDate, tripPrice, originAirport.getName(), destinationAirport.getName());
   }
 
 }

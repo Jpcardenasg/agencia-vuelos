@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.vuelosjanbi.airport.application.ports.out.AirportRepositoryPort;
 import com.vuelosjanbi.trip.application.ports.out.TripRepositoryPort;
 import com.vuelosjanbi.trip.domain.models.Trip;
 
@@ -18,19 +21,31 @@ public class MySQLTripRepository implements TripRepositoryPort {
   private final String user;
   private final String password;
 
-  MySQLTripRepository(String url, String user, String password) {
+  @Autowired
+  private AirportRepositoryPort airportRepositoryPort;
+
+  public MySQLTripRepository(String url, String user, String password) {
     this.url = url;
     this.user = user;
     this.password = password;
   }
 
+  public MySQLTripRepository(String url, String user, String password, AirportRepositoryPort airportRepositoryPort) {
+    this.url = url;
+    this.user = user;
+    this.password = password;
+    this.airportRepositoryPort = airportRepositoryPort;
+  }
+
   @Override
   public Trip save(Trip trip) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
-      String query = "INSERT INTO trip (trip_date, price_trip) VALUES (?, ?)";
+      String query = "INSERT INTO trip (trip_date, price_trip,origin_airport_id,destination_airport_id) VALUES (?, ?, ?, ?)";
       try (PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
         statement.setDate(1, trip.getTripDate());
         statement.setDouble(2, trip.getTripPrice());
+        statement.setLong(3, trip.getOriginAirport().getId());
+        statement.setLong(4, trip.getDestinationAirport().getId());
         statement.executeUpdate();
         try (ResultSet resultSet = statement.getGeneratedKeys()) {
           if (resultSet.next()) {
@@ -94,6 +109,9 @@ public class MySQLTripRepository implements TripRepositoryPort {
             trip.setId(resultSet.getLong("id"));
             trip.setTripDate(resultSet.getDate("trip_date"));
             trip.setTripPrice(resultSet.getDouble("trip_price"));
+            trip.setOriginAirport(airportRepositoryPort.findById(resultSet.getLong("origin_airport_id")).get());
+            trip.setDestinationAirport(
+                airportRepositoryPort.findById(resultSet.getLong("destination_airport_id")).get());
             return Optional.of(trip);
           }
         }

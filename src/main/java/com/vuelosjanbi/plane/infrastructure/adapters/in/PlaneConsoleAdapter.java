@@ -34,14 +34,14 @@ public class PlaneConsoleAdapter {
 
     public void start(boolean useJpa) {
         if (useJpa) {
-            System.out.println("JPA");
+            System.out.println("Using JPA");
         } else {
             planeModelService = new PlaneModelService(new MySQLPlaneModelRepository(url, user, password));
             planeStatusService = new PlaneStatusService(new MySQLPlaneStatusRepository(url, user, password));
             planeService = new PlaneService(
                     new MySQLPlaneRepository(url, user, password, new MySQLPlaneStatusRepository(url, user, password),
                             new MySQLPlaneModelRepository(url, user, password)));
-            System.out.println("MYSQL");
+            System.out.println("Using MYSQL");
         }
 
         Scanner scanner = new Scanner(System.in);
