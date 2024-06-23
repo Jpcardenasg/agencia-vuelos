@@ -3,8 +3,12 @@ package com.vuelosjanbi.planeStatus.application;
 import com.vuelosjanbi.planeStatus.application.ports.out.PlaneStatusRepositoryPort;
 import com.vuelosjanbi.planeStatus.domain.models.PlaneStatus;
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
+@Service
 public class PlaneStatusService {
 
   private PlaneStatusRepositoryPort planeStatusRepositoryPort;

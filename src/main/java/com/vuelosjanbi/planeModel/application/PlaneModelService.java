@@ -4,8 +4,12 @@ import com.vuelosjanbi.planeModel.application.ports.out.PlaneModelRepositoryPort
 import com.vuelosjanbi.planeModel.domain.models.PlaneModel;
 
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 
+@Service
 public class PlaneModelService {
 
   private PlaneModelRepositoryPort planeModelRepositoryPort;

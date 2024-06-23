@@ -36,7 +36,7 @@ public class MySQLPlaneRepository implements PlaneRepositoryPort {
     @Override
     public Plane save(Plane plane) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String query = "INSERT INTO plane(plate, capacity, fabricationDate, status_id, model_id) VALUES(?, ?, ?, ?, ?)";
+            String query = "INSERT INTO plane(plate, capacity, fabrication_date, status_id, model_id) VALUES(?, ?, ?, ?, ?)";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, plane.getPlate());
                 statement.setInt(2, plane.getCapacity());
