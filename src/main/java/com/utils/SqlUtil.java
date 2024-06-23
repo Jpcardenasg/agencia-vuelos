@@ -19,28 +19,21 @@ public class SqlUtil {
   private static final String user = "root";
   private static final String password = "1324";
 
-  // Método estático para guardar un objeto en la base de datos
   public static <T> T save(T object, String tableName) throws NoSuchFieldException, SecurityException {
-    // Construir la consulta INSERT INTO dinámicamente
     StringBuilder queryBuilder = new StringBuilder("INSERT INTO ");
     queryBuilder.append(tableName).append(" (");
 
-    // StringBuilder para los valores de los parámetros
     StringBuilder placeholders = new StringBuilder("VALUES (");
 
-    // Lista para almacenar los valores de los parámetros
     List<Object> params = new ArrayList<>();
 
     try {
-      // Obtener todos los campos declarados en la clase del objeto
       Field[] fields = object.getClass().getDeclaredFields();
 
-      // Construir dinámicamente la consulta y los parámetros
       for (Field field : fields) {
-        field.setAccessible(true); // Hacer accesibles los campos privados
+        field.setAccessible(true); 
 
-        // Ignorar el campo "id" ya que es autoincremental y no debe insertarse
-        // explícitamente
+    
         if ("id".equals(field.getName()) || "name".equals(field.getName())) {
           continue;
         }
@@ -65,7 +58,6 @@ public class SqlUtil {
         }
       }
 
-      // Eliminar la última coma y espacio de queryBuilder y placeholders
       queryBuilder.setLength(queryBuilder.length() - 2);
       placeholders.setLength(placeholders.length() - 2);
 
@@ -76,18 +68,14 @@ public class SqlUtil {
       try (Connection connection = DriverManager.getConnection(url, user, password);
           PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
-        // Establecer los parámetros en la consulta preparada
         for (int i = 0; i < params.size(); i++) {
           statement.setObject(i + 1, params.get(i));
         }
 
-        // Ejecutar la consulta
         statement.executeUpdate();
 
-        // Obtener las claves generadas, si hay alguna
         try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
           if (generatedKeys.next()) {
-            // Establecer el ID generado en el objeto
             setId(object, generatedKeys.getLong(1));
           }
         }
@@ -103,7 +91,6 @@ public class SqlUtil {
     return object;
   }
 
-  // Método auxiliar para establecer el ID generado en el objeto
   private static <T> void setId(T object, Long id) {
     try {
       Field field = object.getClass().getDeclaredField("id");
@@ -114,13 +101,7 @@ public class SqlUtil {
     }
   }
 
-  // Método auxiliar para verificar si el objeto es una entidad persistente
   private static boolean isEntity(Object object) {
-    // Aquí puedes implementar tu lógica para determinar si el objeto es una entidad
-    // persistente
-    // Por ejemplo, verificar si tiene un método getId()
-    // Este método puede ser más complejo dependiendo de tu estructura y
-    // requerimientos
     try {
       object.getClass().getDeclaredMethod("getId");
       return true;
