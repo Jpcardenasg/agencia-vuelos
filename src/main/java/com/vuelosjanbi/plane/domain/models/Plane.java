@@ -5,6 +5,7 @@ import java.sql.Date;
 import com.vuelosjanbi.planeModel.domain.models.PlaneModel;
 import com.vuelosjanbi.planeStatus.domain.models.PlaneStatus;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +19,7 @@ public class Plane {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(unique = true)
     private String plate;
     private Integer capacity;
 
