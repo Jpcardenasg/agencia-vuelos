@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
 
 import com.vuelosjanbi.plane.domain.models.Plane;
 import com.vuelosjanbi.plane.application.ports.out.PlaneRepositoryPort;
@@ -61,6 +60,32 @@ public class MySQLPlaneRepository implements PlaneRepositoryPort {
         return plane;
     }
 
+    @Override
+    public Optional<Plane> findById(Long planeId) {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            String query = "SELECT * FROM plane WHERE id = ? ";
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setLong(1, planeId);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        Plane plane = new Plane();
+                        plane.setId(resultSet.getLong("id"));
+                        plane.setPlate(resultSet.getString("plate"));
+                        plane.setCapacity(resultSet.getInt("capacity"));
+                        plane.setFabricationDate(resultSet.getDate("fabrication_date"));
+                        plane.setStatus(
+                                planeStatusRepositoryPort.findById(resultSet.getLong("status_id")).orElse(null));
+                        plane.setModel(planeModelRepositoryPort.findById(resultSet.getLong("model_id")).orElse(null));
+                        return Optional.of(plane);
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return Optional.empty();
+    }
+
     public Plane update(Plane plane) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
             String query = "UPDATE plane SET plate = ?, capacity = ?, fabrication_date = ?, status_id = ?, model_id = ? WHERE id = ?";
@@ -90,32 +115,6 @@ public class MySQLPlaneRepository implements PlaneRepositoryPort {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public Optional<Plane> findById(Long planeId) {
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String query = "SELECT * FROM plane WHERE id = ? ";
-            try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setLong(1, planeId);
-                try (ResultSet resultSet = statement.executeQuery()) {
-                    if (resultSet.next()) {
-                        Plane plane = new Plane();
-                        plane.setId(resultSet.getLong("id"));
-                        plane.setPlate(resultSet.getString("plate"));
-                        plane.setCapacity(resultSet.getInt("capacity"));
-                        plane.setFabricationDate(resultSet.getDate("fabrication_date"));
-                        plane.setStatus(
-                                planeStatusRepositoryPort.findById(resultSet.getLong("status_id")).orElse(null));
-                        plane.setModel(planeModelRepositoryPort.findById(resultSet.getLong("model_id")).orElse(null));
-                        return Optional.of(plane);
-                    }
-                }
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return Optional.empty();
     }
 
     @Override

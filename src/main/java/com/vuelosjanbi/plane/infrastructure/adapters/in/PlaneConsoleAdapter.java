@@ -9,33 +9,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.vuelosjanbi.plane.application.PlaneService;
-import com.vuelosjanbi.plane.application.ports.out.PlaneRepositoryPort;
 import com.vuelosjanbi.plane.domain.models.Plane;
 import com.vuelosjanbi.plane.infrastructure.adapters.out.MySQLPlaneRepository;
 import com.vuelosjanbi.planeModel.application.PlaneModelService;
-import com.vuelosjanbi.planeModel.application.ports.out.PlaneModelRepositoryPort;
 import com.vuelosjanbi.planeModel.domain.models.PlaneModel;
 import com.vuelosjanbi.planeModel.infrastructure.adapters.out.MySQLPlaneModelRepository;
 import com.vuelosjanbi.planeStatus.application.PlaneStatusService;
-import com.vuelosjanbi.planeStatus.application.ports.out.PlaneStatusRepositoryPort;
 import com.vuelosjanbi.planeStatus.domain.models.PlaneStatus;
 import com.vuelosjanbi.planeStatus.infrastructure.adapters.out.MySQLPlaneStatusRepository;
 
 @Component
 public class PlaneConsoleAdapter {
 
-    private PlaneService planeService;
-
     @Autowired
     private PlaneModelService planeModelService;
     @Autowired
     private PlaneStatusService planeStatusService;
     @Autowired
-    private PlaneRepositoryPort planeRepositoryPort;
-    @Autowired
-    private PlaneModelRepositoryPort planeModelRepositoryPort;
-    @Autowired
-    private PlaneStatusRepositoryPort planeStatusRepositoryPort;
+    private PlaneService planeService;
 
     private final String url = "jdbc:mysql://localhost:3307/vuelosjanpi";
     private final String user = "root";
@@ -43,12 +34,8 @@ public class PlaneConsoleAdapter {
 
     public void start(boolean useJpa) {
         if (useJpa) {
-            planeService = new PlaneService(planeRepositoryPort);
-            planeModelService = new PlaneModelService(planeModelRepositoryPort);
-            planeStatusService = new PlaneStatusService(planeStatusRepositoryPort);
             System.out.println("JPA");
         } else {
-
             planeModelService = new PlaneModelService(new MySQLPlaneModelRepository(url, user, password));
             planeStatusService = new PlaneStatusService(new MySQLPlaneStatusRepository(url, user, password));
             planeService = new PlaneService(

@@ -2,12 +2,16 @@ package com.vuelosjanbi.plane.application;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.vuelosjanbi.plane.application.ports.out.PlaneRepositoryPort;
 import com.vuelosjanbi.plane.domain.models.Plane;
 
+@Service
 public class PlaneService {
-
-    private final PlaneRepositoryPort planeRepositoryPort;
+    @Autowired
+    private PlaneRepositoryPort planeRepositoryPort;
 
     public PlaneService(PlaneRepositoryPort planeRepositoryPort) {
         this.planeRepositoryPort = planeRepositoryPort;
