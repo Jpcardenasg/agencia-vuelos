@@ -1,5 +1,7 @@
 package com.vuelosjanbi.employee.application;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +35,10 @@ public class EmployeeService {
 
   public Employee updateEmployee(Employee employee) {
     return employeeRepositoryPort.save(employee);
+  }
+
+  public List<Employee> getAllEmployees() {
+    return employeeRepositoryPort.findAll();
   }
 
 }

@@ -76,4 +76,16 @@ public class FlightConnection {
     this.airport = airport;
   }
 
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append(getClass().getSimpleName()).append(" ")
+        .append("\n\tid: ").append(id)
+        .append(",\n\tconnectionNumber: ").append(connectionNumber)
+        .append(",\n\ttrip: ").append(trip)
+        .append(",\n\tplane: ").append(plane)
+        .append(",\n\tairport: ").append(airport);
+    return sb.toString();
+  }
+
 }

@@ -10,6 +10,7 @@ import com.vuelosjanbi.plane.domain.models.Plane;
 
 @Service
 public class PlaneService {
+
     @Autowired
     private PlaneRepositoryPort planeRepositoryPort;
 

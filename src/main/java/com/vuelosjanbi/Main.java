@@ -8,12 +8,16 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.vuelosjanbi.plane.infrastructure.adapters.in.PlaneConsoleAdapter;
+import com.vuelosjanbi.trip.infrastructure.adapters.in.TripConsoleAdapter;
 
 @SpringBootApplication
 public class Main implements CommandLineRunner {
 
     @Autowired
     private PlaneConsoleAdapter planeConsoleAdapter;
+
+    @Autowired
+    TripConsoleAdapter tripConsoleAdapter;
 
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
@@ -29,6 +33,7 @@ public class Main implements CommandLineRunner {
         int choice = scanner.nextInt();
         boolean useJpa = (choice == 1);
 
-        planeConsoleAdapter.start(useJpa);
+        // planeConsoleAdapter.start(useJpa);
+        tripConsoleAdapter.start(useJpa);
     }
 }

@@ -8,9 +8,11 @@ import com.vuelosjanbi.employee.domain.models.Employee;
 import com.vuelosjanbi.employee.infrastructure.adapters.out.MySQLEmployeeRepository;
 import com.vuelosjanbi.flightConnection.application.FlightConnectionService;
 import com.vuelosjanbi.flightConnection.application.ports.out.FlightConnectionRepositoryPort;
+import com.vuelosjanbi.flightConnection.domain.models.FlightConnection;
 import com.vuelosjanbi.flightConnection.infrastructure.adapters.out.MySQLFlightConnectionRepository;
 import com.vuelosjanbi.tripCrew.application.TripCrewService;
 import com.vuelosjanbi.tripCrew.application.ports.out.TripCrewRepositoryPort;
+import com.vuelosjanbi.tripCrew.domain.models.TripCrew;
 import com.vuelosjanbi.tripCrew.infrastructure.adapters.out.MySQLTripCrewRepository;
 
 import java.util.Scanner;
@@ -62,27 +64,26 @@ public class TripCrewConsoleAdapter {
     Scanner scanner = new Scanner(System.in);
 
     while (true) {
-      System.out.println("1. Create Trip Crew.");
-      System.out.println("2. Update Trip Crew.");
-      System.out.println("3. Delete Trip Crew.");
-      System.out.println("4. List all Trip Crew.");
-      System.out.println("5. Exit.");
+      System.out.println("1. Add employee to Trip Crew.");
+      System.out.println("2. Remove employee from Trip Crew.");
+      System.out.println("3. List all Trip Crew.");
+      System.out.println("4. Exit.");
 
       int choice = scanner.nextInt();
       scanner.nextLine();
 
       switch (choice) {
         case 1:
-          // createPlane(scanner, planes, models, statusList);
+          addEmployeeToFlightConnection(scanner);
           break;
         case 2:
-          // updatePlane(scanner, planes, models, statusList);
+          RemoveEmployeeFromFlightConnection(scanner);
           break;
         case 3:
-          // deletePlane(scanner, planes);
+          listEmplosyeesInFlightConnection();
           break;
         case 4:
-          // listPlanes(planes);
+          scanner.close();
           break;
         case 5:
           scanner.close();
@@ -92,6 +93,70 @@ public class TripCrewConsoleAdapter {
           break;
       }
     }
+  }
+
+  public void addEmployeeToFlightConnection(Scanner scanner) {
+    flightConnectionService.getAllFlightConnections().forEach(flightConnection -> {
+      System.out.println(flightConnection);
+    });
+    System.out.println("Enter the flight connection id:");
+    Long flightConnectionId = scanner.nextLong();
+    scanner.nextLine();
+    FlightConnection flightConnection = flightConnectionRepositoryPort.findById(flightConnectionId).orElse(null);
+    while (true) {
+      employeeService.getAllEmployees().forEach(employee -> {
+        System.out.println(employee);
+      });
+      System.out.println("Enter the employee id:");
+      Long employeeId = scanner.nextLong();
+      scanner.nextLine();
+      Employee employee = employeeRepositoryPort.findById(employeeId).orElse(null);
+      if (employee == null) {
+        System.out.println("Employee not found.");
+        continue;
+      }
+      tripCrewService.addEmployeeToFlightConnection(new TripCrew(employee, flightConnection));
+      System.out.println("Do you want to add another employee to this flight connection? (y/n)");
+      String choice = scanner.nextLine();
+      if (choice.equals("n")) {
+        break;
+      }
+    }
+  }
+
+  public void RemoveEmployeeFromFlightConnection(Scanner scanner) {
+    flightConnectionService.getAllFlightConnections().forEach(flightConnection -> {
+      System.out.println(flightConnection);
+    });
+    System.out.println("Enter the flight connection id:");
+    Long flightConnectionId = scanner.nextLong();
+    scanner.nextLine();
+    FlightConnection flightConnection = flightConnectionRepositoryPort.findById(flightConnectionId).orElse(null);
+    while (true) {
+      employeeService.getAllEmployees().forEach(employee -> {
+        System.out.println(employee);
+      });
+      System.out.println("Enter the employee id:");
+      Long employeeId = scanner.nextLong();
+      scanner.nextLine();
+      Employee employee = employeeRepositoryPort.findById(employeeId).orElse(null);
+      if (employee == null) {
+        System.out.println("Employee not found.");
+        continue;
+      }
+      tripCrewService.removeEmployeeFromFlightConnection(new TripCrew(employee, flightConnection));
+      System.out.println("Do you want to remove another employee from this flight connection? (y/n)");
+      String choice = scanner.nextLine();
+      if (choice.equals("n")) {
+        break;
+      }
+    }
+  }
+
+  public void listEmplosyeesInFlightConnection() {
+    tripCrewService.getAllTripCrews().forEach(tripCrew -> {
+      System.out.println(tripCrew.getEmployee() + " is in " + tripCrew.getFlightConnection());
+    });
   }
 
 }

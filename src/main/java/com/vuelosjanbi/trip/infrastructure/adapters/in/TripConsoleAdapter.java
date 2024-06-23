@@ -1,6 +1,8 @@
 package com.vuelosjanbi.trip.infrastructure.adapters.in;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
 import java.util.Scanner;
 import java.sql.Date;
 import java.util.List;
@@ -12,6 +14,7 @@ import com.vuelosjanbi.trip.application.TripService;
 import com.vuelosjanbi.trip.domain.models.Trip;
 import com.vuelosjanbi.trip.infrastructure.adapters.out.MySQLTripRepository;
 
+@Controller
 public class TripConsoleAdapter {
 
   @Autowired
@@ -79,6 +82,7 @@ public class TripConsoleAdapter {
     String tripDateStr = tripYear + "-" + tripMonth + "-" + tripDay;
     Date tripDate = Date.valueOf(tripDateStr);
     System.out.println("Enter trip price: ");
+    scanner.nextLine();
     double tripPrice = scanner.nextDouble();
     for (Airport airport : airports) {
       System.out.println("Airport id: " + airport.getId() + " Airport name: " + airport.getName());

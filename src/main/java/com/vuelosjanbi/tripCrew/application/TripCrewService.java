@@ -36,7 +36,7 @@ public class TripCrewService {
     return tripCrewRepositoryPort.findById(id).orElse(null);
   }
 
-  public void deleteTripCrewById(TripCrew id) {
+  public void removeEmployeeFromFlightConnection(TripCrew id) {
     tripCrewRepositoryPort.deleteById(id);
   }
 
@@ -46,6 +46,10 @@ public class TripCrewService {
 
   public List<TripCrew> getAllTripCrews() {
     return tripCrewRepositoryPort.findAll();
+  }
+
+  public void addEmployeeToFlightConnection(TripCrew tripCrew) {
+    tripCrewRepositoryPort.save(tripCrew);
   }
 
 }

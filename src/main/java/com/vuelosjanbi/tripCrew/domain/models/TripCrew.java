@@ -21,6 +21,14 @@ public class TripCrew {
   @MapsId("flightConnectionId")
   private FlightConnection flightConnection;
 
+  public TripCrew() {
+  }
+
+  public TripCrew(Employee employee, FlightConnection flightConnection) {
+    this.employee = employee;
+    this.flightConnection = flightConnection;
+  }
+
   public TripCrewId getId() {
     return id;
   }
