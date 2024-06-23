@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.vuelosjanbi.trip.application.ports.out.TripRepositoryPort;
 import com.vuelosjanbi.tripBooking.application.ports.out.TripBookingRepositoryPort;
 import com.vuelosjanbi.tripBooking.domain.models.TripBooking;
 
@@ -20,9 +17,6 @@ public class MySQLTripBookingRepository implements TripBookingRepositoryPort {
   private final String url;
   private final String user;
   private final String password;
-
-  @Autowired
-  TripRepositoryPort tripRepositoryPort;
 
   public MySQLTripBookingRepository(String url, String user, String password) {
     this.url = url;
@@ -37,6 +31,21 @@ public class MySQLTripBookingRepository implements TripBookingRepositoryPort {
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         statement.setDate(1, tripBooking.getDate());
         statement.setLong(2, tripBooking.getTrip().getId());
+        statement.executeUpdate();
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return tripBooking;
+  }
+
+  public TripBooking update(TripBooking tripBooking) {
+    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+      String query = "UPDATE trip_booking SET date = ?, trip_id = ? WHERE id = ?";
+      try (PreparedStatement statement = connection.prepareStatement(query)) {
+        statement.setDate(1, tripBooking.getDate());
+        statement.setLong(2, tripBooking.getTrip().getId());
+        statement.setLong(3, tripBooking.getId());
         statement.executeUpdate();
       }
     } catch (SQLException e) {
@@ -69,7 +78,6 @@ public class MySQLTripBookingRepository implements TripBookingRepositoryPort {
             TripBooking tripBooking = new TripBooking();
             tripBooking.setId(resultSet.getLong("id"));
             tripBooking.setDate(resultSet.getDate("date"));
-            tripBooking.setTrip(tripRepositoryPort.findById(resultSet.getLong("trip_id")).orElse(null));
             return Optional.of(tripBooking);
           }
         }
@@ -91,7 +99,6 @@ public class MySQLTripBookingRepository implements TripBookingRepositoryPort {
           TripBooking tripBooking = new TripBooking();
           tripBooking.setId(resultSet.getLong("id"));
           tripBooking.setDate(resultSet.getDate("date"));
-          tripBooking.setTrip(tripRepositoryPort.findById(resultSet.getLong("trip_id")).orElse(null));
           tripBookings.add(tripBooking);
         }
         return tripBookings;

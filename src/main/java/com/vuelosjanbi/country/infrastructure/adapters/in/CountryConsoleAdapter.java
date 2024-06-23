@@ -9,11 +9,9 @@ import com.vuelosjanbi.country.domain.models.Country;
 public class CountryConsoleAdapter {
 
     private CountryService countryService;
-    private CountryService countryService2;
 
     public CountryConsoleAdapter(CountryService countryService) {
         this.countryService = countryService;
-        this.countryService2 = countryService2;
     }
 
     public void start() {

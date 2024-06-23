@@ -53,7 +53,7 @@ public class MySQLPlaneRepository implements PlaneRepositoryPort {
 
     public Plane update(Plane plane) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String query = "UPDATE plane SET plate = ?, capacity = ?, fabricationDate = ?, status_id = ?, model_id = ? WHERE id = ?";
+            String query = "UPDATE plane SET plate = ?, capacity = ?, fabrication_date = ?, status_id = ?, model_id = ? WHERE id = ?";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, plane.getPlate());
                 statement.setInt(2, plane.getCapacity());

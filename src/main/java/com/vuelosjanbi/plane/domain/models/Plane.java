@@ -23,7 +23,6 @@ public class Plane {
 
     @Temporal(TemporalType.DATE)
     private Date fabricationDate;
-
     @ManyToOne
     private PlaneStatus status;
     @ManyToOne

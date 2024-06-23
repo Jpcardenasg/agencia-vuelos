@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Optional;
 import java.sql.Connection;
 
-import com.vuelosjanbi.documentType.domain.models.DocumentType;
-
 import com.vuelosjanbi.customer.application.ports.out.CustomerRepositoryPort;
 import com.vuelosjanbi.customer.domain.models.Customer;
 

@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.vuelosjanbi.plane.application.ports.out.PlaneRepositoryPort;
 import com.vuelosjanbi.planeStatus.application.ports.out.PlaneStatusRepositoryPort;
 import com.vuelosjanbi.planeStatus.domain.models.PlaneStatus;
 
@@ -20,9 +17,6 @@ public class MySQLPlaneStatusRepository implements PlaneStatusRepositoryPort {
   private final String url;
   private final String user;
   private final String password;
-
-  @Autowired
-  PlaneRepositoryPort planeRepositoryPort;
 
   public MySQLPlaneStatusRepository(String url, String user, String password) {
     this.url = url;
@@ -36,6 +30,25 @@ public class MySQLPlaneStatusRepository implements PlaneStatusRepositoryPort {
       String query = "INSERT INTO plane_status (name) VALUES (?)";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         statement.setString(1, planeStatus.getName());
+        statement.executeUpdate();
+        try (ResultSet resultSet = statement.getGeneratedKeys()) {
+          if (resultSet.next()) {
+            planeStatus.setId(resultSet.getLong(1));
+          }
+        }
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return planeStatus;
+  }
+
+  public PlaneStatus update(PlaneStatus planeStatus) {
+    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+      String query = "UPDATE plane_status SET name = ? WHERE id = ?";
+      try (PreparedStatement statement = connection.prepareStatement(query)) {
+        statement.setString(1, planeStatus.getName());
+        statement.setLong(2, planeStatus.getId());
         statement.executeUpdate();
       }
     } catch (SQLException e) {
@@ -55,7 +68,6 @@ public class MySQLPlaneStatusRepository implements PlaneStatusRepositoryPort {
             PlaneStatus planeStatus = new PlaneStatus();
             planeStatus.setId(resultSet.getLong("id"));
             planeStatus.setName(resultSet.getString("name"));
-            planeStatus.setPlanes(planeRepositoryPort.findAll());
             return Optional.of(planeStatus);
           }
         }
@@ -91,7 +103,6 @@ public class MySQLPlaneStatusRepository implements PlaneStatusRepositoryPort {
             PlaneStatus planeStatus = new PlaneStatus();
             planeStatus.setId(resultSet.getLong("id"));
             planeStatus.setName(resultSet.getString("name"));
-            planeStatus.setPlanes(planeRepositoryPort.findAll());
             planeStatuses.add(planeStatus);
           }
           return planeStatuses;

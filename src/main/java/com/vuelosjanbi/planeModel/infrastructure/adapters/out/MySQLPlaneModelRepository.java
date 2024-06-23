@@ -9,9 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.vuelosjanbi.planeManufacturer.application.ports.out.PlaneManufacturerRepositoryPort;
 import com.vuelosjanbi.planeModel.application.ports.out.PlaneModelRepositoryPort;
 import com.vuelosjanbi.planeModel.domain.models.PlaneModel;
 
@@ -20,9 +17,6 @@ public class MySQLPlaneModelRepository implements PlaneModelRepositoryPort {
     private final String url;
     private final String username;
     private final String password;
-
-    @Autowired
-    PlaneManufacturerRepositoryPort planeManufacturerRepositoryPort;
 
     public MySQLPlaneModelRepository(String url, String username, String password) {
         this.url = url;
@@ -33,9 +27,10 @@ public class MySQLPlaneModelRepository implements PlaneModelRepositoryPort {
     @Override
     public PlaneModel save(PlaneModel planeModel) {
         try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            String query = "INSERT INTO plane_model(name) VALUES(?)";
+            String query = "INSERT INTO plane_model(name,plane_manufacturer_id) VALUES(?,?)";
             try (PreparedStatement statement = connection.prepareStatement(query)) {
                 statement.setString(1, planeModel.getName());
+                statement.setLong(2, planeModel.getPlaneManufacturer().getId());
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -82,9 +77,6 @@ public class MySQLPlaneModelRepository implements PlaneModelRepositoryPort {
                         PlaneModel planemodel = new PlaneModel();
                         planemodel.setId(resultSet.getLong("id"));
                         planemodel.setName(resultSet.getString("name"));
-                        planemodel.setPlaneManufacturer(
-                                planeManufacturerRepositoryPort.findById(resultSet.getLong("plane_manufacturer_id"))
-                                        .orElse(null));
                         return Optional.of(planemodel);
                     }
                 }
@@ -106,9 +98,6 @@ public class MySQLPlaneModelRepository implements PlaneModelRepositoryPort {
                         PlaneModel planemodel = new PlaneModel();
                         planemodel.setId(resultSet.getLong("id"));
                         planemodel.setName(resultSet.getString("name"));
-                        planemodel.setPlaneManufacturer(
-                                planeManufacturerRepositoryPort.findById(resultSet.getLong("plane_manufacturer_id"))
-                                        .orElse(null));
                         return Optional.of(planemodel);
                     }
                 }
@@ -131,9 +120,6 @@ public class MySQLPlaneModelRepository implements PlaneModelRepositoryPort {
                         PlaneModel planemodel = new PlaneModel();
                         planemodel.setId(resultSet.getLong("id"));
                         planemodel.setName(resultSet.getString("name"));
-                        planemodel.setPlaneManufacturer(
-                                planeManufacturerRepositoryPort.findById(resultSet.getLong("plane_manufacturer_id"))
-                                        .orElse(null));
                         planeModels.add(planemodel);
                     }
                     return planeModels;
@@ -156,9 +142,6 @@ public class MySQLPlaneModelRepository implements PlaneModelRepositoryPort {
                         PlaneModel planemodel = new PlaneModel();
                         planemodel.setId(resultSet.getLong("id"));
                         planemodel.setName(resultSet.getString("name"));
-                        planemodel.setPlaneManufacturer(
-                                planeManufacturerRepositoryPort.findById(resultSet.getLong("plane_manufacturer_id"))
-                                        .orElse(null));
                         planeModels.add(planemodel);
                     }
                     return planeModels;

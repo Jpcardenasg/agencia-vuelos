@@ -28,9 +28,29 @@ public class MySQLTripRepository implements TripRepositoryPort {
   public Trip save(Trip trip) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "INSERT INTO trip (trip_date, price_trip) VALUES (?, ?)";
+      try (PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+        statement.setDate(1, trip.getTripDate());
+        statement.setDouble(2, trip.getTripPrice());
+        statement.executeUpdate();
+        try (ResultSet resultSet = statement.getGeneratedKeys()) {
+          if (resultSet.next()) {
+            trip.setId(resultSet.getLong(1));
+          }
+        }
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return trip;
+  }
+
+  public Trip update(Trip trip) {
+    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+      String query = "UPDATE trip SET trip_date = ?, trip_price = ? WHERE id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         statement.setDate(1, trip.getTripDate());
         statement.setDouble(2, trip.getTripPrice());
+        statement.setLong(3, trip.getId());
         statement.executeUpdate();
       }
     } catch (SQLException e) {

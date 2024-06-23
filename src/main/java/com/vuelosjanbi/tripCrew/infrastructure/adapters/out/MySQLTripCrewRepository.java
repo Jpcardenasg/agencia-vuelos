@@ -9,10 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.vuelosjanbi.employee.application.ports.out.EmployeeRepositoryPort;
-import com.vuelosjanbi.flightConnection.application.ports.out.FlightConnectionRepositoryPort;
 import com.vuelosjanbi.tripCrew.application.ports.out.TripCrewRepositoryPort;
 import com.vuelosjanbi.tripCrew.domain.models.TripCrew;
 import com.vuelosjanbi.tripCrew.domain.models.TripCrewId;
@@ -36,6 +32,22 @@ public class MySQLTripCrewRepository implements TripCrewRepositoryPort {
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         statement.setLong(1, tripCrew.getEmployee().getId());
         statement.setLong(2, tripCrew.getFlightConnection().getId());
+        statement.executeUpdate();
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+    return tripCrew;
+  }
+
+  public TripCrew update(TripCrew tripCrew) {
+    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+      String query = "UPDATE trip_crew SET employee_id = ?, flight_connection_id = ? WHERE employee_id = ? AND flight_connection_id = ?";
+      try (PreparedStatement statement = connection.prepareStatement(query)) {
+        statement.setLong(1, tripCrew.getEmployee().getId());
+        statement.setLong(2, tripCrew.getFlightConnection().getId());
+        statement.setLong(3, tripCrew.getId().getEmployeeId());
+        statement.setLong(4, tripCrew.getId().getFlightConnectionId());
         statement.executeUpdate();
       }
     } catch (SQLException e) {

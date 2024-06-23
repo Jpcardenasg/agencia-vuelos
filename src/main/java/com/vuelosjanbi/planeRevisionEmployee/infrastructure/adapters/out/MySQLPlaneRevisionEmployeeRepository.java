@@ -9,10 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.vuelosjanbi.employee.application.ports.out.EmployeeRepositoryPort;
-import com.vuelosjanbi.planeRevision.application.ports.out.PlaneRevisionRepositoryPort;
 import com.vuelosjanbi.planeRevisionEmployee.application.ports.out.PlaneRevisionEmployeeRepositoryPort;
 import com.vuelosjanbi.planeRevisionEmployee.domain.models.PlanRevisionEmployee;
 import com.vuelosjanbi.planeRevisionEmployee.domain.models.RevisionEmployeeId;
@@ -29,12 +25,6 @@ public class MySQLPlaneRevisionEmployeeRepository implements PlaneRevisionEmploy
     this.password = password;
   }
 
-  @Autowired
-  EmployeeRepositoryPort employeeRepositoryPort;
-
-  @Autowired
-  PlaneRevisionRepositoryPort PlaneRevisionRepositoryPort;
-
   @Override
   public PlanRevisionEmployee save(PlanRevisionEmployee planeRevisionEmployee) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
@@ -42,6 +32,22 @@ public class MySQLPlaneRevisionEmployeeRepository implements PlaneRevisionEmploy
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         statement.setLong(1, planeRevisionEmployee.getEmployee().getId());
         statement.setLong(2, planeRevisionEmployee.getPlanRevision().getId());
+        statement.executeUpdate();
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return planeRevisionEmployee;
+  }
+
+  public PlanRevisionEmployee update(PlanRevisionEmployee planeRevisionEmployee) {
+    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+      String query = "UPDATE plane_revision_employee SET employee_id = ?, plane_revision_id = ? WHERE employee_id = ? AND plane_revision_id = ?";
+      try (PreparedStatement statement = connection.prepareStatement(query)) {
+        statement.setLong(1, planeRevisionEmployee.getEmployee().getId());
+        statement.setLong(2, planeRevisionEmployee.getPlanRevision().getId());
+        statement.setLong(3, planeRevisionEmployee.getEmployee().getId());
+        statement.setLong(4, planeRevisionEmployee.getPlanRevision().getId());
         statement.executeUpdate();
       }
     } catch (SQLException e) {
@@ -62,11 +68,6 @@ public class MySQLPlaneRevisionEmployeeRepository implements PlaneRevisionEmploy
             revisionEmployeeId.setEmployeeId(resultSet.getLong("employee_id"));
             revisionEmployeeId.setPlaneRevisionId(resultSet.getLong("plane_revision_id"));
             planeRevisionEmployee.setId(revisionEmployeeId);
-            planeRevisionEmployee
-                .setEmployee(employeeRepositoryPort.findById(resultSet.getLong("employee_id")).orElse(null));
-            planeRevisionEmployee
-                .setPlanRevision(
-                    PlaneRevisionRepositoryPort.findById(resultSet.getLong("plan_revision_id")).orElse(null));
             return Optional.of(planeRevisionEmployee);
           }
         }
@@ -104,11 +105,6 @@ public class MySQLPlaneRevisionEmployeeRepository implements PlaneRevisionEmploy
             revisionEmployeeId.setEmployeeId(resultSet.getLong("employee_id"));
             revisionEmployeeId.setPlaneRevisionId(resultSet.getLong("plane_revision_id"));
             planeRevisionEmployee.setId(revisionEmployeeId);
-            planeRevisionEmployee
-                .setEmployee(employeeRepositoryPort.findById(resultSet.getLong("employee_id")).orElse(null));
-            planeRevisionEmployee
-                .setPlanRevision(
-                    PlaneRevisionRepositoryPort.findById(resultSet.getLong("plan_revision_id")).orElse(null));
             return planeRevisionEmployee;
           }
         }
@@ -132,11 +128,6 @@ public class MySQLPlaneRevisionEmployeeRepository implements PlaneRevisionEmploy
             revisionEmployeeId.setEmployeeId(resultSet.getLong("employee_id"));
             revisionEmployeeId.setPlaneRevisionId(resultSet.getLong("plane_revision_id"));
             planeRevisionEmployee.setId(revisionEmployeeId);
-            planeRevisionEmployee
-                .setEmployee(employeeRepositoryPort.findById(resultSet.getLong("employee_id")).orElse(null));
-            planeRevisionEmployee
-                .setPlanRevision(
-                    PlaneRevisionRepositoryPort.findById(resultSet.getLong("plan_revision_id")).orElse(null));
             planeRevisionEmployees.add(planeRevisionEmployee);
           }
           return planeRevisionEmployees;

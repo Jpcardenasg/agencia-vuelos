@@ -3,8 +3,6 @@ package com.vuelosjanbi.airportGate.infrastructure.adapters.out;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.ArrayList;
 
 import java.sql.Connection;
@@ -13,7 +11,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.vuelosjanbi.airport.application.ports.out.AirportRepositoryPort;
 import com.vuelosjanbi.airportGate.application.port.out.AirportGateRepositoryPort;
 import com.vuelosjanbi.airportGate.domain.models.AirportGate;
 

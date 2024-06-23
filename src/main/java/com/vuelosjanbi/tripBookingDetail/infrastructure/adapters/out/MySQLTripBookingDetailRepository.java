@@ -8,14 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.sql.ResultSet;
 
-import com.vuelosjanbi.customer.application.ports.out.CustomerRepositoryPort;
 import com.vuelosjanbi.customer.domain.models.Customer;
-import com.vuelosjanbi.flightFare.application.ports.out.FlightFareRepositoryPort;
-import com.vuelosjanbi.tripBooking.application.ports.out.TripBookingRepositoryPort;
+
 import com.vuelosjanbi.tripBookingDetail.application.ports.out.TripBookingDetailRepositoryPort;
 import com.vuelosjanbi.tripBookingDetail.domain.models.TripBookingDetail;
 
@@ -24,13 +20,6 @@ public class MySQLTripBookingDetailRepository implements TripBookingDetailReposi
   private final String url;
   private final String user;
   private final String password;
-
-  @Autowired
-  TripBookingRepositoryPort tripBookingRepositoryPort;
-  @Autowired
-  CustomerRepositoryPort customerRepositoryPort;
-  @Autowired
-  FlightFareRepositoryPort flightFareRepositoryPort;
 
   MySQLTripBookingDetailRepository(String url, String user, String password) {
     this.url = url;
@@ -46,6 +35,22 @@ public class MySQLTripBookingDetailRepository implements TripBookingDetailReposi
         statement.setLong(1, tripBookingDetail.getTripBooking().getId());
         statement.setString(2, tripBookingDetail.getCustomer().getId());
         statement.setLong(3, tripBookingDetail.getFlightFare().getId());
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return tripBookingDetail;
+  }
+
+  public TripBookingDetail update(TripBookingDetail tripBookingDetail) {
+    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+      String query = "UPDATE trip_booking_detail SET trip_booking_id = ?, customer_id = ?, flight_fare_id = ? WHERE id = ?";
+      try (PreparedStatement statement = connection.prepareStatement(query)) {
+        statement.setLong(1, tripBookingDetail.getTripBooking().getId());
+        statement.setString(2, tripBookingDetail.getCustomer().getId());
+        statement.setLong(3, tripBookingDetail.getFlightFare().getId());
+        statement.setLong(4, tripBookingDetail.getId());
+        statement.executeUpdate();
       }
     } catch (SQLException e) {
       e.printStackTrace();
@@ -76,12 +81,6 @@ public class MySQLTripBookingDetailRepository implements TripBookingDetailReposi
           if (resultSet.next()) {
             TripBookingDetail tripBookingDetail = new TripBookingDetail();
             tripBookingDetail.setId(resultSet.getLong("id"));
-            tripBookingDetail.setTripBooking(
-                tripBookingRepositoryPort.findById(resultSet.getLong("trip_booking_id")).orElse(null));
-            tripBookingDetail.setCustomer(
-                customerRepositoryPort.findById(resultSet.getString("customer_id")).orElse(null));
-            tripBookingDetail.setFlightFare(flightFareRepositoryPort.findById(resultSet.getLong("flight_fare_id"))
-                .orElse(null));
             return Optional.of(tripBookingDetail);
           }
         }
@@ -101,12 +100,6 @@ public class MySQLTripBookingDetailRepository implements TripBookingDetailReposi
           if (resultSet.next()) {
             TripBookingDetail tripBookingDetail = new TripBookingDetail();
             tripBookingDetail.setId(resultSet.getLong("id"));
-            tripBookingDetail.setTripBooking(
-                tripBookingRepositoryPort.findById(resultSet.getLong("trip_booking_id")).orElse(null));
-            tripBookingDetail.setCustomer(
-                customerRepositoryPort.findById(resultSet.getString("customer_id")).orElse(null));
-            tripBookingDetail.setFlightFare(flightFareRepositoryPort.findById(resultSet.getLong("flight_fare_id"))
-                .orElse(null));
             return Optional.of(tripBookingDetail);
           }
         }
@@ -127,12 +120,6 @@ public class MySQLTripBookingDetailRepository implements TripBookingDetailReposi
           if (resultSet.next()) {
             TripBookingDetail tripBookingDetail = new TripBookingDetail();
             tripBookingDetail.setId(resultSet.getLong("id"));
-            tripBookingDetail.setTripBooking(
-                tripBookingRepositoryPort.findById(resultSet.getLong("trip_booking_id")).orElse(null));
-            tripBookingDetail.setCustomer(
-                customerRepositoryPort.findById(resultSet.getString("customer_id")).orElse(null));
-            tripBookingDetail.setFlightFare(flightFareRepositoryPort.findById(resultSet.getLong("flight_fare_id"))
-                .orElse(null));
             return Optional.of(tripBookingDetail);
           }
         }
@@ -153,12 +140,6 @@ public class MySQLTripBookingDetailRepository implements TripBookingDetailReposi
           while (resultSet.next()) {
             TripBookingDetail tripBookingDetail = new TripBookingDetail();
             tripBookingDetail.setId(resultSet.getLong("id"));
-            tripBookingDetail.setTripBooking(
-                tripBookingRepositoryPort.findById(resultSet.getLong("trip_booking_id")).orElse(null));
-            tripBookingDetail.setCustomer(
-                customerRepositoryPort.findById(resultSet.getString("customer_id")).orElse(null));
-            tripBookingDetail.setFlightFare(flightFareRepositoryPort.findById(resultSet.getLong("flight_fare_id"))
-                .orElse(null));
             tripBookingDetails.add(tripBookingDetail);
           }
           return tripBookingDetails;
