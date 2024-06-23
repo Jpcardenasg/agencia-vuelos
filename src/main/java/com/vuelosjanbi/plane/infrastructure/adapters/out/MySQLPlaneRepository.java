@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.vuelosjanbi.plane.domain.models.Plane;
 import com.vuelosjanbi.plane.application.ports.out.PlaneRepositoryPort;
@@ -26,6 +27,15 @@ public class MySQLPlaneRepository implements PlaneRepositoryPort {
 
     @Autowired
     PlaneModelRepositoryPort planeModelRepositoryPort;
+
+    public MySQLPlaneRepository(String url, String username, String password,
+            PlaneStatusRepositoryPort planeStatusRepositoryPort, PlaneModelRepositoryPort planeModelRepositoryPort) {
+        this.url = url;
+        this.username = username;
+        this.password = password;
+        this.planeStatusRepositoryPort = planeStatusRepositoryPort;
+        this.planeModelRepositoryPort = planeModelRepositoryPort;
+    }
 
     public MySQLPlaneRepository(String url, String username, String password) {
         this.url = url;

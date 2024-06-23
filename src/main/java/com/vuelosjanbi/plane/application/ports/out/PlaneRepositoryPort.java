@@ -13,4 +13,5 @@ public interface PlaneRepositoryPort {
     Optional<Plane> findById(Long planeId);
 
     List<Plane> findAll();
+
 }

@@ -37,8 +37,8 @@ public class PlaneConsoleAdapter {
     @Autowired
     private PlaneStatusRepositoryPort planeStatusRepositoryPort;
 
-    private final String url = "jdbc:mysql://localhost:3306/vuelosJanbi";
-    private final String user = "admin";
+    private final String url = "jdbc:mysql://localhost:3307/vuelosjanpi";
+    private final String user = "root";
     private final String password = "1324";
 
     public void start(boolean useJpa) {
@@ -48,9 +48,12 @@ public class PlaneConsoleAdapter {
             planeStatusService = new PlaneStatusService(planeStatusRepositoryPort);
             System.out.println("JPA");
         } else {
-            planeService = new PlaneService(new MySQLPlaneRepository(url, user, password));
+
             planeModelService = new PlaneModelService(new MySQLPlaneModelRepository(url, user, password));
             planeStatusService = new PlaneStatusService(new MySQLPlaneStatusRepository(url, user, password));
+            planeService = new PlaneService(
+                    new MySQLPlaneRepository(url, user, password, new MySQLPlaneStatusRepository(url, user, password),
+                            new MySQLPlaneModelRepository(url, user, password)));
             System.out.println("MYSQL");
         }
 
@@ -72,7 +75,7 @@ public class PlaneConsoleAdapter {
 
             switch (choice) {
                 case 1:
-                    createPlane(scanner, models, statusList);
+                    createPlane(scanner, planes, models, statusList);
                     break;
                 case 2:
                     updatePlane(scanner, planes, models, statusList);
@@ -93,9 +96,16 @@ public class PlaneConsoleAdapter {
         }
     }
 
-    private void createPlane(Scanner scanner, List<PlaneModel> models, List<PlaneStatus> statusList) {
+    private void createPlane(Scanner scanner, List<Plane> planes, List<PlaneModel> models,
+            List<PlaneStatus> statusList) {
         System.out.println("Type the plate of the plane:");
         String plate = scanner.nextLine();
+        for (Plane p : planes) {
+            if (p.getPlate().equals(plate)) {
+                System.out.println("Plate already exists.");
+                return;
+            }
+        }
         System.out.println("Type the capacity:");
         Integer capacity = scanner.nextInt();
         scanner.nextLine();

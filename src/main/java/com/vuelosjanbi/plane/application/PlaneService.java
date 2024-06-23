@@ -17,6 +17,10 @@ public class PlaneService {
         return planeRepositoryPort.save(plane);
     }
 
+    public Plane getPlane(Long planeId) {
+        return planeRepositoryPort.findById(planeId).orElse(null);
+    }
+
     public Plane updatePlane(Plane plane) {
         return planeRepositoryPort.save(plane);
     }
