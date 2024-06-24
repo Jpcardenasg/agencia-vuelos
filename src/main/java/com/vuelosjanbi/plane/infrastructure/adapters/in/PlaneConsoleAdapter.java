@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import com.vuelosjanbi.plane.application.PlaneService;
 import com.vuelosjanbi.plane.domain.models.Plane;
@@ -18,7 +18,7 @@ import com.vuelosjanbi.planeStatus.application.PlaneStatusService;
 import com.vuelosjanbi.planeStatus.domain.models.PlaneStatus;
 import com.vuelosjanbi.planeStatus.infrastructure.adapters.out.MySQLPlaneStatusRepository;
 
-@Component
+@Controller
 public class PlaneConsoleAdapter {
 
     @Autowired
@@ -108,16 +108,16 @@ public class PlaneConsoleAdapter {
         cal.set(year, month - 1, day);
         Date fabricationDate = new Date(cal.getTimeInMillis());
 
-        System.out.println("Choose the model of the plane:");
         for (PlaneModel model : models) {
             System.out.printf("ID: %d, Model: %s\n", model.getId(), model.getName());
         }
+        System.out.println("Choose the model of the plane:");
         Long modelChoice = scanner.nextLong();
 
-        System.out.println("Choose the status of the plane:");
         for (PlaneStatus status : statusList) {
             System.out.printf("ID: %d, Status: %s\n", status.getId(), status.getName());
         }
+        System.out.println("Choose the status of the plane:");
         Long statusChoice = scanner.nextLong();
 
         PlaneModel chosenModel = models.stream()
@@ -135,14 +135,14 @@ public class PlaneConsoleAdapter {
             return;
         }
 
-        Plane plane = new Plane();
-        plane.setPlate(plate);
-        plane.setCapacity(capacity);
-        plane.setFabricationDate(fabricationDate);
-        plane.setModel(chosenModel);
-        plane.setStatus(chosenStatus);
+        Plane newPlane = new Plane();
+        newPlane.setPlate(plate);
+        newPlane.setCapacity(capacity);
+        newPlane.setFabricationDate(fabricationDate);
+        newPlane.setModel(chosenModel);
+        newPlane.setStatus(chosenStatus);
 
-        planeService.createPlane(plane);
+        planeService.createPlane(newPlane);
 
         System.out.println("Plane created successfully!");
     }

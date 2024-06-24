@@ -7,17 +7,32 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.sql.Connection;
 
 
 import com.vuelosjanbi.customer.application.ports.out.CustomerRepositoryPort;
 import com.vuelosjanbi.customer.domain.models.Customer;
+import com.vuelosjanbi.documentType.application.ports.out.DocumentTypeRepositoryPort;
 
 public class MySQLCustomerRepository implements CustomerRepositoryPort {
 
   private final String url;
   private final String user;
   private final String password;
+
+  @Autowired
+  DocumentTypeRepositoryPort documentTypeRepositoryPort;
+
+  public MySQLCustomerRepository(String url, String user, String password,
+      DocumentTypeRepositoryPort documentTypeRepositoryPort) {
+    this.url = url;
+    this.user = user;
+    this.password = password;
+    this.documentTypeRepositoryPort = documentTypeRepositoryPort;
+  }
 
   public MySQLCustomerRepository(String url, String user, String password) {
     this.url = url;
@@ -103,6 +118,8 @@ public class MySQLCustomerRepository implements CustomerRepositoryPort {
             customer.setId(resultSet.getString("id"));
             customer.setName(resultSet.getString("name"));
             customer.setAge(resultSet.getInt("age"));
+            customer.setDocumentType(
+                documentTypeRepositoryPort.findById(resultSet.getLong("document_type_id")).orElse(null));
             return Optional.of(customer);
           }
         }
@@ -139,6 +156,8 @@ public class MySQLCustomerRepository implements CustomerRepositoryPort {
             customer.setId(resultSet.getString("id"));
             customer.setName(resultSet.getString("name"));
             customer.setAge(resultSet.getInt("age"));
+            customer.setDocumentType(
+                documentTypeRepositoryPort.findById(resultSet.getLong("document_type_id")).orElse(null));
             customers.add(customer);
           }
           return customers;
