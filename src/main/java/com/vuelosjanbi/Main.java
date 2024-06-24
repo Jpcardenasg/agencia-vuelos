@@ -18,7 +18,7 @@ public class Main implements CommandLineRunner {
     private PlaneConsoleAdapter planeConsoleAdapter;
 
     @Autowired
-    TripConsoleAdapter tripConsoleAdapter;
+    private TripConsoleAdapter tripConsoleAdapter;
 
     @Autowired
     private TripCrewConsoleAdapter tripCrewConsoleAdapter;
