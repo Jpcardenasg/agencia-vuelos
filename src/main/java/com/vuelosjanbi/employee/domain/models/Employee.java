@@ -1,21 +1,24 @@
 package com.vuelosjanbi.employee.domain.models;
 
+import java.sql.Date;
+
 import com.vuelosjanbi.airline.domain.models.Airline;
 import com.vuelosjanbi.airport.domain.models.Airport;
 import com.vuelosjanbi.crewRole.domain.models.CrewRole;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 @Entity
 public class Employee {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private String id;
   private String name;
+  @Temporal(TemporalType.DATE)
+  private Date entryDate;
 
   @ManyToOne
   private CrewRole rol;
@@ -26,13 +29,11 @@ public class Employee {
   @ManyToOne
   private Airport airport;
 
-  
-
-  public Long getId() {
+  public String getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(String id) {
     this.id = id;
   }
 
@@ -66,6 +67,14 @@ public class Employee {
 
   public void setAirport(Airport airport) {
     this.airport = airport;
+  }
+
+  public Date getEntryDate() {
+    return entryDate;
+  }
+
+  public void setEntryDate(Date entryDate) {
+    this.entryDate = entryDate;
   }
 
 }

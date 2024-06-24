@@ -8,9 +8,11 @@ import com.vuelosjanbi.crewRole.domain.models.CrewRole;
 public interface CrewRoleRepositoryport {
   CrewRole save(CrewRole crewRole);
 
+  void deleteById(Long id);
+
   Optional<CrewRole> findById(Long id);
 
-  void deleteById(Long id);
+  Optional<CrewRole> findByName(String name);
 
   List<CrewRole> findAll();
 }

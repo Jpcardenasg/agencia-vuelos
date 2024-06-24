@@ -1,6 +1,7 @@
 package com.vuelosjanbi.employee.application;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,23 +19,24 @@ public class EmployeeService {
     this.employeeRepositoryPort = employeeRepositoryPort;
   }
 
-  public EmployeeService() {
-  }
-
-  public Employee getEmployeeById(Long id) {
-    return employeeRepositoryPort.findById(id).orElse(null);
-  }
-
   public Employee createEmployee(Employee employee) {
     return employeeRepositoryPort.save(employee);
   }
 
-  public void deleteEmployeeById(Long id) {
+  public Employee updateEmployee(Employee employee) {
+    return employeeRepositoryPort.save(employee);
+  }
+
+  public void deleteEmployeeById(String id) {
     employeeRepositoryPort.deleteById(id);
   }
 
-  public Employee updateEmployee(Employee employee) {
-    return employeeRepositoryPort.save(employee);
+  public Optional<Employee> getEmployeeById(String id) {
+    return employeeRepositoryPort.findById(id);
+  }
+
+  public List<Employee> getEmployeesByRol(Long roleId) {
+    return employeeRepositoryPort.findByRolId(roleId);
   }
 
   public List<Employee> getAllEmployees() {

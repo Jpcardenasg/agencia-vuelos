@@ -11,10 +11,10 @@ public interface AirlineRepositoryPort {
 
   void deleteById(Long airlineId);
 
-  List<Airline> findAll();
-
   Optional<Airline> findById(Long airlineId);
 
   Optional<Airline> findByName(String airlineName);
+
+  List<Airline> findAll();
 
 }

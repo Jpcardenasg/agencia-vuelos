@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.vuelosjanbi.crewRole.domain.models.CrewRole;
 import com.vuelosjanbi.employee.application.ports.out.EmployeeRepositoryPort;
 import com.vuelosjanbi.employee.domain.models.Employee;
 
@@ -69,7 +68,7 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
       }
 
       statement.executeUpdate();
-
+      // TODO: Id no es generado ahora es String porque es el número de identifación
       try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
         if (generatedKeys.next()) {
           employee.setId(generatedKeys.getLong(1));
@@ -84,15 +83,15 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
   }
 
   @Override
-  public Optional<Employee> findById(Long id) {
+  public Optional<Employee> findById(String id) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "SELECT * FROM employee WHERE id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setLong(1, id);
+        statement.setString(1, id);
         try (ResultSet result = statement.executeQuery()) {
           if (result.next()) {
             Employee employee = new Employee();
-            employee.setId(result.getLong("id"));
+            employee.setId(result.getString("id"));
             employee.setName(result.getString("name"));
             return Optional.of(employee);
           }
@@ -106,11 +105,11 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
   }
 
   @Override
-  public void deleteById(Long id) {
+  public void deleteById(String id) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "DELETE FROM employee WHERE id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setLong(1, id);
+        statement.setString(1, id);
         statement.executeUpdate();
       }
     } catch (SQLException e) {
@@ -127,7 +126,7 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
           List<Employee> employees = new ArrayList<>();
           while (result.next()) {
             Employee employee = new Employee();
-            employee.setId(result.getLong("id"));
+            employee.setId(result.getString("id"));
             employee.setName(result.getString("name"));
 
             employees.add(employee);
@@ -151,31 +150,7 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
           List<Employee> employees = new ArrayList<>();
           while (result.next()) {
             Employee employee = new Employee();
-            employee.setId(result.getLong("id"));
-            employee.setName(result.getString("name"));
-
-            employees.add(employee);
-          }
-          return employees;
-        }
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
-      return new ArrayList<>();
-    }
-  }
-
-  @Override
-  public List<Employee> findByRol(CrewRole Rol) {
-    try (Connection connection = DriverManager.getConnection(url, user, password)) {
-      String query = "SELECT * FROM employee WHERE rol_id = ?";
-      try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setLong(1, Rol.getId());
-        try (ResultSet result = statement.executeQuery()) {
-          List<Employee> employees = new ArrayList<>();
-          while (result.next()) {
-            Employee employee = new Employee();
-            employee.setId(result.getLong("id"));
+            employee.setId(result.getString("id"));
             employee.setName(result.getString("name"));
             employees.add(employee);
           }
@@ -198,7 +173,7 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
           List<Employee> employees = new ArrayList<>();
           while (result.next()) {
             Employee employee = new Employee();
-            employee.setId(result.getLong("id"));
+            employee.setId(result.getString("id"));
             employee.setName(result.getString("name"));
 
             employees.add(employee);

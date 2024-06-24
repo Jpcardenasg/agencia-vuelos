@@ -22,7 +22,7 @@ public class PlaneService {
         return planeRepositoryPort.save(plane);
     }
 
-    public Plane getPlane(Long planeId) {
+    public Plane getPlaneById(Long planeId) {
         return planeRepositoryPort.findById(planeId).orElse(null);
     }
 

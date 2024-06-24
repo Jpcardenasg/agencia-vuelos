@@ -42,10 +42,10 @@ public class CustomerConsoleAdapter {
 
         while (true) {
             customers = customerService.getAllCustomers();
-            System.out.println("1. Create Customer.");
+            System.out.println("1. Register Customer.");
             System.out.println("2. Update Customer.");
             System.out.println("3. Delete Customer.");
-            System.out.println("4. Find Customer.");
+            System.out.println("4. Find Customer by ID.");
             System.out.println("5. List all Customers.");
             System.out.println("6. Exit.");
 
@@ -81,7 +81,6 @@ public class CustomerConsoleAdapter {
     private void createCustomer(Scanner scanner, List<DocumentType> dTypes) {
         System.out.println("Type the Identification Number:");
         String id = scanner.nextLine();
-
         System.out.println("Type the Customer name:");
         String name = scanner.nextLine();
         System.out.println("Type the Customer age:");

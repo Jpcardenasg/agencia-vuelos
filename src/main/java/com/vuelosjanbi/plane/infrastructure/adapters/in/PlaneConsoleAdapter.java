@@ -46,8 +46,6 @@ public class PlaneConsoleAdapter {
 
         Scanner scanner = new Scanner(System.in);
         List<Plane> planes;
-        List<PlaneModel> models = planeModelService.getAllPlaneModels();
-        List<PlaneStatus> statusList = planeStatusService.getAllPlaneStatus();
 
         while (true) {
             planes = planeService.getAllPlanes();
@@ -62,10 +60,10 @@ public class PlaneConsoleAdapter {
 
             switch (choice) {
                 case 1:
-                    createPlane(scanner, planes, models, statusList);
+                    createPlane(scanner, planes);
                     break;
                 case 2:
-                    updatePlane(scanner, planes, models, statusList);
+                    updatePlane(scanner, planes);
                     break;
                 case 3:
                     deletePlane(scanner, planes);
@@ -83,8 +81,10 @@ public class PlaneConsoleAdapter {
         }
     }
 
-    private void createPlane(Scanner scanner, List<Plane> planes, List<PlaneModel> models,
-            List<PlaneStatus> statusList) {
+    private void createPlane(Scanner scanner, List<Plane> planes) {
+        List<PlaneModel> models = planeModelService.getAllPlaneModels();
+        List<PlaneStatus> statusList = planeStatusService.getAllPlaneStatus();
+
         System.out.println("Type the plate of the plane:");
         String plate = scanner.nextLine();
         for (Plane p : planes) {
@@ -119,6 +119,7 @@ public class PlaneConsoleAdapter {
         }
         System.out.println("Choose the status of the plane:");
         Long statusChoice = scanner.nextLong();
+        scanner.nextLine();
 
         PlaneModel chosenModel = models.stream()
                 .filter(model -> model.getId().equals(modelChoice))
@@ -143,12 +144,13 @@ public class PlaneConsoleAdapter {
         newPlane.setStatus(chosenStatus);
 
         planeService.createPlane(newPlane);
-
         System.out.println("Plane created successfully!");
     }
 
-    private void updatePlane(Scanner scanner, List<Plane> planes, List<PlaneModel> models,
-            List<PlaneStatus> statusList) {
+    private void updatePlane(Scanner scanner, List<Plane> planes) {
+        List<PlaneModel> models = planeModelService.getAllPlaneModels();
+        List<PlaneStatus> statusList = planeStatusService.getAllPlaneStatus();
+
         for (Plane p : planes) {
             System.out.printf("ID: %d, Plate: %s\n", p.getId(), p.getPlate());
         }

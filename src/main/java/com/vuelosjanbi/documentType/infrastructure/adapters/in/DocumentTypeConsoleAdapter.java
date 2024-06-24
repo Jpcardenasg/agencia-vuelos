@@ -16,9 +16,10 @@ public class DocumentTypeConsoleAdapter {
 
     public void start() {
         Scanner scanner = new Scanner(System.in);
-        List<DocumentType> documentTypes = documentTypeService.getAllDocumentTypes();
+        List<DocumentType> documentTypes;
 
         while (true) {
+            documentTypes = documentTypeService.getAllDocumentTypes();
             System.out.println("1. Create Document Type.");
             System.out.println("2. Update Document Type.");
             System.out.println("3. Delete Document Type.");
