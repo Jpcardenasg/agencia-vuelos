@@ -59,6 +59,7 @@ public class Main implements CommandLineRunner {
                 break;
             case 4:
                 tripCrewConsoleAdapter.start(useJpa);
+                scanner.close();
                 break;
         }
 

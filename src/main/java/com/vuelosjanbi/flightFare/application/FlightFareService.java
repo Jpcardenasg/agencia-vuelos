@@ -3,9 +3,12 @@ package com.vuelosjanbi.flightFare.application;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Controller;
+
 import com.vuelosjanbi.flightFare.application.ports.out.FlightFareRepositoryPort;
 import com.vuelosjanbi.flightFare.domain.models.FlightFare;
 
+@Controller
 public class FlightFareService {
 
     private final FlightFareRepositoryPort flightFareRepositoryPort;

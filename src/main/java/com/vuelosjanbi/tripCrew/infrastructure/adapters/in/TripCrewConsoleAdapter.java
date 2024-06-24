@@ -16,6 +16,7 @@ import com.vuelosjanbi.tripCrew.application.ports.out.TripCrewRepositoryPort;
 import com.vuelosjanbi.tripCrew.domain.models.TripCrew;
 import com.vuelosjanbi.tripCrew.infrastructure.adapters.out.MySQLTripCrewRepository;
 
+import java.util.List;
 import java.util.Scanner;
 
 @Controller
@@ -66,7 +67,7 @@ public class TripCrewConsoleAdapter {
     Scanner scanner = new Scanner(System.in);
 
     while (true) {
-      System.out.println("1. Add employee to Trip Crew.");
+      System.out.println("1. Add employees to Trip Crew.");
       System.out.println("2. Remove employee from Trip Crew.");
       System.out.println("3. List all Trip Crew.");
       System.out.println("4. Exit.");
@@ -106,7 +107,12 @@ public class TripCrewConsoleAdapter {
     scanner.nextLine();
     FlightConnection flightConnection = flightConnectionRepositoryPort.findById(flightConnectionId).orElse(null);
     while (true) {
-      employeeService.getAllEmployees().forEach(employee -> {
+      List<Employee> employees = employeeService.getAllEmployees();
+      if (employees.isEmpty()) {
+        System.out.println("No employees found.");
+        break;
+      }
+      employees.forEach(employee -> {
         System.out.println(employee);
       });
       System.out.println("Enter the employee id:");
