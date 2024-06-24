@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.vuelosjanbi.plane.infrastructure.adapters.in.PlaneConsoleAdapter;
 import com.vuelosjanbi.trip.infrastructure.adapters.in.TripConsoleAdapter;
+import com.vuelosjanbi.tripCrew.infrastructure.adapters.in.TripCrewConsoleAdapter;
 
 @SpringBootApplication
 public class Main implements CommandLineRunner {
@@ -18,6 +19,9 @@ public class Main implements CommandLineRunner {
 
     @Autowired
     TripConsoleAdapter tripConsoleAdapter;
+
+    @Autowired
+    private TripCrewConsoleAdapter tripCrewConsoleAdapter;
 
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
@@ -34,6 +38,8 @@ public class Main implements CommandLineRunner {
         boolean useJpa = (choice == 1);
 
         // planeConsoleAdapter.start(useJpa);
-        tripConsoleAdapter.start(useJpa);
+        // tripConsoleAdapter.start(useJpa);
+        tripCrewConsoleAdapter.start(useJpa);
+
     }
 }

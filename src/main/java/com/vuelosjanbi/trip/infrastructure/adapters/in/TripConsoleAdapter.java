@@ -61,7 +61,6 @@ public class TripConsoleAdapter {
           tripService.getAllTrips().forEach(System.out::println);
           break;
         case 5:
-          listTrips(tripService);
           scanner.close();
           return;
         default:
