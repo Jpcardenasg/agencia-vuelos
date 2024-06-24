@@ -99,9 +99,8 @@ public class TripConsoleAdapter {
   }
 
   public static void updateTrip(Scanner scanner, TripService tripService, AirportService airportService) {
-    List<Airport> airports = airportService.getAllAirports();
+    // List<Airport> airports = airportService.getAllAirports();
     System.out.println("Enter trip id: ");
-    airports = airportService.getAllAirports();
     long tripId = scanner.nextLong();
     Trip trip = tripService.getTripById(tripId);
     if (trip == null) {
@@ -118,20 +117,20 @@ public class TripConsoleAdapter {
     Date tripDate2 = Date.valueOf(tripDateStr2);
     System.out.println("Enter trip price: ");
     double tripPrice2 = scanner.nextDouble();
-    for (Airport airport : airports) {
-      System.out.println("Airport id: " + airport.getId() + " Airport name: " + airport.getName());
-    }
-    System.out.println("Enter origin airport id: ");
-    long originAirportId2 = scanner.nextLong();
-    for (Airport airport : airports) {
-      System.out.println("Airport id: " + airport.getId() + " Airport name: " + airport.getName());
-    }
-    System.out.println("Enter destination airport id: ");
-    long destinationAirportId2 = scanner.nextLong();
+    // for (Airport airport : airports) {
+    // System.out.println("Airport id: " + airport.getId() + " Airport name: " +
+    // airport.getName());
+    // }
+    // System.out.println("Enter origin airport id: ");
+    // long originAirportId2 = scanner.nextLong();
+    // for (Airport airport : airports) {
+    // System.out.println("Airport id: " + airport.getId() + " Airport name: " +
+    // airport.getName());
+    // }
+    // System.out.println("Enter destination airport id: ");
+    // long destinationAirportId2 = scanner.nextLong();
     trip.setTripDate(tripDate2);
     trip.setTripPrice(tripPrice2);
-    trip.setOriginAirport(airportService.getAirportById(originAirportId2));
-    trip.setDestinationAirport(airportService.getAirportById(destinationAirportId2));
     tripService.updateTrip(trip);
   }
 

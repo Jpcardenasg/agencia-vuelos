@@ -22,7 +22,9 @@ public class FlightConnection {
   @ManyToOne
   private Plane plane;
   @ManyToOne
-  private Airport airport;
+  private Airport originAirport;
+  @ManyToOne
+  private Airport destinationAirport;
 
   public FlightConnection() {
   }
@@ -68,14 +70,6 @@ public class FlightConnection {
     this.plane = plane;
   }
 
-  public Airport getAirport() {
-    return airport;
-  }
-
-  public void setAirport(Airport airport) {
-    this.airport = airport;
-  }
-
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
@@ -84,8 +78,25 @@ public class FlightConnection {
         .append(",\n\tconnectionNumber: ").append(connectionNumber)
         .append(",\n\ttrip: ").append(trip)
         .append(",\n\tplane: ").append(plane)
-        .append(",\n\tairport: ").append(airport);
+        .append(",\n\tairport origin: ").append(originAirport)
+        .append(",\n\tairport destination: ").append(destinationAirport);
     return sb.toString();
+  }
+
+  public Airport getOriginAirport() {
+    return originAirport;
+  }
+
+  public void setOriginAirport(Airport originAirport) {
+    this.originAirport = originAirport;
+  }
+
+  public Airport getDestinationAirport() {
+    return destinationAirport;
+  }
+
+  public void setDestinationAirport(Airport destinationAirport) {
+    this.destinationAirport = destinationAirport;
   }
 
 }

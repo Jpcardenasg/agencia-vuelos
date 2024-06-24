@@ -27,7 +27,7 @@ public class MySQLFlightConnectionRepository implements FlightConnectionReposito
   @Override
   public FlightConnection save(FlightConnection flightConnection) {
     try (Connection connection = DriverManager.getConnection(url, username, password)) {
-      String query = "INSERT INTO flightConnection VALUES(?)";
+      String query = "INSERT INTO flightConnection (connection_numer,trip_id,plane_id,origin_airpot_id,destination_airport_id) VALUES (?, ?, ?, ?, ?)";
       try (PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
         statement.setString(1, flightConnection.getConnectionNumber());
         statement.executeUpdate();
@@ -45,13 +45,14 @@ public class MySQLFlightConnectionRepository implements FlightConnectionReposito
 
   public FlightConnection update(FlightConnection flightConnection) {
     try (Connection connection = DriverManager.getConnection(url, username, password)) {
-      String query = "UPDATE flightConnection SET connectionNumber = ?,SET trip_id = ?,SET plane_id = ?, SET airport_id = ? WHERE id = ?";
+      String query = "UPDATE flightConnection SET connectionNumber = ?,SET trip_id = ?,SET plane_id = ?, SET origin_airport_id=?, destination_airport_id = ? WHERE id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         statement.setString(1, flightConnection.getConnectionNumber());
         statement.setLong(2, flightConnection.getTrip().getId());
         statement.setLong(3, flightConnection.getPlane().getId());
-        statement.setLong(4, flightConnection.getAirport().getId());
-        statement.setLong(5, flightConnection.getId());
+        statement.setLong(4, flightConnection.getOriginAirport().getId());
+        statement.setLong(5, flightConnection.getDestinationAirport().getId());
+        statement.setLong(6, flightConnection.getId());
         statement.executeUpdate();
       }
     } catch (SQLException e) {

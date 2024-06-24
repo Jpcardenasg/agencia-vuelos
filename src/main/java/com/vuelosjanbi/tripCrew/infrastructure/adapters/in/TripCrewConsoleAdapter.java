@@ -116,6 +116,7 @@ public class TripCrewConsoleAdapter {
         continue;
       }
       tripCrewService.addEmployeeToFlightConnection(new TripCrew(employee, flightConnection));
+      System.out.println("Employee added to the flight connection.");
       System.out.println("Do you want to add another employee to this flight connection? (y/n)");
       String choice = scanner.nextLine();
       if (choice.equals("n")) {
@@ -145,6 +146,7 @@ public class TripCrewConsoleAdapter {
         continue;
       }
       tripCrewService.removeEmployeeFromFlightConnection(new TripCrew(employee, flightConnection));
+      System.out.println("Employee removed from the flight connection.");
       System.out.println("Do you want to remove another employee from this flight connection? (y/n)");
       String choice = scanner.nextLine();
       if (choice.equals("n")) {

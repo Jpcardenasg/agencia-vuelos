@@ -11,7 +11,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+// import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 
 @Entity
@@ -21,11 +21,6 @@ public class Trip {
   private Long id;
   private Date tripDate;
   private double tripPrice;
-
-  @ManyToOne
-  private Airport originAirport;
-  @ManyToOne
-  private Airport destinationAirport;
 
   @OneToMany(mappedBy = "trip")
   private List<FlightConnection> flightConnections;
@@ -39,8 +34,6 @@ public class Trip {
   public Trip(Date tripDate, double tripPrice, Airport originAirport, Airport destinationAirport) {
     this.tripDate = tripDate;
     this.tripPrice = tripPrice;
-    this.originAirport = originAirport;
-    this.destinationAirport = destinationAirport;
   }
 
   public Trip(Long id, Date tripDate, double tripPrice, List<FlightConnection> flightConnections,
@@ -92,26 +85,28 @@ public class Trip {
     this.tripBookings = tripBookings;
   }
 
-  public Airport getOriginAirport() {
-    return originAirport;
-  }
+  // public Airport getOriginAirport() {
+  // return originAirport;
+  // }
 
-  public void setOriginAirport(Airport originAirport) {
-    this.originAirport = originAirport;
-  }
+  // public void setOriginAirport(Airport originAirport) {
+  // this.originAirport = originAirport;
+  // }
 
-  public Airport getDestinationAirport() {
-    return destinationAirport;
-  }
+  // public Airport getDestinationAirport() {
+  // return destinationAirport;
+  // }
 
-  public void setDestinationAirport(Airport destinationAirport) {
-    this.destinationAirport = destinationAirport;
-  }
+  // public void setDestinationAirport(Airport destinationAirport) {
+  // this.destinationAirport = destinationAirport;
+  // }
 
-  @Override
-  public String toString() {
-    return String.format("Trip id: %d, Trip date: %s, Trip price: %.2f, Origin airport: %s, Destination airport: %s",
-        id, tripDate, tripPrice, originAirport.getName(), destinationAirport.getName());
-  }
+  // @Override
+  // public String toString() {
+  // return String.format("Trip id: %d, Trip date: %s, Trip price: %.2f, Origin
+  // airport: %s, Destination airport: %s",
+  // id, tripDate, tripPrice, originAirport.getName(),
+  // destinationAirport.getName());
+  // }
 
 }
