@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.sql.Connection;
 
-
 import com.vuelosjanbi.customer.application.ports.out.CustomerRepositoryPort;
 import com.vuelosjanbi.customer.domain.models.Customer;
 import com.vuelosjanbi.documentType.application.ports.out.DocumentTypeRepositoryPort;

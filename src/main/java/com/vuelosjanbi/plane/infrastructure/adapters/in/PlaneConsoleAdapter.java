@@ -149,10 +149,10 @@ public class PlaneConsoleAdapter {
 
     private void updatePlane(Scanner scanner, List<Plane> planes, List<PlaneModel> models,
             List<PlaneStatus> statusList) {
-        System.out.println("Choose the plane you want to modify:");
         for (Plane p : planes) {
             System.out.printf("ID: %d, Plate: %s\n", p.getId(), p.getPlate());
         }
+        System.out.println("Choose the plane ID you want to modify:");
 
         Long planeId = scanner.nextLong();
         scanner.nextLine();

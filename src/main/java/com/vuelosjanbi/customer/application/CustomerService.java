@@ -1,6 +1,7 @@
 package com.vuelosjanbi.customer.application;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,8 +22,8 @@ public class CustomerService {
         return customerRepositoryPort.save(Customer);
     }
 
-    public Customer getCustomer(String CustomerId) {
-        return customerRepositoryPort.findById(CustomerId).orElse(null);
+    public Optional<Customer> getCustomer(String customerId) {
+        return customerRepositoryPort.findById(customerId);
     }
 
     public Customer updateCustomer(Customer Customer) {
