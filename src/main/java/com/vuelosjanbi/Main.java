@@ -7,6 +7,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import com.vuelosjanbi.airport.infrastructure.adapters.in.AirportConsoleAdapter;
 import com.vuelosjanbi.plane.infrastructure.adapters.in.PlaneConsoleAdapter;
 import com.vuelosjanbi.trip.infrastructure.adapters.in.TripConsoleAdapter;
 import com.vuelosjanbi.tripCrew.infrastructure.adapters.in.TripCrewConsoleAdapter;
@@ -23,6 +24,9 @@ public class Main implements CommandLineRunner {
     @Autowired
     private TripCrewConsoleAdapter tripCrewConsoleAdapter;
 
+    @Autowired
+    private AirportConsoleAdapter airportConsoleAdapter;
+
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
     }
@@ -37,9 +41,26 @@ public class Main implements CommandLineRunner {
         int choice = scanner.nextInt();
         boolean useJpa = (choice == 1);
 
-        // planeConsoleAdapter.start(useJpa);
-        // tripConsoleAdapter.start(useJpa);
-        tripCrewConsoleAdapter.start(useJpa);
+        System.out.println("Choose the entity to manage:");
+        System.out.println("1. Airport");
+        System.out.println("2. Plane");
+        System.out.println("3. Trip");
+        System.out.println("4. Trip Crew");
+
+        switch (scanner.nextInt()) {
+            case 1:
+                airportConsoleAdapter.start(useJpa);
+                break;
+            case 2:
+                planeConsoleAdapter.start(useJpa);
+                break;
+            case 3:
+                tripConsoleAdapter.start(useJpa);
+                break;
+            case 4:
+                tripCrewConsoleAdapter.start(useJpa);
+                break;
+        }
 
     }
 }

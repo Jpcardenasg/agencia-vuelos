@@ -42,7 +42,8 @@ public class TripConsoleAdapter {
       System.out.println("2. Update Trip.");
       System.out.println("3. Delete Trip.");
       System.out.println("4. List all Trips.");
-      System.out.println("5. Exit.");
+      System.out.println("5. Consult information trip.");
+      System.out.println("6. Exit.");
 
       int choice = scanner.nextInt();
       switch (choice) {
@@ -61,6 +62,14 @@ public class TripConsoleAdapter {
           tripService.getAllTrips().forEach(System.out::println);
           break;
         case 5:
+          System.out.println("Enter trip id: ");
+          long tripId3 = scanner.nextLong();
+          System.out.println(tripService.getTripById(tripId3));
+          if (tripService.getTripById(tripId3) == null) {
+            System.out.println("Error Trip not found.");
+          }
+          break;
+        case 6:
           scanner.close();
           return;
         default:

@@ -3,10 +3,14 @@ package com.vuelosjanbi.airport.infrastructure.adapters.out;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.ArrayList;
 
 import com.vuelosjanbi.airport.application.ports.out.AirportRepositoryPort;
 import com.vuelosjanbi.airport.domain.models.Airport;
+import com.vuelosjanbi.city.application.ports.CityRepositoryPort;
+import com.vuelosjanbi.city.infrastructure.adapters.out.MySQLCityRepository;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,10 +24,14 @@ public class MySQLAirportRepository implements AirportRepositoryPort {
   private final String user;
   private final String password;
 
+  @Autowired
+  private CityRepositoryPort cityRepositoryPort;
+
   public MySQLAirportRepository(String url, String user, String password) {
     this.url = url;
     this.user = user;
     this.password = password;
+    this.cityRepositoryPort = new MySQLCityRepository(url, user, password);
   }
 
   @Override
@@ -52,6 +60,49 @@ public class MySQLAirportRepository implements AirportRepositoryPort {
       e.printStackTrace();
     }
     return airport;
+  }
+
+  @Override
+  public Optional<Airport> findById(Long airportId) {
+    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+      String query = "SELECT * FROM airport WHERE id = ?";
+      try (PreparedStatement statement = connection.prepareStatement(query)) {
+        statement.setLong(1, airportId);
+        ResultSet resultSet = statement.executeQuery();
+        if (resultSet.next()) {
+          Airport airport = new Airport();
+          airport.setId(resultSet.getLong("id"));
+          airport.setName(resultSet.getString("name"));
+          airport.setCity(cityRepositoryPort.findById(resultSet.getLong("city_id")).orElse(null));
+          return Optional.of(airport);
+        }
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return Optional.empty();
+  }
+
+  @Override
+  public Optional<Airport> findByName(String airportName) {
+    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+      String query = "SELECT * FROM airport WHERE name = ?";
+      try (PreparedStatement statement = connection.prepareStatement(query)) {
+        statement.setString(1, airportName);
+        ResultSet resultSet = statement.executeQuery();
+        if (resultSet.next()) {
+          Airport airport = new Airport();
+          airport.setId(resultSet.getLong("id"));
+          airport.setName(resultSet.getString("name"));
+          airport.setCity(cityRepositoryPort.findById(resultSet.getLong("city_id")).orElse(null));
+
+          return Optional.of(airport);
+        }
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return Optional.empty();
   }
 
   public Airport update(Airport airport) {
@@ -112,46 +163,6 @@ public class MySQLAirportRepository implements AirportRepositoryPort {
     }
 
     return airports;
-  }
-
-  @Override
-  public Optional<Airport> findById(Long airportId) {
-    try (Connection connection = DriverManager.getConnection(url, user, password)) {
-      String query = "SELECT * FROM airport WHERE id = ?";
-      try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setLong(1, airportId);
-        ResultSet resultSet = statement.executeQuery();
-        if (resultSet.next()) {
-          Airport airport = new Airport();
-          airport.setId(resultSet.getLong("id"));
-          airport.setName(resultSet.getString("name"));
-          return Optional.of(airport);
-        }
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    return Optional.empty();
-  }
-
-  @Override
-  public Optional<Airport> findByName(String airportName) {
-    try (Connection connection = DriverManager.getConnection(url, user, password)) {
-      String query = "SELECT * FROM airport WHERE name = ?";
-      try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setString(1, airportName);
-        ResultSet resultSet = statement.executeQuery();
-        if (resultSet.next()) {
-          Airport airport = new Airport();
-          airport.setId(resultSet.getLong("id"));
-          airport.setName(resultSet.getString("name"));
-          return Optional.of(airport);
-        }
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    return Optional.empty();
   }
 
   @Override

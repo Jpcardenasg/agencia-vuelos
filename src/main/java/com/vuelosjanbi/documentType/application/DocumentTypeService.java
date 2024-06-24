@@ -2,9 +2,12 @@ package com.vuelosjanbi.documentType.application;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.vuelosjanbi.documentType.domain.models.DocumentType;
 import com.vuelosjanbi.documentType.application.ports.out.DocumentTypeRepositoryPort;
 
+@Service
 public class DocumentTypeService {
     private final DocumentTypeRepositoryPort DocumentTypeRepositoryPort;
 

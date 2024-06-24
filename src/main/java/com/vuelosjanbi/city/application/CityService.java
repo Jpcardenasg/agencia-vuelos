@@ -2,9 +2,12 @@ package com.vuelosjanbi.city.application;
 
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import com.vuelosjanbi.city.application.ports.CityRepositoryPort;
 import com.vuelosjanbi.city.domain.models.City;
 
+@Service
 public class CityService {
     private final CityRepositoryPort CityRepositoryPort;
 
@@ -26,6 +29,10 @@ public class CityService {
 
     public List<City> getAllCities() {
         return CityRepositoryPort.findAll();
+    }
+
+    public City getCityById(Long idCity) {
+        return CityRepositoryPort.findById(idCity).orElse(null);
     }
 
 }

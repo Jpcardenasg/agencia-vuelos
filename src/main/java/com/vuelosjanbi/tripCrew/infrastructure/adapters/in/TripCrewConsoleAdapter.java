@@ -1,6 +1,7 @@
 package com.vuelosjanbi.tripCrew.infrastructure.adapters.in;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 import com.vuelosjanbi.employee.application.EmployeeService;
 import com.vuelosjanbi.employee.application.ports.out.EmployeeRepositoryPort;
@@ -17,6 +18,7 @@ import com.vuelosjanbi.tripCrew.infrastructure.adapters.out.MySQLTripCrewReposit
 
 import java.util.Scanner;
 
+@Controller
 public class TripCrewConsoleAdapter {
 
   @Autowired
@@ -83,7 +85,7 @@ public class TripCrewConsoleAdapter {
           listEmplosyeesInFlightConnection();
           break;
         case 4:
-          scanner.close();
+
           break;
         case 5:
           scanner.close();

@@ -3,9 +3,12 @@ package com.vuelosjanbi.flightConnection.application;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.stereotype.Service;
+
 import com.vuelosjanbi.flightConnection.application.ports.out.FlightConnectionRepositoryPort;
 import com.vuelosjanbi.flightConnection.domain.models.FlightConnection;
 
+@Service
 public class FlightConnectionService {
     private final FlightConnectionRepositoryPort flightConnectionsRepositoryPort;
 
