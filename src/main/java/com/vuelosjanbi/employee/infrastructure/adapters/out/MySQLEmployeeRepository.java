@@ -16,12 +16,12 @@ import com.vuelosjanbi.employee.domain.models.Employee;
 public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
 
   private final String url;
-  private final String user;
+  private final String username;
   private final String password;
 
-  public MySQLEmployeeRepository(String url, String user, String password) {
+  public MySQLEmployeeRepository(String url, String username, String password) {
     this.url = url;
-    this.user = user;
+    this.username = username;
     this.password = password;
   }
 
@@ -59,7 +59,7 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
 
     String query = queryBuilder.toString();
 
-    try (Connection connection = DriverManager.getConnection(url, user, password);
+    try (Connection connection = DriverManager.getConnection(url, username, password);
         PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
       // Establecer los parámetros en la consulta preparada
@@ -71,20 +71,38 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
       // TODO: Id no es generado ahora es String porque es el número de identifación
       try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
         if (generatedKeys.next()) {
-          employee.setId(generatedKeys.getLong(1));
+          employee.setId(generatedKeys.getString(1));
         }
       }
 
     } catch (SQLException e) {
       e.printStackTrace();
     }
+    return employee;
+  }
 
+  public Employee update(Employee employee, String oldId) {
+    try (Connection connection = DriverManager.getConnection(url, username, password)) {
+      String query = "UPDATE employee SET id = ?, name = ?, entry_date = ?, rol_id = ?, airline_id = ?, airport_id = ? WHERE id = ?";
+      try (PreparedStatement statement = connection.prepareStatement(query)) {
+        statement.setString(1, employee.getId());
+        statement.setString(2, employee.getName());
+        statement.setDate(3, employee.getEntryDate());
+        statement.setLong(4, employee.getRol().getId());
+        statement.setLong(5, employee.getAirline().getId());
+        statement.setLong(6, employee.getAirport().getId());
+        statement.setString(7, oldId);
+        statement.executeUpdate();
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
     return employee;
   }
 
   @Override
   public Optional<Employee> findById(String id) {
-    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+    try (Connection connection = DriverManager.getConnection(url, username, password)) {
       String query = "SELECT * FROM employee WHERE id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         statement.setString(1, id);
@@ -106,7 +124,7 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
 
   @Override
   public void deleteById(String id) {
-    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+    try (Connection connection = DriverManager.getConnection(url, username, password)) {
       String query = "DELETE FROM employee WHERE id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         statement.setString(1, id);
@@ -119,7 +137,7 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
 
   @Override
   public List<Employee> findAll() {
-    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+    try (Connection connection = DriverManager.getConnection(url, username, password)) {
       String query = "SELECT * FROM employee";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         try (ResultSet result = statement.executeQuery()) {
@@ -142,7 +160,7 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
 
   @Override
   public List<Employee> findByRolId(Long id) {
-    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+    try (Connection connection = DriverManager.getConnection(url, username, password)) {
       String query = "SELECT * FROM employee WHERE rol_id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         statement.setLong(1, id);
@@ -165,7 +183,7 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
 
   @Override
   public List<Employee> findEmployeesByAirlineId(Long airlineId) {
-    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+    try (Connection connection = DriverManager.getConnection(url, username, password)) {
       String query = "SELECT * FROM employee WHERE airline_id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         statement.setLong(1, airlineId);

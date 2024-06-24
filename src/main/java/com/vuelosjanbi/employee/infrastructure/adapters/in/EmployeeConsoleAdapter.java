@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,8 @@ public class EmployeeConsoleAdapter {
     private AirlineService airlineService;
     @Autowired
     private AirportService airportService;
+    @Autowired
+    private MySQLEmployeeRepository mySQLEmployeeRepository;
 
     private final String url = "jdbc:mysql://localhost:3307/vuelosjanpi";
     private final String user = "root";
@@ -73,7 +76,7 @@ public class EmployeeConsoleAdapter {
                     findEmployeeById(scanner);
                     break;
                 case 5:
-                    findEmployeeByRol(employees);
+                    findEmployeeByRolId(scanner);
                     break;
                 case 6:
                     listEmployees(employees);
@@ -86,7 +89,6 @@ public class EmployeeConsoleAdapter {
                     break;
             }
         }
-
     }
 
     private void createEmployee(Scanner scanner) {
@@ -96,7 +98,7 @@ public class EmployeeConsoleAdapter {
 
         System.out.println("Type the Identification Number:");
         String id = scanner.nextLine();
-        System.out.println("Type the Customer name:");
+        System.out.println("Type the Employee name:");
         String name = scanner.nextLine();
         System.out.println("Type the Employee entry date:");
         System.out.println("Day:");
@@ -179,34 +181,137 @@ public class EmployeeConsoleAdapter {
         } else {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String formattedDate = dateFormat.format(chosenEmployee.getEntryDate());
-            System.out.printf("ID: %s, Name: %d, Entry Date: %s, IdRol: %d, IdAirline: %d, IdAirport: %d",
+            System.out.printf("ID: %s, Name: %d, Entry Date: %s, IdRol: %d, IdAirline: %d, IdAirport: %d\n",
                     chosenEmployee.getId(), chosenEmployee.getName(), formattedDate,
-                    chosenEmployee.getAirline(), chosenEmployee.getAirport());
+                    chosenEmployee.getRol().getId(), chosenEmployee.getAirline().getId(),
+                    chosenEmployee.getAirport().getId());
         }
 
         System.out.println("Type the new Employee identification number:");
         String newEmployeeId = scanner.nextLine();
+        System.out.println("Type the new name:");
+        String newEmployeeName = scanner.nextLine();
+        System.out.println("Type the Employee entry date:");
+        System.out.println("Day:");
+        int day = scanner.nextInt();
+        System.out.println("Month:");
+        int month = scanner.nextInt();
+        System.out.println("Year:");
+        int year = scanner.nextInt();
+        scanner.nextLine();
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month - 1, day);
+        Date newEntryDate = new Date(cal.getTimeInMillis());
 
+        System.out.println("Crew Roles:");
+        for (CrewRole crewRole : crewRoles) {
+            System.out.printf("ID: %d, Rol: %s \n", crewRole.getId(), crewRole.getName());
+        }
+        System.out.println("Choose the ID of the rol:");
+        Long newCrewRoleId = scanner.nextLong();
+
+        System.out.println("Airlines:");
+        for (Airline airline : airlines) {
+            System.out.printf("ID: %d, Airline: %s \n", airline.getId(), airline.getName());
+        }
+        System.out.println("Choose the ID of the airline:");
+        Long newAirlineId = scanner.nextLong();
+
+        System.out.println("Airports:");
+        for (Airport airport : airports) {
+            System.out.printf("ID: %d, Airport: %s \n", airport.getId(), airport.getName());
+        }
+        System.out.println("Choose the ID of the airport:");
+        Long newAirportId = scanner.nextLong();
+        scanner.nextLine();
+
+        CrewRole newChosenCrewRole = crewRoles.stream()
+                .filter(role -> role.getId().equals(newCrewRoleId))
+                .findFirst()
+                .orElse(null);
+        Airline newChosenAirline = airlines.stream()
+                .filter(airline -> airline.getId().equals(newAirlineId))
+                .findFirst()
+                .orElse(null);
+        Airport newChosenAirport = airports.stream()
+                .filter(airport -> airport.getId().equals(newAirportId))
+                .findFirst()
+                .orElse(null);
+
+        if (newChosenCrewRole == null || newChosenAirline == null || newChosenAirport == null) {
+            System.out.println("Invalid ID.");
+            return;
+        }
+
+        Employee updatedEmployee = new Employee();
+        updatedEmployee.setId(newEmployeeId);
+        updatedEmployee.setName(newEmployeeName);
+        updatedEmployee.setEntryDate(newEntryDate);
+        updatedEmployee.setRol(newChosenCrewRole);
+        updatedEmployee.setAirline(newChosenAirline);
+        updatedEmployee.setAirport(newChosenAirport);
+
+        mySQLEmployeeRepository.update(updatedEmployee, employeeId);
+        System.out.println("Employee created successfully!");
     }
 
     private void deleteEmployee(Scanner scanner, List<Employee> employees) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'deleteEmployee'");
+        System.out.println("Employees:");
+        listEmployees(employees);
+        System.out.println("Type the employee Id you want to delete");
+        String deleteEmployeeChoice = scanner.nextLine();
+        scanner.nextLine();
+
+        employeeService.deleteEmployeeById(deleteEmployeeChoice);
+        System.out.println("employee deleted successfully!");
     }
 
     private void findEmployeeById(Scanner scanner) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findEmployeeById'");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        System.out.println("Type the Employee ID:");
+        String employeeId = scanner.nextLine();
+        Optional<Employee> employeeOpt = employeeService.getEmployeeById(employeeId);
+
+        employeeOpt.ifPresentOrElse(employee -> {
+            String formattedDate = dateFormat.format(employee.getEntryDate());
+            System.out.printf(
+                    "ID: %s, Name: %d, Entry Date: %s, Rol: %s, Airline: %s, Airport: %s\n",
+                    employee.getId(), employee.getName(), formattedDate,
+                    employee.getRol().getName(), employee.getAirline().getName(),
+                    employee.getAirport().getName());
+        }, () -> System.out.println("Employee not found"));
     }
 
-    private void findEmployeeByRol(List<Employee> employees) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findEmployeeByRol'");
+    private void findEmployeeByRolId(Scanner scanner) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        List<CrewRole> crewRoles = crewRoleService.getAllCrewRoles();
+        for (CrewRole crewRole : crewRoles) {
+            System.out.printf("ID: %d, Rol: %s \n", crewRole.getId(), crewRole.getName());
+        }
+        System.out.println("Choose the ID of the rol:");
+        Long crewRoleId = scanner.nextLong();
+        scanner.nextLine();
+
+        List<Employee> employeesWithRol = employeeService.getEmployeesByRol(crewRoleId);
+
+        for (Employee employee : employeesWithRol) {
+            String formattedDate = dateFormat.format(employee.getEntryDate());
+            System.out.printf("ID: %s, Name: %d, Entry Date: %s, Rol: %s, Airline: %s, Airport: %s\n",
+                    employee.getId(), employee.getName(), formattedDate,
+                    employee.getRol().getName(), employee.getAirline().getName(),
+                    employee.getAirport().getName());
+        }
     }
 
     private void listEmployees(List<Employee> employees) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'listEmployees'");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        for (Employee employee : employees) {
+            String formattedDate = dateFormat.format(employee.getEntryDate());
+            System.out.printf("ID: %s, Name: %d, Entry Date: %s, Rol: %s, Airline: %s, Airport: %s\n",
+                    employee.getId(), employee.getName(), formattedDate,
+                    employee.getRol().getName(), employee.getAirline().getName(),
+                    employee.getAirport().getName());
+        }
     }
 
 }
