@@ -10,10 +10,25 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.vuelosjanbi.airline.application.ports.out.AirlineRepositoryPort;
+import com.vuelosjanbi.airline.infrastructure.adapters.out.MySQLAirlineRepository;
+import com.vuelosjanbi.airport.application.ports.out.AirportRepositoryPort;
+import com.vuelosjanbi.airport.infrastructure.adapters.out.MySQLAirportRepository;
+import com.vuelosjanbi.crewRole.application.ports.out.CrewRoleRepositoryport;
+import com.vuelosjanbi.crewRole.infrastructure.adapters.out.MySQLCrewRoleRepository;
 import com.vuelosjanbi.employee.application.ports.out.EmployeeRepositoryPort;
 import com.vuelosjanbi.employee.domain.models.Employee;
 
 public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
+
+  @Autowired
+  private AirlineRepositoryPort airlineRepositoryPort;
+  @Autowired
+  private AirportRepositoryPort airportRepositoryPort;
+  @Autowired
+  private CrewRoleRepositoryport crewRoleRepositoryport;
 
   private final String url;
   private final String username;
@@ -23,6 +38,9 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
     this.url = url;
     this.username = username;
     this.password = password;
+    this.airlineRepositoryPort = new MySQLAirlineRepository(url, username, password);
+    this.airportRepositoryPort = new MySQLAirportRepository(url, username, password);
+    this.crewRoleRepositoryport = new MySQLCrewRoleRepository(url, username, password);
   }
 
   @Override
@@ -111,6 +129,9 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
             Employee employee = new Employee();
             employee.setId(result.getString("id"));
             employee.setName(result.getString("name"));
+            employee.setRol(crewRoleRepositoryport.findById(result.getLong("rol_id")).orElse(null));
+            employee.setAirline(airlineRepositoryPort.findById(result.getLong("airline_id")).orElse(null));
+            employee.setAirport(airportRepositoryPort.findById(result.getLong("airport_id")).orElse(null));
             return Optional.of(employee);
           }
           return Optional.empty();
@@ -146,6 +167,9 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
             Employee employee = new Employee();
             employee.setId(result.getString("id"));
             employee.setName(result.getString("name"));
+            employee.setRol(crewRoleRepositoryport.findById(result.getLong("rol_id")).orElse(null));
+            employee.setAirline(airlineRepositoryPort.findById(result.getLong("airline_id")).orElse(null));
+            employee.setAirport(airportRepositoryPort.findById(result.getLong("airport_id")).orElse(null));
 
             employees.add(employee);
           }
@@ -170,6 +194,9 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
             Employee employee = new Employee();
             employee.setId(result.getString("id"));
             employee.setName(result.getString("name"));
+            employee.setRol(crewRoleRepositoryport.findById(result.getLong("rol_id")).orElse(null));
+            employee.setAirline(airlineRepositoryPort.findById(result.getLong("airline_id")).orElse(null));
+            employee.setAirport(airportRepositoryPort.findById(result.getLong("airport_id")).orElse(null));
             employees.add(employee);
           }
           return employees;
@@ -193,7 +220,9 @@ public class MySQLEmployeeRepository implements EmployeeRepositoryPort {
             Employee employee = new Employee();
             employee.setId(result.getString("id"));
             employee.setName(result.getString("name"));
-
+            employee.setRol(crewRoleRepositoryport.findById(result.getLong("rol_id")).orElse(null));
+            employee.setAirline(airlineRepositoryPort.findById(result.getLong("airline_id")).orElse(null));
+            employee.setAirport(airportRepositoryPort.findById(result.getLong("airport_id")).orElse(null));
             employees.add(employee);
           }
           return employees;

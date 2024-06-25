@@ -10,7 +10,7 @@ public interface CrewRoleRepositoryport {
 
   void deleteById(Long id);
 
-  Optional<CrewRole> findById(String id);
+  Optional<CrewRole> findById(Long id);
 
   Optional<CrewRole> findByName(String name);
 

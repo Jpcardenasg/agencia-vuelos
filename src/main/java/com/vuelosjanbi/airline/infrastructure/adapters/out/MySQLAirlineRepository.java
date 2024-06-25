@@ -21,7 +21,7 @@ public class MySQLAirlineRepository implements AirlineRepositoryPort {
   private final String username;
   private final String password;
 
-  MySQLAirlineRepository(String url, String username, String password) {
+  public MySQLAirlineRepository(String url, String username, String password) {
     this.url = url;
     this.username = username;
     this.password = password;
