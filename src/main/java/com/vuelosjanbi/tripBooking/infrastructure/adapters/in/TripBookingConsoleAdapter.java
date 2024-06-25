@@ -53,7 +53,7 @@ public class TripBookingConsoleAdapter {
     Scanner scanner = new Scanner(System.in);
     while (true) {
       System.out.println("1. Create Trip Booking");
-      System.out.println("2. Get Trip Booking");
+      System.out.println("2. Get all details about Trip Booking");
       System.out.println("3. Update Trip Booking");
       System.out.println("4. Delete Trip Booking");
       System.out.println("5. Get All Trip Bookings");
@@ -61,6 +61,12 @@ public class TripBookingConsoleAdapter {
       switch (scanner.nextInt()) {
         case 1:
           createTripBooking(scanner);
+          break;
+        case 2:
+
+          break;
+        case 3:
+
           break;
 
         default:
@@ -104,4 +110,34 @@ public class TripBookingConsoleAdapter {
     tripBookingDetailService.createTripBookingDetail(tripBookingDetail);
     System.out.println("Trip booking created successfully!");
   }
+
+  public void updateTripBooking(Scanner scanner) {
+    System.out.println("Enter the trip booking id:");
+    Long tripBookingIdToUpdate = scanner.nextLong();
+    TripBooking tripBookingToUpdate = tripBookingService.getTripBooking(tripBookingIdToUpdate);
+    System.out.println("Enter day of the trip booking:");
+    String dayToUpdate = scanner.next();
+    System.out.println("Enter month of the trip booking:");
+    String monthToUpdate = scanner.next();
+    System.out.println("Enter year of the trip booking:");
+    String yearToUpdate = scanner.next();
+    String tripBookingDateToUpdate = yearToUpdate + "-" + monthToUpdate + "-" + dayToUpdate;
+    Date tripDateToUpdate = Date.valueOf(tripBookingDateToUpdate);
+    tripBookingToUpdate.setDate(tripDateToUpdate);
+    tripBookingService.updateTripBooking(tripBookingToUpdate);
+    System.out.println("Trip booking updated successfully!");
+  }
+
+  public void detailsTripBooking(Scanner scanner) {
+    System.out.println("Enter the trip booking id:");
+    Long tripBookingId = scanner.nextLong();
+    TripBooking tripBooking = tripBookingService.getTripBooking(tripBookingId);
+    TripBookingDetail tripBookingDetail = tripBookingDetailService.getTripBookingDetail(tripBookingId);
+    System.out.println("Trip booking id: " + tripBooking.getId());
+    System.out.println("Trip booking date: " + tripBooking.getDate());
+    System.out.println("Trip id: " + tripBooking.getTrip().getId());
+    System.out.println("Trip booking details:");
+    System.out.println("Customer: ");
+  }
+
 }

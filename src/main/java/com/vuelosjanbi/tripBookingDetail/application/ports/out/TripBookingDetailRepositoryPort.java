@@ -19,4 +19,13 @@ public interface TripBookingDetailRepositoryPort {
 
   List<TripBookingDetail> findAll();
 
+  Optional<TripBookingDetail> findByTripBookingId(Long tripBookingId);
+
+  Optional<TripBookingDetail> findByTripBookingIdAndCustomerId(Long tripBookingId, String customerId);
+
+  Optional<TripBookingDetail> findByTripBookingIdAndCustomer(Long tripBookingId, String customerId);
+
+  Optional<TripBookingDetail> findByTripBookingIdAndCustomerIdAndFlightFareId(Long tripBookingId, String customerId,
+      Long flightFareId);
+
 }
