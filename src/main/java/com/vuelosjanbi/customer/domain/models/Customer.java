@@ -49,4 +49,9 @@ public class Customer {
     this.documentType = documentType;
   }
 
+  @Override
+  public String toString() {
+    return String.format("Id: %d Name: %s", id, name);
+  }
+
 }

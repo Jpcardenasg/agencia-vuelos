@@ -6,19 +6,34 @@ import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import com.vuelosjanbi.customer.application.CustomerService;
+import com.vuelosjanbi.customer.infrastructure.adapters.out.MySQLCustomerRepository;
+import com.vuelosjanbi.flightFare.application.FlightFareService;
+import com.vuelosjanbi.trip.application.TripService;
 import com.vuelosjanbi.tripBooking.application.TripBookingService;
+import com.vuelosjanbi.tripBooking.domain.models.TripBooking;
 import com.vuelosjanbi.tripBooking.infrastructure.adapters.out.MySQLTripBookingRepository;
 import com.vuelosjanbi.tripBookingDetail.application.TripBookingDetailService;
+import com.vuelosjanbi.tripBookingDetail.domain.models.TripBookingDetail;
 import com.vuelosjanbi.tripBookingDetail.infrastructure.adapters.out.MySQLTripBookingDetailRepository;
 
 @Controller
 public class TripBookingConsoleAdapter {
 
   @Autowired
-  private TripBookingService tripBookingService;
+  private static TripBookingService tripBookingService;
 
   @Autowired
-  private TripBookingDetailService tripBookingDetailService;
+  private static TripBookingDetailService tripBookingDetailService;
+
+  @Autowired
+  private static CustomerService customerService;
+
+  @Autowired
+  private static TripService tripService;
+
+  @Autowired
+  private static FlightFareService flightFareService;
 
   private final String url = "jdbc:mysql://localhost:3307/vuelosjanpi";
   private final String user = "root";
@@ -32,6 +47,8 @@ public class TripBookingConsoleAdapter {
       tripBookingService = new TripBookingService(new MySQLTripBookingRepository(url, user, password));
       tripBookingDetailService = new TripBookingDetailService(
           new MySQLTripBookingDetailRepository(url, user, password));
+      customerService = new CustomerService(new MySQLCustomerRepository(url, user, password));
+
     }
     Scanner scanner = new Scanner(System.in);
     while (true) {
@@ -52,7 +69,7 @@ public class TripBookingConsoleAdapter {
     }
   }
 
-  private void createTripBooking(Scanner scanner) {
+  private static void createTripBooking(Scanner scanner) {
     System.out.println("Enter day of the trip booking:");
     String day = scanner.next();
     System.out.println("Enter month of the trip booking:");
@@ -62,7 +79,29 @@ public class TripBookingConsoleAdapter {
     String tripBookingDate = year + "-" + month + "-" + day;
     Date tripDate = Date.valueOf(tripBookingDate);
     System.out.println("Enter the trip id:");
+    for (int i = 0; i < tripService.getAllTrips().size(); i++) {
+      System.out.println(tripService.getAllTrips().get(i));
+    }
     Long tripId = scanner.nextLong();
-    tripBookingService.createTripBooking(null);
+    TripBooking tripBooking = new TripBooking();
+    tripBooking.setDate(tripDate);
+    tripBooking.setTrip(tripService.getTripById(tripId));
+    tripBookingService.createTripBooking(tripBooking);
+    System.out.println("Select the customer id:");
+    for (int i = 0; i < customerService.getAllCustomers().size(); i++) {
+      System.out.println(customerService.getAllCustomers().get(i));
+    }
+    String customerId = scanner.nextLine();
+    System.out.println("Select the flight fare id:");
+    for (int i = 0; i < flightFareService.getAllFlightFares().size(); i++) {
+      System.out.println(flightFareService.getAllFlightFares().get(i));
+    }
+    Long flightFareId = scanner.nextLong();
+    TripBookingDetail tripBookingDetail = new TripBookingDetail();
+    tripBookingDetail.setCustomer(customerService.getCustomer(customerId).orElse(null));
+    tripBookingDetail.setFlightFare(flightFareService.getFlightFareById(flightFareId).orElse(null));
+    tripBookingDetail.setTripBooking(tripBooking);
+    tripBookingDetailService.createTripBookingDetail(tripBookingDetail);
+    System.out.println("Trip booking created successfully!");
   }
 }

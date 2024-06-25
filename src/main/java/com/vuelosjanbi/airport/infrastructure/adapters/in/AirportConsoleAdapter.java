@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Controller;
 
 import com.vuelosjanbi.airport.application.AirportService;
 import com.vuelosjanbi.airport.domain.models.Airport;
@@ -13,7 +13,7 @@ import com.vuelosjanbi.city.application.CityService;
 import com.vuelosjanbi.city.domain.models.City;
 import com.vuelosjanbi.city.infrastructure.adapters.out.MySQLCityRepository;
 
-@Service
+@Controller
 public class AirportConsoleAdapter {
 
   @Autowired
