@@ -31,7 +31,7 @@ public class CrewRoleService {
         crewRoleRepositoryport.deleteById(crewRoleId);
     }
 
-    public Optional<CrewRole> getCrewRoleById(String crewRoleId) {
+    public Optional<CrewRole> getCrewRoleById(Long crewRoleId) {
         return crewRoleRepositoryport.findById(crewRoleId);
     }
 

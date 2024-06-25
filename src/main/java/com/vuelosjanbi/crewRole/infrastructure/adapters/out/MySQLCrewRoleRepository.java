@@ -75,11 +75,11 @@ public class MySQLCrewRoleRepository implements CrewRoleRepositoryport {
   }
 
   @Override
-  public Optional<CrewRole> findById(String id) {
+  public Optional<CrewRole> findById(Long id) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "SELECT * FROM crew_role WHERE id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setString(1, id);
+        statement.setLong(1, id);
         try (ResultSet resultSet = statement.executeQuery()) {
           if (resultSet.next()) {
             CrewRole crewRole = new CrewRole();
