@@ -30,7 +30,7 @@ public class MySQLPlaneRevisionEmployeeRepository implements PlaneRevisionEmploy
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "INSERT INTO plane_revision_employee (employee_id, plane_revision_id) VALUES (?, ?)";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setLong(1, planeRevisionEmployee.getEmployee().getId());
+        statement.setString(1, planeRevisionEmployee.getEmployee().getId());
         statement.setLong(2, planeRevisionEmployee.getPlanRevision().getId());
         statement.executeUpdate();
       }
@@ -44,9 +44,9 @@ public class MySQLPlaneRevisionEmployeeRepository implements PlaneRevisionEmploy
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "UPDATE plane_revision_employee SET employee_id = ?, plane_revision_id = ? WHERE employee_id = ? AND plane_revision_id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setLong(1, planeRevisionEmployee.getEmployee().getId());
+        statement.setString(1, planeRevisionEmployee.getEmployee().getId());
         statement.setLong(2, planeRevisionEmployee.getPlanRevision().getId());
-        statement.setLong(3, planeRevisionEmployee.getEmployee().getId());
+        statement.setString(3, planeRevisionEmployee.getEmployee().getId());
         statement.setLong(4, planeRevisionEmployee.getPlanRevision().getId());
         statement.executeUpdate();
       }

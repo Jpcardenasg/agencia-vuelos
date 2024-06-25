@@ -75,11 +75,11 @@ public class MySQLCrewRoleRepository implements CrewRoleRepositoryport {
   }
 
   @Override
-  public Optional<CrewRole> findById(Long id) {
+  public Optional<CrewRole> findById(String id) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "SELECT * FROM crew_role WHERE id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setLong(1, id);
+        statement.setString(1, id);
         try (ResultSet resultSet = statement.executeQuery()) {
           if (resultSet.next()) {
             CrewRole crewRole = new CrewRole();
@@ -127,6 +127,27 @@ public class MySQLCrewRoleRepository implements CrewRoleRepositoryport {
       throw new RuntimeException("Database connection error", e);
     }
     return crewRoles;
+  }
+
+  @Override
+  public Optional<CrewRole> findByName(String name) {
+    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+      String query = "SELECT * FROM crew_role WHERE name = ?";
+      try (PreparedStatement statement = connection.prepareStatement(query)) {
+        statement.setString(1, name);
+        try (ResultSet resultSet = statement.executeQuery()) {
+          if (resultSet.next()) {
+            CrewRole crewRole = new CrewRole();
+            crewRole.setId(resultSet.getLong("id"));
+            crewRole.setName(resultSet.getString("name"));
+            return Optional.of(crewRole);
+          }
+        }
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException("Database connection error", e);
+    }
+    return Optional.empty();
   }
 
 }

@@ -116,7 +116,7 @@ public class TripCrewConsoleAdapter {
         System.out.println(employee);
       });
       System.out.println("Enter the employee id:");
-      Long employeeId = scanner.nextLong();
+      String employeeId = scanner.nextLine();
       scanner.nextLine();
       Employee employee = employeeRepositoryPort.findById(employeeId).orElse(null);
       if (employee == null) {
@@ -146,7 +146,7 @@ public class TripCrewConsoleAdapter {
         System.out.println(employee);
       });
       System.out.println("Enter the employee id:");
-      Long employeeId = scanner.nextLong();
+      String employeeId = scanner.nextLine();
       scanner.nextLine();
       Employee employee = employeeRepositoryPort.findById(employeeId).orElse(null);
       if (employee == null) {

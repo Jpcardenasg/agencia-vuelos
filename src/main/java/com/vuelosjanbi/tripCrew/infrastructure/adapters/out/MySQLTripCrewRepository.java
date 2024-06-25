@@ -50,7 +50,7 @@ public class MySQLTripCrewRepository implements TripCrewRepositoryPort {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "INSERT INTO trip_crew (employee_id,flight_connection_id) VALUES (?, ?)";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setLong(1, tripCrew.getEmployee().getId());
+        statement.setString(1, tripCrew.getEmployee().getId());
         statement.setLong(2, tripCrew.getFlightConnection().getId());
         statement.executeUpdate();
       }
@@ -64,9 +64,9 @@ public class MySQLTripCrewRepository implements TripCrewRepositoryPort {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "UPDATE trip_crew SET employee_id = ?, flight_connection_id = ? WHERE employee_id = ? AND flight_connection_id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setLong(1, tripCrew.getEmployee().getId());
+        statement.setString(1, tripCrew.getEmployee().getId());
         statement.setLong(2, tripCrew.getFlightConnection().getId());
-        statement.setLong(3, tripCrew.getId().getEmployeeId());
+        statement.setString(3, tripCrew.getId().getEmployeeId());
         statement.setLong(4, tripCrew.getId().getFlightConnectionId());
         statement.executeUpdate();
       }
@@ -81,14 +81,14 @@ public class MySQLTripCrewRepository implements TripCrewRepositoryPort {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "SELECT * FROM trip_crew WHERE employee_id = ? AND flight_connection_id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setLong(1, id.getEmployee().getId());
+        statement.setString(1, id.getEmployee().getId());
         statement.setLong(2, id.getFlightConnection().getId());
         statement.execute();
         try (ResultSet resultSet = statement.getResultSet()) {
           if (resultSet.next()) {
             TripCrew tripCrew = new TripCrew();
             TripCrewId tripCrewId = new TripCrewId();
-            tripCrewId.setEmployeeId(resultSet.getLong("employee_id"));
+            tripCrewId.setEmployeeId(resultSet.getString("employee_id"));
             tripCrewId.setFlightConnectionId(resultSet.getLong("flight_connection_id"));
             tripCrew.setEmployee(employeeRepositoryPort.findById(tripCrewId.getEmployeeId()).orElse(null));
             tripCrew.setFlightConnection(
@@ -110,7 +110,7 @@ public class MySQLTripCrewRepository implements TripCrewRepositoryPort {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "DELETE FROM trip_crew WHERE id = ? AND flight_connection_id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setLong(1, id.getId().getEmployeeId());
+        statement.setString(1, id.getId().getEmployeeId());
         statement.setLong(2, id.getId().getFlightConnectionId());
         statement.executeUpdate();
       }
@@ -129,7 +129,7 @@ public class MySQLTripCrewRepository implements TripCrewRepositoryPort {
           while (resultSet.next()) {
             TripCrew tripCrew = new TripCrew();
             TripCrewId tripCrewId = new TripCrewId();
-            tripCrewId.setEmployeeId(statement.getResultSet().getLong("employee_id"));
+            tripCrewId.setEmployeeId(statement.getResultSet().getString("employee_id"));
             tripCrewId.setFlightConnectionId(statement.getResultSet().getLong("flight_connection_id"));
             tripCrew.setId(tripCrewId);
             tripCrew.setEmployee(employeeRepositoryPort.findById(tripCrewId.getEmployeeId()).orElse(null));
