@@ -9,6 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.vuelosjanbi.airport.infrastructure.adapters.in.AirportConsoleAdapter;
 import com.vuelosjanbi.plane.infrastructure.adapters.in.PlaneConsoleAdapter;
+import com.vuelosjanbi.planeRevision.application.PlaneRevisionService;
+import com.vuelosjanbi.trip.application.TripService;
 import com.vuelosjanbi.trip.infrastructure.adapters.in.TripConsoleAdapter;
 import com.vuelosjanbi.tripCrew.infrastructure.adapters.in.TripCrewConsoleAdapter;
 
@@ -26,6 +28,12 @@ public class Main implements CommandLineRunner {
 
     @Autowired
     private AirportConsoleAdapter airportConsoleAdapter;
+
+    @Autowired
+    private TripService tripService;
+
+    @Autowired
+    private PlaneRevisionService planeRevisionService;
 
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);

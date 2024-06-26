@@ -120,4 +120,76 @@ public class MySQLTripBookingRepository implements TripBookingRepositoryPort {
     }
   }
 
+  @Override
+  public List<TripBooking> findByTripId(Long tripId) {
+    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+      String query = "SELECT * FROM trip_booking WHERE trip_id = ?";
+      try (PreparedStatement statement = connection.prepareStatement(query)) {
+        statement.setLong(1, tripId);
+        try (ResultSet resultSet = statement.executeQuery()) {
+          List<TripBooking> tripBookings = new ArrayList<>();
+          while (resultSet.next()) {
+            TripBooking tripBooking = new TripBooking();
+            tripBooking.setId(resultSet.getLong("id"));
+            tripBooking.setDate(resultSet.getDate("date"));
+            tripBooking.setTrip(tripRepositoryPort.findById(resultSet.getLong("trip_id")).orElse(null));
+            tripBookings.add(tripBooking);
+          }
+          return tripBookings;
+        }
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      return new ArrayList<>();
+    }
+  }
+
+  @Override
+  public List<TripBooking> findByDate(String date) {
+    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+      String query = "SELECT * FROM trip_booking WHERE date = ?";
+      try (PreparedStatement statement = connection.prepareStatement(query)) {
+        statement.setString(1, date);
+        try (ResultSet resultSet = statement.executeQuery()) {
+          List<TripBooking> tripBookings = new ArrayList<>();
+          while (resultSet.next()) {
+            TripBooking tripBooking = new TripBooking();
+            tripBooking.setId(resultSet.getLong("id"));
+            tripBooking.setDate(resultSet.getDate("date"));
+            tripBooking.setTrip(tripRepositoryPort.findById(resultSet.getLong("trip_id")).orElse(null));
+            tripBookings.add(tripBooking);
+          }
+          return tripBookings;
+        }
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      return new ArrayList<>();
+    }
+  }
+
+  @Override
+  public List<TripBooking> findByCustomerId(String customerId) {
+    try (Connection connection = DriverManager.getConnection(url, user, password)) {
+      String query = "SELECT * FROM trip_booking WHERE trip_id IN (SELECT id FROM trip WHERE customer_id = ?)";
+      try (PreparedStatement statement = connection.prepareStatement(query)) {
+        statement.setString(1, customerId);
+        try (ResultSet resultSet = statement.executeQuery()) {
+          List<TripBooking> tripBookings = new ArrayList<>();
+          while (resultSet.next()) {
+            TripBooking tripBooking = new TripBooking();
+            tripBooking.setId(resultSet.getLong("id"));
+            tripBooking.setDate(resultSet.getDate("date"));
+            tripBooking.setTrip(tripRepositoryPort.findById(resultSet.getLong("trip_id")).orElse(null));
+            tripBookings.add(tripBooking);
+          }
+          return tripBookings;
+        }
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+      return new ArrayList<>();
+    }
+  }
+
 }
