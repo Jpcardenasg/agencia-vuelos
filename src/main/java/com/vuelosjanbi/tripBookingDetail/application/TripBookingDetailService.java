@@ -41,17 +41,16 @@ public class TripBookingDetailService {
     return tripBookingDetailRepositoryPort.findAll();
   }
 
-  public TripBookingDetail getTripBookingDetailsByTripBookingId(Long tripBookingId) {
-    return tripBookingDetailRepositoryPort.findByTripBookingId(tripBookingId).orElse(null);
+  public List<TripBookingDetail> getTripBookingDetailsByTripBookingId(Long tripBookingId) {
+    return tripBookingDetailRepositoryPort.findByTripBookingId(tripBookingId);
   }
 
-  public TripBookingDetail getTripBookingDetailsByTripBookingIdList(Long tripBookingId) {
-    return tripBookingDetailRepositoryPort.findByTripBookingId(tripBookingId).orElse(null);
+  public List<TripBookingDetail> getTripBookingDetailsByTripId(Long tripId) {
+    return tripBookingDetailRepositoryPort.findByTripBookingId(tripId);
   }
 
-  public TripBookingDetail getTripBookingDetailsByTripBookingIdAndPassengerId(Long tripBookingId,
-      String passengerId) {
-    return tripBookingDetailRepositoryPort.findByTripBookingIdAndCustomerId(tripBookingId, passengerId).orElse(null);
+  public List<TripBookingDetail> getTripBookingDetailsByCustomerId(String customerId) {
+    return tripBookingDetailRepositoryPort.findByCustomerId(customerId);
   }
 
 }

@@ -31,12 +31,11 @@ public class EmployeeConsoleAdapter {
     private AirlineService airlineService;
     @Autowired
     private AirportService airportService;
-    @Autowired
-    private MySQLEmployeeRepository mySQLEmployeeRepository;
 
     private final String url = "jdbc:mysql://localhost:3307/vuelosjanpi";
     private final String user = "root";
     private final String password = "1324";
+    private MySQLEmployeeRepository mySQLEmployeeRepository = new MySQLEmployeeRepository(url, user, password);
 
     public void start(boolean useJpa) {
         if (useJpa) {

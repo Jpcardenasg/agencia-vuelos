@@ -14,7 +14,7 @@ public interface PlaneRevisionEmployeeRepositoryPort {
 
   void deleteById(RevisionEmployeeId id);
 
-  PlanRevisionEmployee findByEmployeeId(Long employeeId);
+  PlanRevisionEmployee findByEmployeeId(String employeeId);
 
   List<PlanRevisionEmployee> findAll();
 

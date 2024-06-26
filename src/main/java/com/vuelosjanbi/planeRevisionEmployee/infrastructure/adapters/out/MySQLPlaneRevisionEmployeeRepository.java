@@ -65,7 +65,7 @@ public class MySQLPlaneRevisionEmployeeRepository implements PlaneRevisionEmploy
           if (resultSet.next()) {
             PlanRevisionEmployee planeRevisionEmployee = new PlanRevisionEmployee();
             RevisionEmployeeId revisionEmployeeId = new RevisionEmployeeId();
-            revisionEmployeeId.setEmployeeId(resultSet.getLong("employee_id"));
+            revisionEmployeeId.setEmployeeId(resultSet.getString("employee_id"));
             revisionEmployeeId.setPlaneRevisionId(resultSet.getLong("plane_revision_id"));
             planeRevisionEmployee.setId(revisionEmployeeId);
             return Optional.of(planeRevisionEmployee);
@@ -83,7 +83,7 @@ public class MySQLPlaneRevisionEmployeeRepository implements PlaneRevisionEmploy
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "DELETE FROM plane_revision_employee WHERE employee_id = ? AND plan_revision_id";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setLong(1, id.getEmployeeId());
+        statement.setString(1, id.getEmployeeId());
         statement.setLong(2, id.getPlaneRevisionId());
         statement.executeUpdate();
       }
@@ -93,16 +93,16 @@ public class MySQLPlaneRevisionEmployeeRepository implements PlaneRevisionEmploy
   }
 
   @Override
-  public PlanRevisionEmployee findByEmployeeId(Long employeeId) {
+  public PlanRevisionEmployee findByEmployeeId(String employeeId) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "SELECT * FROM plane_revision_employee WHERE employee_id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setLong(1, employeeId);
+        statement.setString(1, employeeId);
         try (ResultSet resultSet = statement.executeQuery()) {
           if (resultSet.next()) {
             PlanRevisionEmployee planeRevisionEmployee = new PlanRevisionEmployee();
             RevisionEmployeeId revisionEmployeeId = new RevisionEmployeeId();
-            revisionEmployeeId.setEmployeeId(resultSet.getLong("employee_id"));
+            revisionEmployeeId.setEmployeeId(resultSet.getString("employee_id"));
             revisionEmployeeId.setPlaneRevisionId(resultSet.getLong("plane_revision_id"));
             planeRevisionEmployee.setId(revisionEmployeeId);
             return planeRevisionEmployee;
@@ -125,7 +125,7 @@ public class MySQLPlaneRevisionEmployeeRepository implements PlaneRevisionEmploy
           while (resultSet.next()) {
             PlanRevisionEmployee planeRevisionEmployee = new PlanRevisionEmployee();
             RevisionEmployeeId revisionEmployeeId = new RevisionEmployeeId();
-            revisionEmployeeId.setEmployeeId(resultSet.getLong("employee_id"));
+            revisionEmployeeId.setEmployeeId(resultSet.getString("employee_id"));
             revisionEmployeeId.setPlaneRevisionId(resultSet.getLong("plane_revision_id"));
             planeRevisionEmployee.setId(revisionEmployeeId);
             planeRevisionEmployees.add(planeRevisionEmployee);

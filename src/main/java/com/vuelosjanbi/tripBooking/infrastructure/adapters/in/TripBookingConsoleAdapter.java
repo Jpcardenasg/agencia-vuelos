@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import java.util.List;
 
 import com.vuelosjanbi.customer.application.CustomerService;
 import com.vuelosjanbi.customer.infrastructure.adapters.out.MySQLCustomerRepository;
@@ -21,19 +22,19 @@ import com.vuelosjanbi.tripBookingDetail.infrastructure.adapters.out.MySQLTripBo
 public class TripBookingConsoleAdapter {
 
   @Autowired
-  private static TripBookingService tripBookingService;
+  private TripBookingService tripBookingService;
 
   @Autowired
-  private static TripBookingDetailService tripBookingDetailService;
+  private TripBookingDetailService tripBookingDetailService;
 
   @Autowired
-  private static CustomerService customerService;
+  private CustomerService customerService;
 
   @Autowired
-  private static TripService tripService;
+  private TripService tripService;
 
   @Autowired
-  private static FlightFareService flightFareService;
+  private FlightFareService flightFareService;
 
   private final String url = "jdbc:mysql://localhost:3307/vuelosjanpi";
   private final String user = "root";
@@ -60,22 +61,33 @@ public class TripBookingConsoleAdapter {
       System.out.println("6. Exit");
       switch (scanner.nextInt()) {
         case 1:
-          createTripBooking(scanner);
+          createTripBooking(scanner, tripBookingService, tripBookingDetailService, customerService, tripService,
+              flightFareService);
           break;
         case 2:
-
+          detailsTripBooking(scanner);
           break;
         case 3:
-
+          updateTripBooking(scanner);
           break;
-
+        case 4:
+          deleteTripBooking(scanner);
+          break;
+        case 5:
+          getAllTripBookings();
+          break;
+        case 6:
+          scanner.close();
+          return;
         default:
           break;
       }
     }
   }
 
-  private static void createTripBooking(Scanner scanner) {
+  private static void createTripBooking(Scanner scanner, TripBookingService tripBookingService,
+      TripBookingDetailService tripBookingDetailService, CustomerService customerService, TripService tripService,
+      FlightFareService flightFareService) {
     System.out.println("Enter day of the trip booking:");
     String day = scanner.next();
     System.out.println("Enter month of the trip booking:");
@@ -129,15 +141,37 @@ public class TripBookingConsoleAdapter {
   }
 
   public void detailsTripBooking(Scanner scanner) {
+    System.out.println("Enter the Customer id:");
+    String customerId = scanner.nextLine();
     System.out.println("Enter the trip booking id:");
+    List<TripBookingDetail> tripBookingDetails = tripBookingDetailService.getTripBookingDetailsByCustomerId(customerId);
+    System.out.println("What trip booking detail do you want to see?");
+    for (int i = 0; i < tripBookingDetails.size(); i++) {
+      System.out.println(tripBookingDetails.get(i));
+    }
     Long tripBookingId = scanner.nextLong();
-    TripBooking tripBooking = tripBookingService.getTripBooking(tripBookingId);
-    TripBookingDetail tripBookingDetail = tripBookingDetailService.getTripBookingDetail(tripBookingId);
-    System.out.println("Trip booking id: " + tripBooking.getId());
-    System.out.println("Trip booking date: " + tripBooking.getDate());
-    System.out.println("Trip id: " + tripBooking.getTrip().getId());
-    System.out.println("Trip booking details:");
-    System.out.println("Customer: ");
+    List<TripBookingDetail> tripBookingDetail = tripBookingDetailService
+        .getTripBookingDetailsByTripBookingId(tripBookingId);
+    System.out.println("The trip booking detail is:");
+    for (int i = 0; i < tripBookingDetail.size(); i++) {
+      System.out.println(tripBookingDetail.get(i));
+    }
+
+  }
+
+  public void deleteTripBooking(Scanner scanner) {
+    System.out.println("Enter the trip booking id:");
+    Long tripBookingIdToDelete = scanner.nextLong();
+    tripBookingService.deleteTripBooking(tripBookingIdToDelete);
+    System.out.println("Trip booking deleted successfully!");
+  }
+
+  public void getAllTripBookings() {
+    List<TripBooking> tripBookings = tripBookingService.getAllTripBookings();
+    System.out.println("The trip bookings are:");
+    for (int i = 0; i < tripBookings.size(); i++) {
+      System.out.println(tripBookings.get(i));
+    }
   }
 
 }

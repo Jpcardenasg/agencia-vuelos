@@ -117,30 +117,6 @@ public class MySQLTripBookingDetailRepository implements TripBookingDetailReposi
   }
 
   @Override
-  public Optional<TripBookingDetail> findByCustomerId(String id) {
-    try (Connection connection = DriverManager.getConnection(url, user, password)) {
-      String query = "SELECT * FROM trip_booking_detail WHERE customer_id = ?";
-      try (PreparedStatement statement = connection.prepareStatement(query)) {
-        try (ResultSet resultSet = statement.executeQuery()) {
-          if (resultSet.next()) {
-            TripBookingDetail tripBookingDetail = new TripBookingDetail();
-            tripBookingDetail.setId(resultSet.getLong("id"));
-            tripBookingDetail
-                .setTripBooking(tripBookingRepositoryPort.findById(resultSet.getLong("trip_booking_id")).get());
-            tripBookingDetail.setCustomer(customerRepositoryPort.findById(resultSet.getString("customer_id")).get());
-            tripBookingDetail
-                .setFlightFare(flightFareRepositoryPort.findById(resultSet.getLong("flight_fare_id")).get());
-            return Optional.of(tripBookingDetail);
-          }
-        }
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    return Optional.empty();
-  }
-
-  @Override
   public Optional<TripBookingDetail> findById(Long id) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "SELECT * FROM trip_booking_detail WHERE id = ?";
@@ -193,13 +169,14 @@ public class MySQLTripBookingDetailRepository implements TripBookingDetailReposi
   }
 
   @Override
-  public Optional<TripBookingDetail> findByTripBookingId(Long tripBookingId) {
+  public List<TripBookingDetail> findByTripBookingId(Long tripBookingId) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "SELECT * FROM trip_booking_detail WHERE trip_booking_id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         statement.setLong(1, tripBookingId);
         try (ResultSet resultSet = statement.executeQuery()) {
-          if (resultSet.next()) {
+          List<TripBookingDetail> tripBookingDetails = new ArrayList<>();
+          while (resultSet.next()) {
             TripBookingDetail tripBookingDetail = new TripBookingDetail();
             tripBookingDetail.setId(resultSet.getLong("id"));
             tripBookingDetail
@@ -207,25 +184,27 @@ public class MySQLTripBookingDetailRepository implements TripBookingDetailReposi
             tripBookingDetail.setCustomer(customerRepositoryPort.findById(resultSet.getString("customer_id")).get());
             tripBookingDetail
                 .setFlightFare(flightFareRepositoryPort.findById(resultSet.getLong("flight_fare_id")).get());
-            return Optional.of(tripBookingDetail);
+            tripBookingDetails.add(tripBookingDetail);
           }
+          return tripBookingDetails;
         }
       }
+
     } catch (SQLException e) {
       e.printStackTrace();
+      return new ArrayList<>();
     }
-    return Optional.empty();
   }
 
   @Override
-  public Optional<TripBookingDetail> findByTripBookingIdAndCustomerId(Long tripBookingId, String customerId) {
+  public List<TripBookingDetail> findByCustomerId(String customerId) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
-      String query = "SELECT * FROM trip_booking_detail WHERE trip_booking_id = ? AND customer_id = ?";
+      String query = "SELECT * FROM trip_booking_detail WHERE customer_id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setLong(1, tripBookingId);
-        statement.setString(2, customerId);
+        statement.setString(1, customerId);
         try (ResultSet resultSet = statement.executeQuery()) {
-          if (resultSet.next()) {
+          List<TripBookingDetail> tripBookingDetails = new ArrayList<>();
+          while (resultSet.next()) {
             TripBookingDetail tripBookingDetail = new TripBookingDetail();
             tripBookingDetail.setId(resultSet.getLong("id"));
             tripBookingDetail
@@ -233,68 +212,15 @@ public class MySQLTripBookingDetailRepository implements TripBookingDetailReposi
             tripBookingDetail.setCustomer(customerRepositoryPort.findById(resultSet.getString("customer_id")).get());
             tripBookingDetail
                 .setFlightFare(flightFareRepositoryPort.findById(resultSet.getLong("flight_fare_id")).get());
-            return Optional.of(tripBookingDetail);
+            tripBookingDetails.add(tripBookingDetail);
           }
+          return tripBookingDetails;
         }
       }
     } catch (SQLException e) {
       e.printStackTrace();
+      return new ArrayList<>();
     }
-    return Optional.empty();
-  }
-
-  @Override
-  public Optional<TripBookingDetail> findByTripBookingIdAndCustomer(Long tripBookingId, String customerId) {
-    try (Connection connection = DriverManager.getConnection(url, user, password)) {
-      String query = "SELECT * FROM trip_booking_detail WHERE trip_booking_id = ? AND customer_id = ?";
-      try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setLong(1, tripBookingId);
-        statement.setString(2, customerId);
-        try (ResultSet resultSet = statement.executeQuery()) {
-          if (resultSet.next()) {
-            TripBookingDetail tripBookingDetail = new TripBookingDetail();
-            tripBookingDetail.setId(resultSet.getLong("id"));
-            tripBookingDetail
-                .setTripBooking(tripBookingRepositoryPort.findById(resultSet.getLong("trip_booking_id")).get());
-            tripBookingDetail.setCustomer(customerRepositoryPort.findById(resultSet.getString("customer_id")).get());
-            tripBookingDetail
-                .setFlightFare(flightFareRepositoryPort.findById(resultSet.getLong("flight_fare_id")).get());
-            return Optional.of(tripBookingDetail);
-          }
-        }
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    return Optional.empty();
-  } 
-
-  @Override
-  public Optional<TripBookingDetail> findByTripBookingIdAndCustomerIdAndFlightFareId(Long tripBookingId,
-      String customerId, Long flightFareId) {
-    try (Connection connection = DriverManager.getConnection(url, user, password)) {
-      String query = "SELECT * FROM trip_booking_detail WHERE trip_booking_id = ? AND customer_id = ? AND flight_fare_id = ?";
-      try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setLong(1, tripBookingId);
-        statement.setString(2, customerId);
-        statement.setLong(3, flightFareId);
-        try (ResultSet resultSet = statement.executeQuery()) {
-          if (resultSet.next()) {
-            TripBookingDetail tripBookingDetail = new TripBookingDetail();
-            tripBookingDetail.setId(resultSet.getLong("id"));
-            tripBookingDetail
-                .setTripBooking(tripBookingRepositoryPort.findById(resultSet.getLong("trip_booking_id")).get());
-            tripBookingDetail.setCustomer(customerRepositoryPort.findById(resultSet.getString("customer_id")).get());
-            tripBookingDetail
-                .setFlightFare(flightFareRepositoryPort.findById(resultSet.getLong("flight_fare_id")).get());
-            return Optional.of(tripBookingDetail);
-          }
-        }
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-    return Optional.empty();
   }
 
 }

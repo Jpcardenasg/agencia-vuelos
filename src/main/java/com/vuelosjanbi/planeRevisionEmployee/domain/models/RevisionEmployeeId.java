@@ -7,14 +7,14 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class RevisionEmployeeId implements Serializable {
-  private Long employeeId;
+  private String employeeId;
   private Long planeRevisionId;
 
-  public Long getEmployeeId() {
+  public String getEmployeeId() {
     return employeeId;
   }
 
-  public void setEmployeeId(Long employeeId) {
+  public void setEmployeeId(String employeeId) {
     this.employeeId = employeeId;
   }
 

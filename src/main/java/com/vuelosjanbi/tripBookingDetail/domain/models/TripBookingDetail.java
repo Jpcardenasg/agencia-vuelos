@@ -57,4 +57,11 @@ public class TripBookingDetail {
     this.flightFare = flightFare;
   }
 
+  @Override
+  public String toString() {
+    return String.format("Id %d, \nDate %s, \nCustomer %s, \nFlightFare %s", id,
+        tripBooking.getDate(), customer.getName(),
+        flightFare.getDetails());
+  }
+
 }
