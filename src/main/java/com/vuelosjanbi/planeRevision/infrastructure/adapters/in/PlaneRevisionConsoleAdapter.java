@@ -62,7 +62,7 @@ public class PlaneRevisionConsoleAdapter {
                     deletePlaneRevision(scanner);
                     break;
                 case 5:
-
+                    getPlaneRevisionsByPlaneId(scanner);
                     break;
                 case 6:
                     getAllPlaneRevisions();

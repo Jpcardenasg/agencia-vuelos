@@ -63,27 +63,6 @@ public class FlightFareConsoleAdapter {
 
   }
 
-  private void getAllFlightFares() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getAllFlightFares'");
-
-  }
-
-  private void deleteFlightFare(Scanner scanner) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'deleteFlightFare'");
-  }
-
-  private void updateFlightFare(Scanner scanner) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'updateFlightFare'");
-  }
-
-  private void getFlightFare(Scanner scanner) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getFlightFare'");
-  }
-
   private void createFlightFare(Scanner scanner) {
     System.out.println("Type description the flight fare: ");
     String description = scanner.next();
@@ -93,6 +72,48 @@ public class FlightFareConsoleAdapter {
     Double value = scanner.nextDouble();
     FlightFare newFlightFare = new FlightFare(description, details, value);
     flightFareService.createFlightFare(newFlightFare);
+    System.out.println("Flight Fare created successfully");
+  }
+
+  private void getAllFlightFares() {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'getAllFlightFares'");
+
+  }
+
+  private void deleteFlightFare(Scanner scanner) {
+    System.out.println("Type the id of the flight fare to delete: ");
+    Long id = scanner.nextLong();
+    flightFareService.deleteFlightFare(id);
+    if (flightFareService.getFlightFareById(id) == null) {
+      System.out.println("Flight Fare not found");
+      return;
+    }
+    System.out.println("Flight Fare deleted successfully");
+  }
+
+  private void updateFlightFare(Scanner scanner) {
+    System.out.println("Type the id of the flight fare to update: ");
+    Long id = scanner.nextLong();
+    System.out.println("Type description the flight fare: ");
+    String description = scanner.next();
+    System.out.println("Type details flight fare: ");
+    String details = scanner.next();
+    System.out.println("Type price the flight fare: ");
+    Double value = scanner.nextDouble();
+    FlightFare newFlightFare = new FlightFare(id, description, details, value);
+    flightFareService.updateFlightFare(newFlightFare);
+  }
+
+  private void getFlightFare(Scanner scanner) {
+    System.out.println("Type the id of the flight fare to get: ");
+    Long id = scanner.nextLong();
+    FlightFare flightFare = flightFareService.getFlightFareById(id).orElse(null);
+    if (flightFare == null) {
+      System.out.println("Flight Fare not found");
+      return;
+    }
+    System.out.println(flightFare);
   }
 
 }

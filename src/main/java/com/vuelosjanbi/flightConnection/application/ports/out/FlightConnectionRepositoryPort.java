@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.vuelosjanbi.flightConnection.domain.models.FlightConnection;
+import com.vuelosjanbi.trip.domain.models.Trip;
 
 public interface FlightConnectionRepositoryPort {
 
@@ -20,5 +21,7 @@ public interface FlightConnectionRepositoryPort {
   List<FlightConnection> findByPlanePlate(String plate);
 
   Optional<FlightConnection> findByTripId(Long tripId);
+
+  List<FlightConnection> findByTrip(Trip trip);
 
 }

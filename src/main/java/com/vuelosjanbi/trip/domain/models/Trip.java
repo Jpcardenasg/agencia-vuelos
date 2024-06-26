@@ -107,8 +107,7 @@ public class Trip {
   @Override
   public String toString() {
     return String.format("Trip id: %d, Trip date: %s, Trip price: %.2f, Origin airport: %s, Destination airport: %s",
-        id, tripDate, tripPrice, flightConnections.get(0).getOriginAirport().getName(),
-        flightConnections.get(flightConnections.size() - 1).getDestinationAirport().getName());
+        id, tripDate, tripPrice);
   }
 
 }

@@ -70,7 +70,8 @@ public class TripCrewConsoleAdapter {
       System.out.println("1. Add employees to Trip Crew.");
       System.out.println("2. Remove employee from Trip Crew.");
       System.out.println("3. List all Trip Crew.");
-      System.out.println("4. Exit.");
+      System.out.println("4. Trip Crew information.");
+      System.out.println("5. Exit.");
 
       int choice = scanner.nextInt();
       scanner.nextLine();
@@ -86,7 +87,7 @@ public class TripCrewConsoleAdapter {
           listEmplosyeesInFlightConnection();
           break;
         case 4:
-
+          tripCrewInformationByTripId(scanner);
           break;
         case 5:
           scanner.close();
@@ -167,6 +168,24 @@ public class TripCrewConsoleAdapter {
     tripCrewService.getAllTripCrews().forEach(tripCrew -> {
       System.out.println(tripCrew.getEmployee() + " is in " + tripCrew.getFlightConnection());
     });
+  }
+
+  public void tripCrewInformationByTripId(Scanner scanner) {
+    flightConnectionService.getAllFlightConnections().forEach(flightConnection -> {
+      System.out.println(flightConnection.getTrip().getId());
+    });
+    System.out.println("Enter the trip id:");
+    Long tripId = scanner.nextLong();
+    scanner.nextLine();
+    List<TripCrew> tripCrew = tripCrewService.getTripCrewByFlightConnectionTrip(tripId);
+    if (tripCrew == null) {
+      System.out.println("No employees found for this trip.");
+      return;
+    }
+    System.out.println("Employees in this trip:");
+    for (TripCrew tripCrew2 : tripCrew) {
+      System.out.println(tripCrew2.getEmployee());
+    }
   }
 
 }

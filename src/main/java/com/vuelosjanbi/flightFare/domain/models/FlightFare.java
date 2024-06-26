@@ -71,4 +71,15 @@ public class FlightFare {
         this.value = value;
     }
 
+    @Override
+    public String toString() {
+        return "FlightFare {" +
+                "ID: " + id + ", " +
+                "Description: '" + description + "', " +
+                "Details: '" + details + "', " +
+                "Value: $" + value + ", " +
+                "Trip Booking Details: " +
+                "}";
+    }
+
 }

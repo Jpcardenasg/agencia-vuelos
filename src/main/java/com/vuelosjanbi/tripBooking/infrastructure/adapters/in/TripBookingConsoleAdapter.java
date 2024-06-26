@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import java.util.List;
 
 import com.vuelosjanbi.customer.application.CustomerService;
+import com.vuelosjanbi.customer.domain.models.Customer;
 import com.vuelosjanbi.customer.infrastructure.adapters.out.MySQLCustomerRepository;
 import com.vuelosjanbi.flightFare.application.FlightFareService;
 import com.vuelosjanbi.trip.application.TripService;
@@ -146,8 +147,12 @@ public class TripBookingConsoleAdapter {
     String search = scanner.next();
     if (search.equals("customer")) {
       System.out.println("Enter the customer id:");
-      String customerId = scanner.next();
-      List<TripBooking> tripBookings = tripBookingService.getTripBookingsByCustomerId(customerId);
+      Customer customer = customerService.getCustomer(scanner.next()).orElse(null);
+      if (customer == null) {
+        System.out.println("Customer not found!");
+        return;
+      }
+      List<TripBooking> tripBookings = tripBookingService.getTripBookingsByCustomerId(customer);
       System.out.println("The trip bookings are:");
       for (int i = 0; i < tripBookings.size(); i++) {
         System.out.println(tripBookings.get(i));

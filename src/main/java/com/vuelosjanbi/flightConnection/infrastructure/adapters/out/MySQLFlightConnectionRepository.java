@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 import com.vuelosjanbi.flightConnection.application.ports.out.FlightConnectionRepositoryPort;
 import com.vuelosjanbi.flightConnection.domain.models.FlightConnection;
+import com.vuelosjanbi.trip.domain.models.Trip;
 
 public class MySQLFlightConnectionRepository implements FlightConnectionRepositoryPort {
 
@@ -170,5 +171,11 @@ public class MySQLFlightConnectionRepository implements FlightConnectionReposito
       e.printStackTrace();
     }
     return Optional.empty();
+  }
+
+  @Override
+  public List<FlightConnection> findByTrip(Trip trip) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'findByTrip'");
   }
 }

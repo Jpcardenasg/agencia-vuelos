@@ -52,4 +52,8 @@ public class TripCrewService {
     tripCrewRepositoryPort.save(tripCrew);
   }
 
+  public List<TripCrew> getTripCrewByFlightConnectionTrip(Long id) {
+    return tripCrewRepositoryPort.findByFlightConnectionTripId(id);
+  }
+
 }

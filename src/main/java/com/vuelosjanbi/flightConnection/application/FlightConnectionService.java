@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.vuelosjanbi.flightConnection.application.ports.out.FlightConnectionRepositoryPort;
 import com.vuelosjanbi.flightConnection.domain.models.FlightConnection;
+import com.vuelosjanbi.trip.domain.models.Trip;
 
 @Service
 public class FlightConnectionService {
@@ -46,6 +47,10 @@ public class FlightConnectionService {
 
     public Optional<FlightConnection> getConnectionByTripId(Long tripId) {
         return flightConnectionsRepositoryPort.findByTripId(tripId);
+    }
+
+    public List<FlightConnection> getConnectionByTripId(Trip trip) {
+        return flightConnectionsRepositoryPort.findByTrip(trip);
     }
 
 }

@@ -53,4 +53,11 @@ public class TripCrew {
     this.flightConnection = flightConnection;
   }
 
+  @Override
+  public String toString() {
+    return "TripCrew [id=" + id + ", employee=" + employee + ", flightConnection=" + flightConnection + "]";
+  }
+
+  
+
 }

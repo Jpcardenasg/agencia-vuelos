@@ -77,4 +77,12 @@ public class Employee {
     this.entryDate = entryDate;
   }
 
+  @Override
+  public String toString() {
+    return "Employee [id=" + id + ", name=" + name + ", entryDate=" + entryDate + ", rol=" + rol + ", airline="
+        + airline + ", airport=" + airport + "]";
+  }
+
+  
+
 }

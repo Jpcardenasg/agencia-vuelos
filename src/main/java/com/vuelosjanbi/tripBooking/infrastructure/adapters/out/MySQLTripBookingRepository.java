@@ -1,6 +1,7 @@
 package com.vuelosjanbi.tripBooking.infrastructure.adapters.out;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,6 +12,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.vuelosjanbi.customer.domain.models.Customer;
 import com.vuelosjanbi.trip.application.ports.out.TripRepositoryPort;
 import com.vuelosjanbi.trip.infrastructure.adapters.out.MySQLTripRepository;
 import com.vuelosjanbi.tripBooking.application.ports.out.TripBookingRepositoryPort;
@@ -145,11 +147,11 @@ public class MySQLTripBookingRepository implements TripBookingRepositoryPort {
   }
 
   @Override
-  public List<TripBooking> findByDate(String date) {
+  public List<TripBooking> findByDate(Date date) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "SELECT * FROM trip_booking WHERE date = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setString(1, date);
+        statement.setDate(1, date);
         try (ResultSet resultSet = statement.executeQuery()) {
           List<TripBooking> tripBookings = new ArrayList<>();
           while (resultSet.next()) {
@@ -169,11 +171,11 @@ public class MySQLTripBookingRepository implements TripBookingRepositoryPort {
   }
 
   @Override
-  public List<TripBooking> findByCustomerId(String customerId) {
+  public List<TripBooking> findBytripBookingDetailsCustomer(Customer customer) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "SELECT * FROM trip_booking WHERE trip_id IN (SELECT id FROM trip WHERE customer_id = ?)";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
-        statement.setString(1, customerId);
+        statement.setString(1, customer.getId());
         try (ResultSet resultSet = statement.executeQuery()) {
           List<TripBooking> tripBookings = new ArrayList<>();
           while (resultSet.next()) {

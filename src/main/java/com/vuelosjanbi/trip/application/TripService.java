@@ -38,4 +38,15 @@ public class TripService {
     return tripRepositoryPort.findAll();
   }
 
+  public List<Trip> getTripsByOriginCityAndDestinationCity(String originCityName, String destinationCityName,
+      String tripDate) {
+    return tripRepositoryPort.findByOriginCityAndDestinationCity(originCityName, destinationCityName, tripDate);
+  }
+
+  public List<Trip> getTripsByOriginCityAndFinalDestinationCityWithStopover(String originCityName,
+      String finalDestinationCityName, String tripDate) {
+    return tripRepositoryPort.findByOriginCityAndFinalDestinationCityWithStopover(originCityName,
+        finalDestinationCityName, tripDate);
+  }
+
 }

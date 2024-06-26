@@ -43,11 +43,13 @@ public class TripConsoleAdapter {
 
     while (true) {
       System.out.println("1. Create Trip.");
-      System.out.println("2. Update Trip.");
-      System.out.println("3. Delete Trip.");
-      System.out.println("4. List all Trips.");
-      System.out.println("5. Consult information trip.");
-      System.out.println("6. Exit.");
+      System.out.println("2. Look availeble trips for origin, destination and date.");
+      System.out.println("3. Update Trip.");
+      System.out.println("4. Delete Trip.");
+      System.out.println("5. List all Trips.");
+      System.out.println("6. Consult information trip.");
+      System.out.println("7 Consult scales of a trip.");
+      System.out.println("8. Exit.");
 
       int choice = scanner.nextInt();
       switch (choice) {
@@ -55,17 +57,31 @@ public class TripConsoleAdapter {
           createTrip(scanner, tripService, airportService);
           break;
         case 2:
-          updateTrip(scanner, tripService, airportService);
+          lookAvailebleTripsForOriginDestinationAndDate(scanner);
           break;
         case 3:
-          System.out.println("Enter trip id: ");
-          long tripId2 = scanner.nextLong();
-          tripService.deleteTripById(tripId2);
+          updateTrip(scanner, tripService, airportService);
           break;
         case 4:
-          tripService.getAllTrips().forEach(System.out::println);
+          List<Trip> trips = tripService.getAllTrips();
+          System.out.println("Enter trip id: ");
+          for (Trip trip : trips) {
+            System.out.println("Trip id: " + trip.getId() + " Trip date: " + trip.getTripDate() + " Trip price: "
+                + trip.getTripPrice());
+          }
+          long tripId2 = scanner.nextLong();
+
+          if (tripService.getTripById(tripId2) == null) {
+            System.out.println("Error Trip not found.");
+          } else {
+            System.out.println("Trip deleted.");
+          }
+          tripService.deleteTripById(tripId2);
           break;
         case 5:
+          tripService.getAllTrips().forEach(System.out::println);
+          break;
+        case 6:
           System.out.println("Enter trip id: ");
           long tripId3 = scanner.nextLong();
           Trip trip = tripService.getTripById(tripId3);
@@ -78,13 +94,36 @@ public class TripConsoleAdapter {
               trip.getTripPrice(), tripDate, flightConnection.getOriginAirport().getName(),
               flightConnection.getDestinationAirport().getName());
           break;
-        case 6:
+        case 7:
+
+          break;
+        case 8:
           scanner.close();
           return;
         default:
           System.out.println("Invalid choice.");
           break;
       }
+    }
+  }
+
+  public void lookAvailebleTripsForOriginDestinationAndDate(Scanner scanner) {
+    System.out.println("Enter origin city name: ");
+    String originCityName = scanner.next();
+    System.out.println("Enter destination city name: ");
+    String destinationCityName = scanner.next();
+    System.out.println("Enter trip day: ");
+    String tripDay = scanner.next();
+    System.out.println("Enter trip month: ");
+    String tripMonth = scanner.next();
+    System.out.println("Enter trip year: ");
+    String tripYear = scanner.next();
+    String tripDate = tripYear + "-" + tripMonth + "-" + tripDay;
+    List<Trip> trips = tripService.getTripsByOriginCityAndFinalDestinationCityWithStopover(originCityName,
+        destinationCityName,
+        tripDate);
+    for (Trip trip : trips) {
+      System.out.println(trip);
     }
   }
 
@@ -117,7 +156,12 @@ public class TripConsoleAdapter {
   }
 
   public static void updateTrip(Scanner scanner, TripService tripService, AirportService airportService) {
-    // List<Airport> airports = airportService.getAllAirports();
+    System.out.println("What trip do you want to update?");
+    List<Trip> trips = tripService.getAllTrips();
+    for (Trip trip : trips) {
+      System.out.println("Trip id: " + trip.getId() + " Trip date: " + trip.getTripDate() + " Trip price: "
+          + trip.getTripPrice());
+    }
     System.out.println("Enter trip id: ");
     long tripId = scanner.nextLong();
     Trip trip = tripService.getTripById(tripId);
@@ -154,6 +198,26 @@ public class TripConsoleAdapter {
 
   public static void listTrips(TripService tripService) {
     tripService.getAllTrips().forEach(System.out::println);
+  }
+
+  public void consulFlightConnectionsByTrip(Scanner scanner) {
+    List<Trip> trips = tripService.getAllTrips();
+    for (Trip trip : trips) {
+      System.out.println("Trip id: " + trip.getId() + " Trip date: " + trip.getTripDate() + " Trip price: "
+          + trip.getTripPrice());
+    }
+    System.out.println("Enter trip id: ");
+
+    long tripId = scanner.nextLong();
+    Trip trip = tripService.getTripById(tripService.getTripById(tripId).getId());
+    if (trip == null) {
+      System.out.println("Trip not found.");
+      return;
+    }
+    List<FlightConnection> flightConnections = flightConnectionService.getConnectionByTripId(trip);
+    for (FlightConnection flightConnection : flightConnections) {
+      System.out.println(flightConnection);
+    }
   }
 
 }

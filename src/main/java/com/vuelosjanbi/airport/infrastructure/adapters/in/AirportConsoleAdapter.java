@@ -38,22 +38,37 @@ public class AirportConsoleAdapter {
 
     while (true) {
       System.out.println("1. Create Airport.");
-      System.out.println("2. Consult Airport.");
+      System.out.println("2. Consult Airport information.");
+      System.out.println("3. Update Airport information.");
+      System.out.println("4. Delete Airport.");
+      System.out.println("5. List all Airports.");
+      System.out.println("6. Exit.");
 
       int choice = scanner.nextInt();
       switch (choice) {
         case 1:
-          createAirport(scanner, airportService);
+          createAirport(scanner);
           break;
         case 2:
-          consultAiportDetails(scanner, airportService);
+          consultAiportDetails(scanner);
           break;
+        case 3:
+          updateAirport(scanner);
+          break;
+        case 4:
+          deleteAirport(scanner);
+          break;
+        case 5:
+          listAllAirports();
+          break;
+        case 6:
+          return;
       }
     }
 
   }
 
-  public void createAirport(Scanner scanner, AirportService airportService) {
+  public void createAirport(Scanner scanner) {
     List<City> citieList = cityService.getAllCities();
     System.out.println("Enter airport name: ");
     String name = scanner.next();
@@ -64,7 +79,7 @@ public class AirportConsoleAdapter {
     }
     System.out.println("Enter city id where is the airport: ");
     long cityId = scanner.nextLong();
-    
+
     airport.setCity(cityService.getCityById(cityId));
     if (airport.getCity() == null) {
       System.out.println("City not found.");
@@ -73,7 +88,7 @@ public class AirportConsoleAdapter {
     airportService.createAirport(airport);
   }
 
-  public void consultAiportDetails(Scanner scanner, AirportService airportService) {
+  public void consultAiportDetails(Scanner scanner) {
     System.out.println("Enter airport id: ");
     long id = scanner.nextLong();
     Airport airport = airportService.getAirportById(id);
@@ -83,5 +98,32 @@ public class AirportConsoleAdapter {
     }
     System.out.println("Airport name: " + airport.getName());
     System.out.println("City: " + airport.getCity().getName());
+  }
+
+  public void deleteAirport(Scanner scanner) {
+    System.out.println("Enter airport id: ");
+    long id = scanner.nextLong();
+    airportService.deleteAirportById(id);
+  }
+
+  public void listAllAirports() {
+    List<Airport> airports = airportService.getAllAirports();
+    for (Airport airport : airports) {
+      System.out.println(airport);
+    }
+  }
+
+  public void updateAirport(Scanner scanner) {
+    System.out.println("Enter the airport id:");
+    Long airportIdToUpdate = scanner.nextLong();
+    Airport airportToUpdate = airportService.getAirportById(airportIdToUpdate);
+    System.out.println("Enter the airport name:");
+    String airportNameToUpdate = scanner.next();
+    System.out.println("Enter the city id:");
+    Long cityIdToUpdate = scanner.nextLong();
+    airportToUpdate.setCity(cityService.getCityById(cityIdToUpdate));
+    airportToUpdate.setName(airportNameToUpdate);
+    airportService.updateAirport(airportToUpdate);
+    System.out.println("Airport updated successfully!");
   }
 }

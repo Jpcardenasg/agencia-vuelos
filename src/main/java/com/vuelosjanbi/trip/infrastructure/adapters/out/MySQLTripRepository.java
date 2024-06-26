@@ -129,4 +129,19 @@ public class MySQLTripRepository implements TripRepositoryPort {
     }
   }
 
+  @Override
+  public List<Trip> findByOriginCityAndDestinationCity(String originCityName, String destinationCityName,
+      String tripDate) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException("Unimplemented method 'findByOriginCityAndDestinationCity'");
+  }
+
+  @Override
+  public List<Trip> findByOriginCityAndFinalDestinationCityWithStopover(String originCityName,
+      String finalDestinationCityName, String tripDate) {
+    // TODO Auto-generated method stub
+    throw new UnsupportedOperationException(
+        "Unimplemented method 'findByOriginCityAndFinalDestinationCityWithStopover'");
+  }
+
 }

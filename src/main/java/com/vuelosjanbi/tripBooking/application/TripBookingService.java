@@ -1,10 +1,12 @@
 package com.vuelosjanbi.tripBooking.application;
 
+import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.vuelosjanbi.customer.domain.models.Customer;
 import com.vuelosjanbi.tripBooking.application.ports.out.TripBookingRepositoryPort;
 import com.vuelosjanbi.tripBooking.domain.models.TripBooking;
 
@@ -45,12 +47,12 @@ public class TripBookingService {
     return tripBookingRepositoryPort.findByTripId(tripId);
   }
 
-  public List<TripBooking> getTripBookingsByDate(String date) {
+  public List<TripBooking> getTripBookingsByDate(Date date) {
     return tripBookingRepositoryPort.findByDate(date);
   }
 
-  public List<TripBooking> getTripBookingsByCustomerId(String customerId) {
-    return tripBookingRepositoryPort.findByCustomerId(customerId);
+  public List<TripBooking> getTripBookingsByCustomerId(Customer customer) {
+    return tripBookingRepositoryPort.findBytripBookingDetailsCustomer(customer);
   }
 
 }
