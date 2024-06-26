@@ -19,4 +19,6 @@ public interface FlightConnectionRepositoryPort {
 
   List<FlightConnection> findByPlanePlate(String plate);
 
+  Optional<FlightConnection> findByTripId(Long tripId);
+
 }

@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.vuelosjanbi.planeRevisionEmployee.application.ports.out.PlaneRevisionEmployeeRepositoryPort;
-import com.vuelosjanbi.planeRevisionEmployee.domain.models.PlanRevisionEmployee;
+import com.vuelosjanbi.planeRevisionEmployee.domain.models.PlaneRevisionEmployee;
 import com.vuelosjanbi.planeRevisionEmployee.domain.models.RevisionEmployeeId;
 
 public class MySQLPlaneRevisionEmployeeRepository implements PlaneRevisionEmployeeRepositoryPort {
@@ -26,7 +26,7 @@ public class MySQLPlaneRevisionEmployeeRepository implements PlaneRevisionEmploy
   }
 
   @Override
-  public PlanRevisionEmployee save(PlanRevisionEmployee planeRevisionEmployee) {
+  public PlaneRevisionEmployee save(PlaneRevisionEmployee planeRevisionEmployee) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "INSERT INTO plane_revision_employee (employee_id, plane_revision_id) VALUES (?, ?)";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -40,7 +40,7 @@ public class MySQLPlaneRevisionEmployeeRepository implements PlaneRevisionEmploy
     return planeRevisionEmployee;
   }
 
-  public PlanRevisionEmployee update(PlanRevisionEmployee planeRevisionEmployee) {
+  public PlaneRevisionEmployee update(PlaneRevisionEmployee planeRevisionEmployee) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "UPDATE plane_revision_employee SET employee_id = ?, plane_revision_id = ? WHERE employee_id = ? AND plane_revision_id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -57,13 +57,13 @@ public class MySQLPlaneRevisionEmployeeRepository implements PlaneRevisionEmploy
   }
 
   @Override
-  public Optional<PlanRevisionEmployee> findById(RevisionEmployeeId id) {
+  public Optional<PlaneRevisionEmployee> findById(RevisionEmployeeId id) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "SELECT * FROM plane_revision_employee WHERE employee_id = ? AND plane_revision_id";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         try (ResultSet resultSet = statement.executeQuery()) {
           if (resultSet.next()) {
-            PlanRevisionEmployee planeRevisionEmployee = new PlanRevisionEmployee();
+            PlaneRevisionEmployee planeRevisionEmployee = new PlaneRevisionEmployee();
             RevisionEmployeeId revisionEmployeeId = new RevisionEmployeeId();
             revisionEmployeeId.setEmployeeId(resultSet.getString("employee_id"));
             revisionEmployeeId.setPlaneRevisionId(resultSet.getLong("plane_revision_id"));
@@ -93,14 +93,14 @@ public class MySQLPlaneRevisionEmployeeRepository implements PlaneRevisionEmploy
   }
 
   @Override
-  public PlanRevisionEmployee findByEmployeeId(String employeeId) {
+  public PlaneRevisionEmployee findByEmployeeId(String employeeId) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "SELECT * FROM plane_revision_employee WHERE employee_id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         statement.setString(1, employeeId);
         try (ResultSet resultSet = statement.executeQuery()) {
           if (resultSet.next()) {
-            PlanRevisionEmployee planeRevisionEmployee = new PlanRevisionEmployee();
+            PlaneRevisionEmployee planeRevisionEmployee = new PlaneRevisionEmployee();
             RevisionEmployeeId revisionEmployeeId = new RevisionEmployeeId();
             revisionEmployeeId.setEmployeeId(resultSet.getString("employee_id"));
             revisionEmployeeId.setPlaneRevisionId(resultSet.getLong("plane_revision_id"));
@@ -116,14 +116,14 @@ public class MySQLPlaneRevisionEmployeeRepository implements PlaneRevisionEmploy
   }
 
   @Override
-  public List<PlanRevisionEmployee> findAll() {
+  public List<PlaneRevisionEmployee> findAll() {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "SELECT * FROM plane_revision_employee";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         try (ResultSet resultSet = statement.executeQuery()) {
-          List<PlanRevisionEmployee> planeRevisionEmployees = new ArrayList<>();
+          List<PlaneRevisionEmployee> planeRevisionEmployees = new ArrayList<>();
           while (resultSet.next()) {
-            PlanRevisionEmployee planeRevisionEmployee = new PlanRevisionEmployee();
+            PlaneRevisionEmployee planeRevisionEmployee = new PlaneRevisionEmployee();
             RevisionEmployeeId revisionEmployeeId = new RevisionEmployeeId();
             revisionEmployeeId.setEmployeeId(resultSet.getString("employee_id"));
             revisionEmployeeId.setPlaneRevisionId(resultSet.getLong("plane_revision_id"));

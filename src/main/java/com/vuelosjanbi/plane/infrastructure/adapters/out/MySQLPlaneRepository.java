@@ -14,7 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.vuelosjanbi.plane.domain.models.Plane;
 import com.vuelosjanbi.plane.application.ports.out.PlaneRepositoryPort;
 import com.vuelosjanbi.planeModel.application.ports.out.PlaneModelRepositoryPort;
+import com.vuelosjanbi.planeModel.infrastructure.adapters.out.MySQLPlaneModelRepository;
 import com.vuelosjanbi.planeStatus.application.ports.out.PlaneStatusRepositoryPort;
+import com.vuelosjanbi.planeStatus.infrastructure.adapters.out.MySQLPlaneStatusRepository;
 
 public class MySQLPlaneRepository implements PlaneRepositoryPort {
     private final String url;
@@ -27,19 +29,12 @@ public class MySQLPlaneRepository implements PlaneRepositoryPort {
     @Autowired
     PlaneModelRepositoryPort planeModelRepositoryPort;
 
-    public MySQLPlaneRepository(String url, String username, String password,
-            PlaneStatusRepositoryPort planeStatusRepositoryPort, PlaneModelRepositoryPort planeModelRepositoryPort) {
-        this.url = url;
-        this.username = username;
-        this.password = password;
-        this.planeStatusRepositoryPort = planeStatusRepositoryPort;
-        this.planeModelRepositoryPort = planeModelRepositoryPort;
-    }
-
     public MySQLPlaneRepository(String url, String username, String password) {
         this.url = url;
         this.username = username;
         this.password = password;
+        this.planeStatusRepositoryPort = new MySQLPlaneStatusRepository(url, username, password);
+        this.planeModelRepositoryPort = new MySQLPlaneModelRepository(url, username, password);
     }
 
     @Override

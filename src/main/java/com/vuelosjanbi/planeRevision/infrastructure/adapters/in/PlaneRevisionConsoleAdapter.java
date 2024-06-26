@@ -7,6 +7,7 @@ import java.sql.Date;
 import com.vuelosjanbi.plane.domain.models.Plane;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.vuelosjanbi.employee.application.EmployeeService;
 import com.vuelosjanbi.employee.domain.models.Employee;
@@ -14,149 +15,163 @@ import com.vuelosjanbi.plane.application.PlaneService;
 import com.vuelosjanbi.planeRevision.application.PlaneRevisionService;
 import com.vuelosjanbi.planeRevision.domain.models.PlaneRevision;
 import com.vuelosjanbi.planeRevisionEmployee.application.PlaneRevisionEmployeeService;
-import com.vuelosjanbi.planeRevisionEmployee.domain.models.PlanRevisionEmployee;
+import com.vuelosjanbi.planeRevisionEmployee.domain.models.PlaneRevisionEmployee;
 
 @Controller
 public class PlaneRevisionConsoleAdapter {
 
-  @Autowired
-  private PlaneRevisionService planeRevisionService;
+    @Autowired
+    private PlaneRevisionService planeRevisionService;
 
-  @Autowired
-  private PlaneService planeService;
+    @Autowired
+    private PlaneService planeService;
 
-  @Autowired
-  private EmployeeService employeeService;
+    @Autowired
+    private EmployeeService employeeService;
 
-  @Autowired
-  private PlaneRevisionEmployeeService planRevisionEmployeeService;
+    @Autowired
+    private PlaneRevisionEmployeeService planRevisionEmployeeService;
 
-  public void start() {
-    System.out.println("Plane Revision Console Adapter started");
+    public void start() {
+        System.out.println("Plane Revision Console Adapter started");
 
-    Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
 
-    while (true) {
-      System.out.println("1. Create plane revision ");
-      System.out.println("2. Get plane revision by id ");
-      System.out.println("3. Update plane revision ");
-      System.out.println("4. Delete plane revision ");
-      System.out.println("5. Get all plane revisions ");
-      System.out.println("6. Exit: ");
+        while (true) {
+            System.out.println("1. Create plane revision ");
+            System.out.println("2. Get plane revision by id ");
+            System.out.println("3. Update plane revision ");
+            System.out.println("4. Delete plane revision ");
+            System.out.println("5. Get all plane revisions by plane id");
+            System.out.println("6. Get all plane revisions");
 
-      int option = scanner.nextInt();
-      switch (option) {
-        case 1:
-          createPlaneRevision(scanner);
-          break;
-        case 2:
-          getPlaneRevisionById(scanner);
-          break;
-        case 3:
-          updatePlaneRevision(scanner);
-          break;
-        case 4:
-          deletePlaneRevision(scanner);
-          break;
-        case 5:
-          getAllPlaneRevisions();
-          break;
-        case 6:
-          return;
-        default:
-          break;
-      }
+            System.out.println("7. Exit: ");
+
+            int option = scanner.nextInt();
+            switch (option) {
+                case 1:
+                    createPlaneRevision(scanner);
+                    break;
+                case 2:
+                    getPlaneRevisionById(scanner);
+                    break;
+                case 3:
+                    updatePlaneRevision(scanner);
+                    break;
+                case 4:
+                    deletePlaneRevision(scanner);
+                    break;
+                case 5:
+
+                    break;
+                case 6:
+                    getAllPlaneRevisions();
+                    break;
+                case 7:
+                    return;
+                default:
+                    break;
+            }
+        }
     }
-  }
 
-  public void createPlaneRevision(Scanner scanner) {
-    System.out.println("Creating plane revision");
-    System.out.println("Enter day of the trip booking:");
-    String day = scanner.next();
-    System.out.println("Enter month of the trip booking:");
-    String month = scanner.next();
-    System.out.println("Enter year of the trip booking:");
-    String year = scanner.next();
-    String tripBookingDate = year + "-" + month + "-" + day;
-    Date tripDate = Date.valueOf(tripBookingDate);
-    PlaneRevision newPlaneRevision = new PlaneRevision();
-    List<Plane> planes = planeService.getAllPlanes();
-    for (Plane plane : planes) {
-      System.out.println(plane);
-    }
-    System.out.println("Enter plane id:");
-    Long planeId = scanner.nextLong();
-    Plane plane = planeService.getPlaneById(planeId);
-    if (plane == null) {
-      System.out.println("Plane not found");
-      return;
-    }
-    List<Employee> employees = employeeService.getAllEmployees();
-    for (Employee employee : employees) {
-      System.out.println(employee);
-    }
-    System.out.println("Select the employee id for the revision:");
-    PlanRevisionEmployee planRevisionEmployee = new PlanRevisionEmployee();
-    String employeeId = scanner.nextLine();
-    Employee employee = employeeService.getEmployeeById(employeeId).orElse(null);
-    if (employee == null) {
-      System.out.println("Employee not found");
-      return;
-    }
-    planRevisionEmployee.setEmployee(employee);
-    planRevisionEmployee.setPlanRevision(newPlaneRevision);
-    planRevisionEmployeeService.createPlaneRevisionEmployee(planRevisionEmployee);
-    newPlaneRevision.setRevisionDate(tripDate);
-    newPlaneRevision.setPlane(plane);
-    planeRevisionService.createPlaneRevision(newPlaneRevision);
+    public void createPlaneRevision(Scanner scanner) {
+        System.out.println("Creating plane revision");
+        System.out.println("Enter day of the trip booking:");
+        String day = scanner.next();
+        System.out.println("Enter month of the trip booking:");
+        String month = scanner.next();
+        System.out.println("Enter year of the trip booking:");
+        String year = scanner.next();
+        String tripBookingDate = year + "-" + month + "-" + day;
+        Date tripDate = Date.valueOf(tripBookingDate);
+        PlaneRevision newPlaneRevision = new PlaneRevision();
+        List<Plane> planes = planeService.getAllPlanes();
+        for (Plane plane : planes) {
+            System.out.println(plane);
+        }
+        System.out.println("Enter plane id:");
+        Long planeId = scanner.nextLong();
+        Plane plane = planeService.getPlaneById(planeId);
+        if (plane == null) {
+            System.out.println("Plane not found");
+            return;
+        }
+        List<Employee> employees = employeeService.getAllEmployees();
+        for (Employee employee : employees) {
+            System.out.println(employee);
+        }
+        System.out.println("Select the employee id for the revision:");
+        PlaneRevisionEmployee planRevisionEmployee = new PlaneRevisionEmployee();
+        String employeeId = scanner.nextLine();
+        Employee employee = employeeService.getEmployeeById(employeeId).orElse(null);
+        if (employee == null) {
+            System.out.println("Employee not found");
+            return;
+        }
+        planRevisionEmployee.setEmployee(employee);
+        planRevisionEmployee.setPlanRevision(newPlaneRevision);
+        planeRevisionService.createPlaneRevision(newPlaneRevision);
+        planRevisionEmployeeService.createPlaneRevisionEmployee(planRevisionEmployee);
+        newPlaneRevision.setRevisionDate(tripDate);
+        newPlaneRevision.setPlane(plane);
 
-    System.out.println("Plane revision created");
-  }
-
-  public void getPlaneRevisionById(Scanner scanner) {
-    System.out.println("Enter the plane revision id:");
-    Long id = scanner.nextLong();
-    PlaneRevision planeRevision = planeRevisionService.getPlaneRevisionById(id);
-    if (planeRevision == null) {
-      System.out.println("Plane revision not found");
-      return;
+        System.out.println("Plane revision created");
     }
-    System.out.println(planeRevision);
-  }
 
-  public void updatePlaneRevision(Scanner scanner) {
-    System.out.println("Enter the plane revision id:");
-    Long id = scanner.nextLong();
-    PlaneRevision planeRevision = planeRevisionService.getPlaneRevisionById(id);
-    if (planeRevision == null) {
-      System.out.println("Plane revision not found");
-      return;
+    public void getPlaneRevisionById(Scanner scanner) {
+        System.out.println("Enter the plane revision id:");
+        Long id = scanner.nextLong();
+        Optional<PlaneRevision> planeRevision = planeRevisionService.getPlaneRevisionById(id);
+        if (planeRevision == null) {
+            System.out.println("Plane revision not found");
+            return;
+        }
+        System.out.println(planeRevision);
     }
-    System.out.println("Enter day of the trip booking:");
-    String day = scanner.next();
-    System.out.println("Enter month of the trip booking:");
-    String month = scanner.next();
-    System.out.println("Enter year of the trip booking:");
-    String year = scanner.next();
-    String tripBookingDate = year + "-" + month + "-" + day;
-    Date tripDate = Date.valueOf(tripBookingDate);
-    planeRevision.setRevisionDate(tripDate);
-    planeRevisionService.updatePlaneRevision(planeRevision);
-    System.out.println("Plane revision updated successfully!");
-  }
 
-  public void deletePlaneRevision(Scanner scanner) {
-    System.out.println("Enter the plane revision id:");
-    Long id = scanner.nextLong();
-    planeRevisionService.deletePlaneRevision(id);
-    System.out.println("Plane revision deleted successfully!");
-  }
-
-  public void getAllPlaneRevisions() {
-    List<PlaneRevision> planeRevisions = planeRevisionService.getAllPlaneRevisions();
-    for (PlaneRevision planeRevision : planeRevisions) {
-      System.out.println(planeRevision);
+    public void updatePlaneRevision(Scanner scanner) {
+        System.out.println("Enter the plane revision id:");
+        Long id = scanner.nextLong();
+        PlaneRevision planeRevision = planeRevisionService.getPlaneRevisionById(id).get();
+        if (planeRevision == null) {
+            System.out.println("Plane revision not found");
+            return;
+        }
+        System.out.println("Enter day of the revision:");
+        String day = scanner.next();
+        System.out.println("Enter month of the revision:");
+        String month = scanner.next();
+        System.out.println("Enter year of the revision:");
+        String year = scanner.next();
+        String revisionDateString = year + "-" + month + "-" + day;
+        Date revisionDate = Date.valueOf(revisionDateString);
+        planeRevision.setRevisionDate(revisionDate);
+        planeRevisionService.updatePlaneRevision(planeRevision);
+        System.out.println("Plane revision updated successfully!");
     }
-  }
+
+    public void deletePlaneRevision(Scanner scanner) {
+        System.out.println("Enter the plane revision id:");
+        Long id = scanner.nextLong();
+        planeRevisionService.deletePlaneRevision(id);
+        System.out.println("Plane revision deleted successfully!");
+    }
+
+    public void getAllPlaneRevisions() {
+        List<PlaneRevision> planeRevisions = planeRevisionService.getAllPlaneRevisions();
+        for (PlaneRevision planeRevision : planeRevisions) {
+            System.out.println(planeRevision);
+        }
+    }
+
+    public void getPlaneRevisionsByPlaneId(Scanner scanner) {
+        System.out.println("Enter the plane id:");
+        Long id = scanner.nextLong();
+        List<PlaneRevision> planeRevisions = planeRevisionService.getPlaneRevisionByPlaneId(id);
+        for (PlaneRevision planeRevision : planeRevisions) {
+            System.out.println(planeRevision);
+        }
+    }
 
 }

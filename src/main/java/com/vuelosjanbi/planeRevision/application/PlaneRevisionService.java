@@ -1,40 +1,46 @@
 package com.vuelosjanbi.planeRevision.application;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.List;
 
+import com.vuelosjanbi.planeRevision.application.ports.out.PlaneRevisionRepositoryPort;
 import com.vuelosjanbi.planeRevision.domain.models.PlaneRevision;
-import com.vuelosjanbi.planeRevision.infrastructure.adapters.out.PlaneRevisionRepository;
 
 @Service
 public class PlaneRevisionService {
 
   @Autowired
-  private PlaneRevisionRepository planeRevisionRepository;
+  PlaneRevisionRepositoryPort planeRevisionRepositoryPort;
 
-  public PlaneRevisionService(PlaneRevisionRepository planeRevisionRepository) {
-    this.planeRevisionRepository = planeRevisionRepository;
+  public PlaneRevisionService(PlaneRevisionRepositoryPort planeRevisionRepositoryPort) {
+    this.planeRevisionRepositoryPort = planeRevisionRepositoryPort;
   }
 
   public PlaneRevision createPlaneRevision(PlaneRevision planeRevision) {
-    return planeRevisionRepository.save(planeRevision);
-  }
-
-  public PlaneRevision getPlaneRevisionById(Long id) {
-    return planeRevisionRepository.findById(id).orElse(null);
-  }
-
-  public PlaneRevision updatePlaneRevision(PlaneRevision planeRevision) {
-    return planeRevisionRepository.save(planeRevision);
+    return planeRevisionRepositoryPort.save(planeRevision);
   }
 
   public void deletePlaneRevision(Long id) {
-    planeRevisionRepository.deleteById(id);
+    planeRevisionRepositoryPort.deleteById(id);
+  }
+
+  public Optional<PlaneRevision> getPlaneRevisionById(Long id) {
+    return planeRevisionRepositoryPort.findById(id);
+  }
+
+  public List<PlaneRevision> getPlaneRevisionByPlaneId(Long planeId) {
+    return planeRevisionRepositoryPort.findByPlaneId(planeId);
   }
 
   public List<PlaneRevision> getAllPlaneRevisions() {
-    return planeRevisionRepository.findAll();
+    return planeRevisionRepositoryPort.findAll();
+  }
+
+  public PlaneRevision updatePlaneRevision(PlaneRevision planeRevision) {
+    return planeRevisionRepositoryPort.save(planeRevision);
   }
 
 }

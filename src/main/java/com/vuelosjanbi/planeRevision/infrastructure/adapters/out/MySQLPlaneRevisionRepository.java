@@ -2,18 +2,26 @@ package com.vuelosjanbi.planeRevision.infrastructure.adapters.out;
 
 import java.util.List;
 import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.vuelosjanbi.plane.application.ports.out.PlaneRepositoryPort;
+import com.vuelosjanbi.plane.infrastructure.adapters.out.MySQLPlaneRepository;
 import com.vuelosjanbi.planeRevision.application.ports.out.PlaneRevisionRepositoryPort;
 import com.vuelosjanbi.planeRevision.domain.models.PlaneRevision;
 
 import java.util.ArrayList;
 
 public class MySQLPlaneRevisionRepository implements PlaneRevisionRepositoryPort {
+
+  @Autowired
+  PlaneRepositoryPort planeRepositoryPort;
 
   private final String url;
   private final String user;
@@ -23,6 +31,7 @@ public class MySQLPlaneRevisionRepository implements PlaneRevisionRepositoryPort
     this.url = url;
     this.user = user;
     this.password = password;
+    this.planeRepositoryPort = new MySQLPlaneRepository(url, user, password);
   }
 
   @Override
@@ -31,6 +40,7 @@ public class MySQLPlaneRevisionRepository implements PlaneRevisionRepositoryPort
       String query = "INSERT INTO plane_revision (revision_date,plane_id) VALUES (?,?)";
       try (PreparedStatement statement = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
         statement.setDate(1, planeRevision.getRevisionDate());
+        statement.setLong(2, planeRevision.getPlane().getId());
         statement.executeUpdate();
         try (ResultSet resultSet = statement.getGeneratedKeys()) {
           if (resultSet.next()) {
@@ -46,10 +56,11 @@ public class MySQLPlaneRevisionRepository implements PlaneRevisionRepositoryPort
 
   public PlaneRevision update(PlaneRevision planeRevision) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
-      String query = "UPDATE plane_revision SET revision_date = ? WHERE id = ?";
+      String query = "UPDATE plane_revision SET revision_date = ? plane_id = ? WHERE id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         statement.setDate(1, planeRevision.getRevisionDate());
-        statement.setLong(2, planeRevision.getId());
+        statement.setLong(2, planeRevision.getPlane().getId());
+        statement.setLong(3, planeRevision.getId());
         statement.executeUpdate();
       }
     } catch (SQLException e) {
@@ -82,6 +93,7 @@ public class MySQLPlaneRevisionRepository implements PlaneRevisionRepositoryPort
             PlaneRevision planeRevision = new PlaneRevision();
             planeRevision.setId(resultSet.getLong("id"));
             planeRevision.setRevisionDate(resultSet.getDate("revision_date"));
+            planeRevision.setPlane(planeRepositoryPort.findById(resultSet.getLong("plane_id")).orElse(null));
             return Optional.of(planeRevision);
           }
         }
@@ -93,24 +105,27 @@ public class MySQLPlaneRevisionRepository implements PlaneRevisionRepositoryPort
   }
 
   @Override
-  public Optional<PlaneRevision> findByPlaneId(Long planeId) {
+  public List<PlaneRevision> findByPlaneId(Long planeId) {
     try (Connection connection = DriverManager.getConnection(url, user, password)) {
       String query = "SELECT * FROM plane_revision WHERE plane_id = ?";
       try (PreparedStatement statement = connection.prepareStatement(query)) {
         statement.setLong(1, planeId);
         try (ResultSet resultSet = statement.executeQuery()) {
-          if (resultSet.next()) {
+          List<PlaneRevision> planeRevisions = new ArrayList<>();
+          while (resultSet.next()) {
             PlaneRevision planeRevision = new PlaneRevision();
             planeRevision.setId(resultSet.getLong("id"));
             planeRevision.setRevisionDate(resultSet.getDate("revision_date"));
-            return Optional.of(planeRevision);
+            planeRevision.setPlane(planeRepositoryPort.findById(resultSet.getLong("plane_id")).orElse(null));
+            planeRevisions.add(planeRevision);
           }
+          return planeRevisions;
         }
       }
     } catch (SQLException e) {
       e.printStackTrace();
+      return new ArrayList<>();
     }
-    return Optional.empty();
   }
 
   @Override
@@ -124,6 +139,7 @@ public class MySQLPlaneRevisionRepository implements PlaneRevisionRepositoryPort
             PlaneRevision planeRevision = new PlaneRevision();
             planeRevision.setId(resultSet.getLong("id"));
             planeRevision.setRevisionDate(resultSet.getDate("revision_date"));
+            planeRevision.setPlane(planeRepositoryPort.findById(resultSet.getLong("plane_id")).orElse(null));
             planeRevisions.add(planeRevision);
           }
           return planeRevisions;

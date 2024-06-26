@@ -153,4 +153,22 @@ public class MySQLFlightConnectionRepository implements FlightConnectionReposito
       return new ArrayList<>();
     }
   }
+
+  @Override
+  public Optional<FlightConnection> findByTripId(Long tripId) {
+    try (Connection connection = DriverManager.getConnection(url, username, password)) {
+      String query = "SELECT * FROM flightConnection WHERE trip_id = ?";
+      try (PreparedStatement statement = connection.prepareStatement(query)) {
+        statement.setLong(1, tripId);
+        try (ResultSet resultSet = statement.executeQuery()) {
+          if (resultSet.next()) {
+            return Optional.of(new FlightConnection(resultSet.getLong("id"), resultSet.getString("connection_number")));
+          }
+        }
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return Optional.empty();
+  }
 }

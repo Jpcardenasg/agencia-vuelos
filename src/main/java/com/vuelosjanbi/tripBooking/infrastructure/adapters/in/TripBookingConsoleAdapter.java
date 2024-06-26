@@ -168,6 +168,10 @@ public class TripBookingConsoleAdapter {
     System.out.println("Enter the trip booking id:");
     Long tripBookingIdToDelete = scanner.nextLong();
     tripBookingService.deleteTripBooking(tripBookingIdToDelete);
+    if (tripBookingService.getTripBooking(tripBookingIdToDelete) != null) {
+      System.out.println("Trip booking not deleted!");
+      return;
+    }
     System.out.println("Trip booking deleted successfully!");
   }
 

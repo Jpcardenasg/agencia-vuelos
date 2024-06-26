@@ -64,6 +64,7 @@ public class AirportConsoleAdapter {
     }
     System.out.println("Enter city id where is the airport: ");
     long cityId = scanner.nextLong();
+    
     airport.setCity(cityService.getCityById(cityId));
     if (airport.getCity() == null) {
       System.out.println("City not found.");

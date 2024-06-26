@@ -40,4 +40,12 @@ public class FlightConnectionService {
         return flightConnectionsRepositoryPort.findAll();
     }
 
+    public List<FlightConnection> getConnectionByPlanePlate(String plate) {
+        return flightConnectionsRepositoryPort.findByPlanePlate(plate);
+    }
+
+    public Optional<FlightConnection> getConnectionByTripId(Long tripId) {
+        return flightConnectionsRepositoryPort.findByTripId(tripId);
+    }
+
 }

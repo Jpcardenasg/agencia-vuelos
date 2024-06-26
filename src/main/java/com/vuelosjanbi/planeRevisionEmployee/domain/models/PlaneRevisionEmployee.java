@@ -10,7 +10,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 
 @Entity
-public class PlanRevisionEmployee {
+public class PlaneRevisionEmployee {
   @EmbeddedId
   private RevisionEmployeeId id;
 

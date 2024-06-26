@@ -13,12 +13,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 // import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 @Entity
 public class Trip {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+  @Temporal(TemporalType.DATE)
   private Date tripDate;
   private double tripPrice;
 

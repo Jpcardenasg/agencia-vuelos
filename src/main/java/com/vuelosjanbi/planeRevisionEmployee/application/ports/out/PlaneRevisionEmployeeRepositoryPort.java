@@ -1,6 +1,6 @@
 package com.vuelosjanbi.planeRevisionEmployee.application.ports.out;
 
-import com.vuelosjanbi.planeRevisionEmployee.domain.models.PlanRevisionEmployee;
+import com.vuelosjanbi.planeRevisionEmployee.domain.models.PlaneRevisionEmployee;
 import com.vuelosjanbi.planeRevisionEmployee.domain.models.RevisionEmployeeId;
 
 import java.util.Optional;
@@ -8,14 +8,14 @@ import java.util.List;
 
 public interface PlaneRevisionEmployeeRepositoryPort {
 
-  PlanRevisionEmployee save(PlanRevisionEmployee planeRevisionEmployee);
+  PlaneRevisionEmployee save(PlaneRevisionEmployee planeRevisionEmployee);
 
-  Optional<PlanRevisionEmployee> findById(RevisionEmployeeId id);
+  Optional<PlaneRevisionEmployee> findById(RevisionEmployeeId id);
 
   void deleteById(RevisionEmployeeId id);
 
-  PlanRevisionEmployee findByEmployeeId(String employeeId);
+  PlaneRevisionEmployee findByEmployeeId(String employeeId);
 
-  List<PlanRevisionEmployee> findAll();
+  List<PlaneRevisionEmployee> findAll();
 
 }

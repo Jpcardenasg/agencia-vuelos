@@ -29,18 +29,16 @@ public class PlaneConsoleAdapter {
     private PlaneService planeService;
 
     private final String url = "jdbc:mysql://localhost:3307/vuelosjanpi";
-    private final String user = "root";
+    private final String username = "root";
     private final String password = "1324";
 
     public void start(boolean useJpa) {
         if (useJpa) {
             System.out.println("Using JPA");
         } else {
-            planeModelService = new PlaneModelService(new MySQLPlaneModelRepository(url, user, password));
-            planeStatusService = new PlaneStatusService(new MySQLPlaneStatusRepository(url, user, password));
-            planeService = new PlaneService(
-                    new MySQLPlaneRepository(url, user, password, new MySQLPlaneStatusRepository(url, user, password),
-                            new MySQLPlaneModelRepository(url, user, password)));
+            planeModelService = new PlaneModelService(new MySQLPlaneModelRepository(url, username, password));
+            planeStatusService = new PlaneStatusService(new MySQLPlaneStatusRepository(url, username, password));
+            planeService = new PlaneService(new MySQLPlaneRepository(url, username, password));
             System.out.println("Using MYSQL");
         }
 

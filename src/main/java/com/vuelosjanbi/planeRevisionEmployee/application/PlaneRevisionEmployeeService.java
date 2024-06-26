@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.vuelosjanbi.planeRevisionEmployee.application.ports.out.PlaneRevisionEmployeeRepositoryPort;
-import com.vuelosjanbi.planeRevisionEmployee.domain.models.PlanRevisionEmployee;
+import com.vuelosjanbi.planeRevisionEmployee.domain.models.PlaneRevisionEmployee;
 import com.vuelosjanbi.planeRevisionEmployee.domain.models.RevisionEmployeeId;
 
 @Service
@@ -17,15 +17,15 @@ public class PlaneRevisionEmployeeService {
     this.planeRevisionEmployeeRepositoryPort = planeRevisionEmployeeRepositoryPort;
   }
 
-  public void createPlaneRevisionEmployee(PlanRevisionEmployee planRevisionEmployee) {
+  public void createPlaneRevisionEmployee(PlaneRevisionEmployee planRevisionEmployee) {
     planeRevisionEmployeeRepositoryPort.save(planRevisionEmployee);
   }
 
-  public PlanRevisionEmployee getPlaneRevisionEmployeeById(RevisionEmployeeId id) {
+  public PlaneRevisionEmployee getPlaneRevisionEmployeeById(RevisionEmployeeId id) {
     return planeRevisionEmployeeRepositoryPort.findById(id).orElse(null);
   }
 
-  public PlanRevisionEmployee updatePlaneRevisionEmployee(PlanRevisionEmployee planRevisionEmployee) {
+  public PlaneRevisionEmployee updatePlaneRevisionEmployee(PlaneRevisionEmployee planRevisionEmployee) {
     return planeRevisionEmployeeRepositoryPort.save(planRevisionEmployee);
   }
 

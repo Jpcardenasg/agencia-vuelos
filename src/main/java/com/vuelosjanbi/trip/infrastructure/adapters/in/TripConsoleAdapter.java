@@ -10,6 +10,8 @@ import java.util.List;
 import com.vuelosjanbi.airport.application.AirportService;
 import com.vuelosjanbi.airport.domain.models.Airport;
 import com.vuelosjanbi.airport.infrastructure.adapters.out.MySQLAirportRepository;
+import com.vuelosjanbi.flightConnection.application.FlightConnectionService;
+import com.vuelosjanbi.flightConnection.domain.models.FlightConnection;
 import com.vuelosjanbi.trip.application.TripService;
 import com.vuelosjanbi.trip.domain.models.Trip;
 import com.vuelosjanbi.trip.infrastructure.adapters.out.MySQLTripRepository;
@@ -21,6 +23,8 @@ public class TripConsoleAdapter {
   private TripService tripService;
   @Autowired
   AirportService airportService;
+  @Autowired
+  private FlightConnectionService flightConnectionService;
 
   private final String url = "jdbc:mysql://localhost:3307/vuelosjanpi";
   private final String user = "root";
@@ -64,10 +68,15 @@ public class TripConsoleAdapter {
         case 5:
           System.out.println("Enter trip id: ");
           long tripId3 = scanner.nextLong();
-          System.out.println(tripService.getTripById(tripId3));
+          Trip trip = tripService.getTripById(tripId3);
+          String tripDate = trip.getTripDate().toString();
           if (tripService.getTripById(tripId3) == null) {
             System.out.println("Error Trip not found.");
           }
+          FlightConnection flightConnection = flightConnectionService.getConnectionByTripId(tripId3).orElse(null);
+          System.out.printf("Id: %d , price: %d, Date: %s,  Origin Airport: %s, Destination Airport: %s", trip.getId(),
+              trip.getTripPrice(), tripDate, flightConnection.getOriginAirport().getName(),
+              flightConnection.getDestinationAirport().getName());
           break;
         case 6:
           scanner.close();

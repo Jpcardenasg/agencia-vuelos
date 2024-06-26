@@ -12,7 +12,7 @@ public interface PlaneRevisionRepositoryPort {
 
   Optional<PlaneRevision> findById(Long id);
 
-  Optional<PlaneRevision> findByPlaneId(Long planeId);
+  List<PlaneRevision> findByPlaneId(Long planeId);
 
   List<PlaneRevision> findAll();
 }
