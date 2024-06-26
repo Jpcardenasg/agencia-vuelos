@@ -142,20 +142,24 @@ public class TripBookingConsoleAdapter {
   }
 
   public void detailsTripBooking(Scanner scanner) {
-    System.out.println("Enter the Customer id:");
-    String customerId = scanner.nextLine();
-    System.out.println("Enter the trip booking id:");
-    List<TripBookingDetail> tripBookingDetails = tripBookingDetailService.getTripBookingDetailsByCustomerId(customerId);
-    System.out.println("What trip booking detail do you want to see?");
-    for (int i = 0; i < tripBookingDetails.size(); i++) {
-      System.out.println(tripBookingDetails.get(i));
-    }
-    Long tripBookingId = scanner.nextLong();
-    List<TripBookingDetail> tripBookingDetail = tripBookingDetailService
-        .getTripBookingDetailsByTripBookingId(tripBookingId);
-    System.out.println("The trip booking detail is:");
-    for (int i = 0; i < tripBookingDetail.size(); i++) {
-      System.out.println(tripBookingDetail.get(i));
+    System.out.println("How do you want to search for the trip booking, customer or trip?");
+    String search = scanner.next();
+    if (search.equals("customer")) {
+      System.out.println("Enter the customer id:");
+      String customerId = scanner.next();
+      List<TripBooking> tripBookings = tripBookingService.getTripBookingsByCustomerId(customerId);
+      System.out.println("The trip bookings are:");
+      for (int i = 0; i < tripBookings.size(); i++) {
+        System.out.println(tripBookings.get(i));
+      }
+    } else {
+      System.out.println("Enter the trip id:");
+      Long tripId = scanner.nextLong();
+      List<TripBooking> tripBookings = tripBookingService.getTripBookingsByTripId(tripId);
+      System.out.println("The trip bookings are:");
+      for (int i = 0; i < tripBookings.size(); i++) {
+        System.out.println(tripBookings.get(i));
+      }
     }
 
   }

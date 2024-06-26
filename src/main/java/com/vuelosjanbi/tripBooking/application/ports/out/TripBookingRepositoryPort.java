@@ -15,4 +15,10 @@ public interface TripBookingRepositoryPort {
 
   List<TripBooking> findAll();
 
+  public List<TripBooking> findByTripId(Long tripId);
+
+  public List<TripBooking> findByDate(String date);
+
+  public List<TripBooking> findByCustomerId(String customerId);
+
 }

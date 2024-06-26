@@ -46,4 +46,9 @@ public class TripBooking {
     this.trip = trip;
   }
 
+  @Override
+  public String toString() {
+    return "TripBooking [id=" + id + ", date=" + date + ", trip=" + trip + "]";
+  }
+
 }

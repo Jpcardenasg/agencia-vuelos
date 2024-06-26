@@ -41,4 +41,16 @@ public class TripBookingService {
     return tripBookingRepositoryPort.findAll();
   }
 
+  public List<TripBooking> getTripBookingsByTripId(Long tripId) {
+    return tripBookingRepositoryPort.findByTripId(tripId);
+  }
+
+  public List<TripBooking> getTripBookingsByDate(String date) {
+    return tripBookingRepositoryPort.findByDate(date);
+  }
+
+  public List<TripBooking> getTripBookingsByCustomerId(String customerId) {
+    return tripBookingRepositoryPort.findByCustomerId(customerId);
+  }
+
 }
