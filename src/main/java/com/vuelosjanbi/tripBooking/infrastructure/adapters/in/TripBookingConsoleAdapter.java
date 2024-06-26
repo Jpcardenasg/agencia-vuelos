@@ -11,6 +11,7 @@ import com.vuelosjanbi.customer.application.CustomerService;
 import com.vuelosjanbi.customer.infrastructure.adapters.out.MySQLCustomerRepository;
 import com.vuelosjanbi.flightFare.application.FlightFareService;
 import com.vuelosjanbi.trip.application.TripService;
+import com.vuelosjanbi.trip.domain.models.Trip;
 import com.vuelosjanbi.tripBooking.application.TripBookingService;
 import com.vuelosjanbi.tripBooking.domain.models.TripBooking;
 import com.vuelosjanbi.tripBooking.infrastructure.adapters.out.MySQLTripBookingRepository;
@@ -97,8 +98,8 @@ public class TripBookingConsoleAdapter {
     String tripBookingDate = year + "-" + month + "-" + day;
     Date tripDate = Date.valueOf(tripBookingDate);
     System.out.println("Enter the trip id:");
-    for (int i = 0; i < tripService.getAllTrips().size(); i++) {
-      System.out.println(tripService.getAllTrips().get(i));
+    for (Trip iterable_element : tripService.getAllTrips()) {
+      System.out.println(iterable_element);
     }
     Long tripId = scanner.nextLong();
     TripBooking tripBooking = new TripBooking();

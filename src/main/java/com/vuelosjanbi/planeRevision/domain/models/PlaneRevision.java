@@ -17,7 +17,7 @@ public class PlaneRevision {
   private Long id;
 
   Date revisionDate;
-
+  
   @ManyToOne
   Plane plane;
 
