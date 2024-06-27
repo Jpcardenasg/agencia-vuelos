@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.vuelosjanbi.airport.infrastructure.adapters.in.AirportConsoleAdapter;
 import com.vuelosjanbi.plane.infrastructure.adapters.in.PlaneConsoleAdapter;
+import com.vuelosjanbi.planeManufacturer.infrastructure.adapters.in.PlaneManufacturerConsoleAdapter;
 import com.vuelosjanbi.planeRevision.application.PlaneRevisionService;
 import com.vuelosjanbi.trip.application.TripService;
 import com.vuelosjanbi.trip.infrastructure.adapters.in.TripConsoleAdapter;
@@ -30,10 +31,7 @@ public class Main implements CommandLineRunner {
     private AirportConsoleAdapter airportConsoleAdapter;
 
     @Autowired
-    private TripService tripService;
-
-    @Autowired
-    private PlaneRevisionService planeRevisionService;
+    private PlaneManufacturerConsoleAdapter planeManufacturerConsoleAdapter;
 
     public static void main(String[] args) {
         SpringApplication.run(Main.class, args);
@@ -49,27 +47,38 @@ public class Main implements CommandLineRunner {
         int choice = scanner.nextInt();
         boolean useJpa = (choice == 1);
 
-        System.out.println("Choose the entity to manage:");
-        System.out.println("1. Airport");
-        System.out.println("2. Plane");
-        System.out.println("3. Trip");
-        System.out.println("4. Trip Crew");
-
-        switch (scanner.nextInt()) {
-            case 1:
-                airportConsoleAdapter.start(useJpa);
-                break;
-            case 2:
-                planeConsoleAdapter.start(useJpa);
-                break;
-            case 3:
-                tripConsoleAdapter.start(useJpa);
-                break;
-            case 4:
-                tripCrewConsoleAdapter.start(useJpa);
-                scanner.close();
-                break;
+        while (true) {
+            System.out.println("Choose the entity to manage:");
+            System.out.println("1. Airport");
+            System.out.println("2. Plane");
+            System.out.println("3. Trip");
+            System.out.println("4. Trip Crew");
+            System.out.println("5. Create basic data for the application");
+            choice = scanner.nextInt();
+            switch (choice) {
+                case 1:
+                    airportConsoleAdapter.start(useJpa);
+                    break;
+                case 2:
+                    planeConsoleAdapter.start(useJpa);
+                    break;
+                case 3:
+                    tripConsoleAdapter.start(useJpa);
+                    break;
+                case 4:
+                    tripCrewConsoleAdapter.start(useJpa);
+                    break;
+                case 5:
+                    createBasicData();
+                    break;
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
         }
+
+    }
+
+    public void createBasicData() {
 
     }
 }

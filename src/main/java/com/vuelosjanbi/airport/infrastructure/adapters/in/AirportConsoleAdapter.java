@@ -118,7 +118,8 @@ public class AirportConsoleAdapter {
     Long airportIdToUpdate = scanner.nextLong();
     Airport airportToUpdate = airportService.getAirportById(airportIdToUpdate);
     System.out.println("Enter the airport name:");
-    String airportNameToUpdate = scanner.next();
+    scanner.nextLine();
+    String airportNameToUpdate = scanner.nextLine();
     System.out.println("Enter the city id:");
     Long cityIdToUpdate = scanner.nextLong();
     airportToUpdate.setCity(cityService.getCityById(cityIdToUpdate));

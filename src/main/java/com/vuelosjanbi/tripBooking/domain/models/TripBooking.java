@@ -28,6 +28,14 @@ public class TripBooking {
   @OneToMany
   private List<TripBookingDetail> tripBookingDetails;
 
+  public TripBooking() {
+  }
+
+  public TripBooking(Date date, Trip trip) {
+    this.date = date;
+    this.trip = trip;
+  }
+
   public Long getId() {
     return id;
   }

@@ -1,7 +1,11 @@
 package com.vuelosjanbi.flightConnection.domain.models;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.vuelosjanbi.airport.domain.models.Airport;
 import com.vuelosjanbi.plane.domain.models.Plane;
+import com.vuelosjanbi.seat.domain.Seat;
 import com.vuelosjanbi.trip.domain.models.Trip;
 
 import jakarta.persistence.Entity;
@@ -9,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class FlightConnection {
@@ -26,6 +31,9 @@ public class FlightConnection {
   @ManyToOne
   private Airport destinationAirport;
 
+  @OneToMany(mappedBy = "flightConnection")
+  private List<Seat> seats;
+
   public FlightConnection() {
   }
 
@@ -36,6 +44,16 @@ public class FlightConnection {
 
   public FlightConnection(String connectionNumber) {
     this.connectionNumber = connectionNumber;
+  }
+
+  public FlightConnection(String connectionNumber, Trip trip, Plane plane, Airport originAirport,
+      Airport destinationAirport) {
+    this.connectionNumber = connectionNumber;
+    this.trip = trip;
+    this.plane = plane;
+    this.originAirport = originAirport;
+    this.destinationAirport = destinationAirport;
+    initializeDefaultSeats();
   }
 
   public Long getId() {
@@ -97,6 +115,24 @@ public class FlightConnection {
 
   public void setDestinationAirport(Airport destinationAirport) {
     this.destinationAirport = destinationAirport;
+  }
+
+  private void initializeDefaultSeats() {
+    seats = new ArrayList<>();
+    for (int i = 1; i <= plane.getCapacity(); i++) {
+      seats.add(new Seat("Economy" + i, "Economy", true, this));
+    }
+    for (int i = 1; i <= plane.getCapacity() - 20; i++) {
+      seats.add(new Seat("Business" + i, "Business", true, this));
+    }
+  }
+
+  public List<Seat> getSeats() {
+    return seats;
+  }
+
+  public void setSeats(List<Seat> seats) {
+    this.seats = seats;
   }
 
 }

@@ -25,6 +25,8 @@ public class TripBookingDetail {
   @ManyToOne
   private FlightFare flightFare;
 
+  private int seatNumber;
+
   public Long getId() {
     return id;
   }
@@ -62,6 +64,14 @@ public class TripBookingDetail {
     return String.format("Id %d, \nDate %s, \nCustomer %s, \nFlightFare %s", id,
         tripBooking.getDate(), customer.getName(),
         flightFare.getDetails());
+  }
+
+  public int getSeatNumber() {
+    return seatNumber;
+  }
+
+  public void setSeatNumber(int seatNumber) {
+    this.seatNumber = seatNumber;
   }
 
 }
