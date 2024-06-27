@@ -3,9 +3,12 @@ package com.vuelosjanbi.documentType.infrastructure.adapters.in;
 import java.util.List;
 import java.util.Scanner;
 
+import org.springframework.stereotype.Controller;
+
 import com.vuelosjanbi.documentType.application.DocumentTypeService;
 import com.vuelosjanbi.documentType.domain.models.DocumentType;
 
+@Controller
 public class DocumentTypeConsoleAdapter {
 
     private final DocumentTypeService documentTypeService;

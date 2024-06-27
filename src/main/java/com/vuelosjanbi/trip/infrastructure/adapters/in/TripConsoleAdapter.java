@@ -5,25 +5,15 @@ import org.springframework.stereotype.Controller;
 
 import java.util.Scanner;
 import java.sql.Date;
-import java.time.LocalDate;
 import java.util.List;
 
 import com.vuelosjanbi.airport.application.AirportService;
 import com.vuelosjanbi.airport.domain.models.Airport;
-import com.vuelosjanbi.customer.domain.models.Customer;
 import com.vuelosjanbi.flightConnection.application.FlightConnectionService;
 import com.vuelosjanbi.flightConnection.domain.models.FlightConnection;
 import com.vuelosjanbi.flightConnection.infrastructure.adapters.in.FlightConnectionConsoleAdapter;
-import com.vuelosjanbi.flightFare.application.FlightFareService;
-import com.vuelosjanbi.flightFare.domain.models.FlightFare;
-import com.vuelosjanbi.payment.domain.Payment;
-import com.vuelosjanbi.paymentMethod.domain.PaymentMethod;
 import com.vuelosjanbi.trip.application.TripService;
 import com.vuelosjanbi.trip.domain.models.Trip;
-import com.vuelosjanbi.tripBooking.application.TripBookingService;
-import com.vuelosjanbi.tripBooking.domain.models.TripBooking;
-import com.vuelosjanbi.tripBookingDetail.application.TripBookingDetailService;
-import com.vuelosjanbi.tripBookingDetail.domain.models.TripBookingDetail;
 
 @Controller
 public class TripConsoleAdapter {
@@ -34,12 +24,6 @@ public class TripConsoleAdapter {
   private AirportService airportService;
   @Autowired
   private FlightConnectionService flightConnectionService;
-  @Autowired
-  private FlightFareService flightFareService;
-  @Autowired
-  private TripBookingService tripBookingService;
-  @Autowired
-  private TripBookingDetailService tripBookingDetailService;
 
   @Autowired
   private FlightConnectionConsoleAdapter flightConnectionConsoleAdapter;
@@ -96,8 +80,8 @@ public class TripConsoleAdapter {
     long originAirportId = getInputLong(scanner, "Enter origin airport id: ");
     long destinationAirportId = getInputLong(scanner, "Enter destination airport id: ");
 
-    Trip trip = new Trip(tripDate, tripPrice, airportService.getAirportById(originAirportId),
-        airportService.getAirportById(destinationAirportId));
+    Trip trip = new Trip(tripDate, tripPrice, airportService.getAirportById(originAirportId).orElse(null),
+        airportService.getAirportById(destinationAirportId).orElse(null));
     tripService.createTrip(trip);
     System.out.println("Trip created successfully.");
     flightConnectionConsoleAdapter.start();

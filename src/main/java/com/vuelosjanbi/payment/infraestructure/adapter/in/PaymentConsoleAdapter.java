@@ -36,6 +36,7 @@ public class PaymentConsoleAdapter {
 
             switch (choice) {
                 case 1:
+
                     break;
 
                 default:

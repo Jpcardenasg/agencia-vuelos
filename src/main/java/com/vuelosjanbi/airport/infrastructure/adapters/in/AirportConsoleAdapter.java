@@ -91,7 +91,7 @@ public class AirportConsoleAdapter {
   public void consultAiportDetails(Scanner scanner) {
     System.out.println("Enter airport id: ");
     long id = scanner.nextLong();
-    Airport airport = airportService.getAirportById(id);
+    Airport airport = airportService.getAirportById(id).orElse(null);
     if (airport == null) {
       System.out.println("Airport not found.");
       return;
@@ -116,7 +116,7 @@ public class AirportConsoleAdapter {
   public void updateAirport(Scanner scanner) {
     System.out.println("Enter the airport id:");
     Long airportIdToUpdate = scanner.nextLong();
-    Airport airportToUpdate = airportService.getAirportById(airportIdToUpdate);
+    Airport airportToUpdate = airportService.getAirportById(airportIdToUpdate).orElse(null);
     System.out.println("Enter the airport name:");
     scanner.nextLine();
     String airportNameToUpdate = scanner.nextLine();

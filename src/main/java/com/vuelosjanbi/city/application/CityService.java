@@ -2,6 +2,7 @@ package com.vuelosjanbi.city.application;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.vuelosjanbi.city.application.ports.CityRepositoryPort;
@@ -9,6 +10,8 @@ import com.vuelosjanbi.city.domain.models.City;
 
 @Service
 public class CityService {
+
+    @Autowired
     private final CityRepositoryPort CityRepositoryPort;
 
     public CityService(CityRepositoryPort cityRepository) {
@@ -34,5 +37,7 @@ public class CityService {
     public City getCityById(Long idCity) {
         return CityRepositoryPort.findById(idCity).orElse(null);
     }
+
+    
 
 }

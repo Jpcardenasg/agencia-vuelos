@@ -3,11 +3,16 @@ package com.vuelosjanbi.city.infrastructure.adapters.in;
 import java.util.List;
 import java.util.Scanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
 import com.vuelosjanbi.city.application.CityService;
 import com.vuelosjanbi.city.domain.models.City;
 
+@Controller
 public class CityConsoleAdapter {
 
+    @Autowired
     private final CityService CityService;
 
     public CityConsoleAdapter(CityService CityService) {

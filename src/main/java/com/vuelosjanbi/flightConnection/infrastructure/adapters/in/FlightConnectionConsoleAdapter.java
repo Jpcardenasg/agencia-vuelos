@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 import com.vuelosjanbi.airport.application.AirportService;
 import com.vuelosjanbi.airport.domain.models.Airport;
@@ -14,6 +15,7 @@ import com.vuelosjanbi.plane.domain.models.Plane;
 import com.vuelosjanbi.trip.application.TripService;
 import com.vuelosjanbi.trip.domain.models.Trip;
 
+@Controller
 public class FlightConnectionConsoleAdapter {
 
     @Autowired
@@ -126,8 +128,8 @@ public class FlightConnectionConsoleAdapter {
         FlightConnection newFlightConnection = new FlightConnection(connectionNumber);
         newFlightConnection.setTrip(tripService.getTripById(tripId));
         newFlightConnection.setPlane(planeService.getPlaneById(planeId));
-        newFlightConnection.setOriginAirport(airportService.getAirportById(originAirportId));
-        newFlightConnection.setDestinationAirport(airportService.getAirportById(destinationAirportId));
+        newFlightConnection.setOriginAirport(airportService.getAirportById(originAirportId).orElse(null));
+        newFlightConnection.setDestinationAirport(airportService.getAirportById(destinationAirportId).orElse(null));
         flightConnectionService.createFlightConnection(newFlightConnection);
     }
 }

@@ -3,11 +3,16 @@ package com.vuelosjanbi.country.infrastructure.adapters.in;
 import java.util.List;
 import java.util.Scanner;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
 import com.vuelosjanbi.country.application.CountryService;
 import com.vuelosjanbi.country.domain.models.Country;
 
+@Controller
 public class CountryConsoleAdapter {
 
+    @Autowired
     private CountryService countryService;
 
     public CountryConsoleAdapter(CountryService countryService) {
