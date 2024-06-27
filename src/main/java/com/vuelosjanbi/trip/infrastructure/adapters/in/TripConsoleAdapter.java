@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 
 import java.util.Scanner;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 import com.vuelosjanbi.airport.application.AirportService;
@@ -24,7 +25,6 @@ public class TripConsoleAdapter {
   private AirportService airportService;
   @Autowired
   private FlightConnectionService flightConnectionService;
-
   @Autowired
   private FlightConnectionConsoleAdapter flightConnectionConsoleAdapter;
 
