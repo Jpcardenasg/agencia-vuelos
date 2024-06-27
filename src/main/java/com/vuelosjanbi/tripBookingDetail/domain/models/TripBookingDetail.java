@@ -2,6 +2,7 @@ package com.vuelosjanbi.tripBookingDetail.domain.models;
 
 import com.vuelosjanbi.customer.domain.models.Customer;
 import com.vuelosjanbi.flightFare.domain.models.FlightFare;
+import com.vuelosjanbi.payment.domain.Payment;
 import com.vuelosjanbi.tripBooking.domain.models.TripBooking;
 
 import jakarta.persistence.Entity;
@@ -24,6 +25,9 @@ public class TripBookingDetail {
 
   @ManyToOne
   private FlightFare flightFare;
+
+  @ManyToOne
+  private Payment payment;
 
   private int seatNumber;
 
@@ -72,6 +76,14 @@ public class TripBookingDetail {
 
   public void setSeatNumber(int seatNumber) {
     this.seatNumber = seatNumber;
+  }
+
+  public Payment getPayment() {
+    return payment;
+  }
+
+  public void setPayment(Payment payment) {
+    this.payment = payment;
   }
 
 }

@@ -3,6 +3,7 @@ package com.vuelosjanbi.tripCrew.infrastructure.adapters.in;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import com.vuelosjanbi.customer.infrastructure.adapters.in.CustomerConsoleAdapter;
 import com.vuelosjanbi.employee.application.EmployeeService;
 import com.vuelosjanbi.employee.application.ports.out.EmployeeRepositoryPort;
 import com.vuelosjanbi.employee.domain.models.Employee;
@@ -38,6 +39,9 @@ public class TripCrewConsoleAdapter {
   @Autowired
   private TripCrewService tripCrewService;
 
+  @Autowired
+  private CustomerConsoleAdapter customerConsoleAdapter;
+
   private final String url = "jdbc:mysql://localhost:3307/vuelosjanpi";
   private final String user = "root";
   private final String password = "1324";
@@ -71,7 +75,8 @@ public class TripCrewConsoleAdapter {
       System.out.println("2. Remove employee from Trip Crew.");
       System.out.println("3. List all Trip Crew.");
       System.out.println("4. Trip Crew information.");
-      System.out.println("5. Exit.");
+      System.out.println("5. Employee Management.");
+      System.out.println("6. Exit.");
 
       int choice = scanner.nextInt();
       scanner.nextLine();
@@ -90,7 +95,10 @@ public class TripCrewConsoleAdapter {
           tripCrewInformationByTripId(scanner);
           break;
         case 5:
-          scanner.close();
+          customerConsoleAdapter.start(true);
+          return;
+
+        case 6:
           return;
         default:
           System.out.println("Invalid choice. Please try again.");

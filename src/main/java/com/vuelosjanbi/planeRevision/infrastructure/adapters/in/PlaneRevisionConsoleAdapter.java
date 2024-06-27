@@ -32,7 +32,7 @@ public class PlaneRevisionConsoleAdapter {
     @Autowired
     private PlaneRevisionEmployeeService planRevisionEmployeeService;
 
-    public void start() {
+    public void start(boolean useJpa) {
         System.out.println("Plane Revision Console Adapter started");
 
         Scanner scanner = new Scanner(System.in);

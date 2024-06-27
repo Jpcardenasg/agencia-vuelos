@@ -13,8 +13,11 @@ import com.vuelosjanbi.airport.domain.models.Airport;
 import com.vuelosjanbi.customer.domain.models.Customer;
 import com.vuelosjanbi.flightConnection.application.FlightConnectionService;
 import com.vuelosjanbi.flightConnection.domain.models.FlightConnection;
+import com.vuelosjanbi.flightConnection.infrastructure.adapters.in.FlightConnectionConsoleAdapter;
 import com.vuelosjanbi.flightFare.application.FlightFareService;
 import com.vuelosjanbi.flightFare.domain.models.FlightFare;
+import com.vuelosjanbi.payment.domain.Payment;
+import com.vuelosjanbi.paymentMethod.domain.PaymentMethod;
 import com.vuelosjanbi.trip.application.TripService;
 import com.vuelosjanbi.trip.domain.models.Trip;
 import com.vuelosjanbi.tripBooking.application.TripBookingService;
@@ -38,6 +41,9 @@ public class TripConsoleAdapter {
   @Autowired
   private TripBookingDetailService tripBookingDetailService;
 
+  @Autowired
+  private FlightConnectionConsoleAdapter flightConnectionConsoleAdapter;
+
   // private final String url = "jdbc:mysql://localhost:3307/vuelosjanpi";
   // private final String user = "root";
   // private final String password = "1324";
@@ -53,7 +59,7 @@ public class TripConsoleAdapter {
         int choice = getInputInt(scanner, "Choose an option: ");
         switch (choice) {
           case 1 -> createTrip(scanner);
-          case 2 -> lookAvailableTrips(scanner);
+          case 2 -> flightConnectionConsoleAdapter.start();
           case 3 -> updateTrip(scanner);
           case 4 -> deleteTrip(scanner);
           case 5 -> listTrips();
@@ -70,9 +76,8 @@ public class TripConsoleAdapter {
   }
 
   private void printMenu() {
-    System.out.println("\nPlane Manufacturer Management Menu:");
     System.out.println("1. Create Trip.");
-    System.out.println("2. Look available trips for origin, destination, and date.");
+    System.out.println("2. Manage flight Connections.");
     System.out.println("3. Update Trip.");
     System.out.println("4. Delete Trip.");
     System.out.println("5. List all Trips.");
@@ -95,20 +100,7 @@ public class TripConsoleAdapter {
         airportService.getAirportById(destinationAirportId));
     tripService.createTrip(trip);
     System.out.println("Trip created successfully.");
-  }
-
-  private void lookAvailableTrips(Scanner scanner) {
-    String originCityName = getInputString(scanner, "Enter origin city name: ");
-    String destinationCityName = getInputString(scanner, "Enter destination city name: ");
-    Date tripDate = getInputDate(scanner, "Enter trip date (YYYY-MM-DD): ");
-
-    List<Trip> trips = tripService.getTripsByOriginCityAndFinalDestinationCityWithStopover(originCityName,
-        destinationCityName, tripDate.toString());
-    trips.forEach(System.out::println);
-
-    if (getInputString(scanner, "Do you want to book a trip? (y/n): ").equalsIgnoreCase("y")) {
-      bookTrip(scanner, trips);
-    }
+    flightConnectionConsoleAdapter.start();
   }
 
   private void updateTrip(Scanner scanner) {
@@ -173,91 +165,6 @@ public class TripConsoleAdapter {
 
     List<FlightConnection> flightConnections = flightConnectionService.getConnectionByTripId(trip);
     flightConnections.forEach(System.out::println);
-  }
-
-  private void bookTrip(Scanner scanner, List<Trip> trips) {
-    long tripId = getInputLong(scanner, "Enter trip id: ");
-    Trip trip = tripService.getTripById(tripId);
-    if (trip == null) {
-      System.out.println("Trip not found.");
-      return;
-    }
-
-    TripBooking tripBooking = new TripBooking(Date.valueOf(LocalDate.now()), trip);
-    while (true) {
-      Customer customer = new Customer();
-      String passengerName = getInputString(scanner, "Enter passenger name: ");
-      int age = getInputInt(scanner, "Enter passenger age: ");
-      String passengerDocument = getInputString(scanner, "Enter passenger document: ");
-      customer.setName(passengerName);
-      customer.setAge(age);
-      customer.setId(passengerDocument);
-
-      TripBookingDetail tripBookingDetail = new TripBookingDetail();
-      tripBookingDetail.setCustomer(customer);
-      tripBookingDetail.setTripBooking(tripBooking);
-
-      List<FlightFare> flightFares = flightFareService.getAllFlightFares();
-      flightFares.forEach(flightFare -> System.out.printf("Flight fare id: %d Flight fare price: %.2f%n",
-          flightFare.getId(), flightFare.getValue()));
-      long flightFareId = getInputLong(scanner, "Enter flight fare id: ");
-      FlightFare flightFare = flightFareService.getFlightFareById(flightFareId).orElse(null);
-      if (flightFare == null) {
-        System.out.println("Flight fare not found.");
-        return;
-      }
-
-      FlightConnection flightConnection = flightConnectionService.getConnectionByTripId(tripId).orElse(null);
-      if (flightConnection == null) {
-        System.out.println("Flight connection not found.");
-        return;
-      }
-
-      System.out.println("Select available seat number: ");
-      flightConnection.getSeats().forEach(seat -> {
-        if (seat.isAvailable()) {
-          System.out.println("Seat number: " + seat.getSeatNumber());
-        }
-      });
-
-      int seatNumber = getInputInt(scanner, "Enter seat number: ");
-      flightConnection.getSeats().forEach(seat -> {
-        if (seat.getSeatNumber().equals(String.valueOf(seatNumber))) {
-          seat.setAvailable(false);
-        }
-      });
-
-      tripBookingDetail.setSeatNumber(seatNumber);
-      tripBookingDetail.setFlightFare(flightFare);
-      tripBookingService.createTripBooking(tripBooking);
-      tripBookingDetailService.createTripBookingDetail(tripBookingDetail);
-
-      if (getInputString(scanner, "Do you want to add another passenger? (y/n): ").equalsIgnoreCase("n")) {
-        processPayment(scanner);
-        break;
-      }
-    }
-  }
-
-  private void processPayment(Scanner scanner) {
-    int paymentMethod = getInputInt(scanner, "How do you want to pay? (1. Credit card, 2. Cash): ");
-    switch (paymentMethod) {
-      case 1 -> {
-        String creditCardNumber = getInputString(scanner, "Enter credit card number: ");
-        String expirationDate = getInputString(scanner, "Enter credit card expiration date (MM/YY): ");
-        String securityCode = getInputString(scanner, "Enter credit card security code: ");
-        String ownerName = getInputString(scanner, "Enter credit card owner name: ");
-        String ownerDocument = getInputString(scanner, "Enter credit card owner document: ");
-        String ownerPhone = getInputString(scanner, "Enter credit card owner phone: ");
-        System.out.printf("Processing payment with credit card ending in %s%n",
-            creditCardNumber.substring(creditCardNumber.length() - 4));
-      }
-      case 2 -> {
-        double cashAmount = getInputDouble(scanner, "Enter cash amount: ");
-        System.out.printf("Processing cash payment of %.2f%n", cashAmount);
-      }
-      default -> System.out.println("Invalid payment method.");
-    }
   }
 
   // Helper methods for input

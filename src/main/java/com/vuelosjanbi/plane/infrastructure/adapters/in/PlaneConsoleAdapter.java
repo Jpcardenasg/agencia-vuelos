@@ -14,6 +14,7 @@ import com.vuelosjanbi.plane.infrastructure.adapters.out.MySQLPlaneRepository;
 import com.vuelosjanbi.planeModel.application.PlaneModelService;
 import com.vuelosjanbi.planeModel.domain.models.PlaneModel;
 import com.vuelosjanbi.planeModel.infrastructure.adapters.out.MySQLPlaneModelRepository;
+import com.vuelosjanbi.planeRevision.infrastructure.adapters.in.PlaneRevisionConsoleAdapter;
 import com.vuelosjanbi.planeStatus.application.PlaneStatusService;
 import com.vuelosjanbi.planeStatus.domain.models.PlaneStatus;
 import com.vuelosjanbi.planeStatus.infrastructure.adapters.out.MySQLPlaneStatusRepository;
@@ -27,6 +28,9 @@ public class PlaneConsoleAdapter {
     private PlaneStatusService planeStatusService;
     @Autowired
     private PlaneService planeService;
+
+    @Autowired
+    private PlaneRevisionConsoleAdapter planeRevisionConsoleAdapter;
 
     private final String url = "jdbc:mysql://localhost:3307/vuelosjanpi";
     private final String username = "root";
@@ -51,7 +55,8 @@ public class PlaneConsoleAdapter {
             System.out.println("2. Update Plane.");
             System.out.println("3. Delete Plane.");
             System.out.println("4. List all Planes.");
-            System.out.println("5. Exit.");
+            System.out.println("5. Check plane revisions");
+            System.out.println("6. Exit.");
 
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -70,8 +75,8 @@ public class PlaneConsoleAdapter {
                     listPlanes(planes);
                     break;
                 case 5:
-                    scanner.close();
-                    return;
+                    planeRevisionConsoleAdapter.start(true);
+                    break;
                 default:
                     System.out.println("Invalid choice. Please try again.");
                     break;
