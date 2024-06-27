@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.vuelosjanbi.airport.application.ports.out.AirportRepositoryPort;
 import com.vuelosjanbi.airport.domain.models.Airport;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AirportService {
@@ -21,8 +22,8 @@ public class AirportService {
     return airportRepositoryPort.save(airport);
   }
 
-  public Airport getAirportById(Long id) {
-    return airportRepositoryPort.findById(id).orElse(null);
+  public Optional<Airport> getAirportById(Long id) {
+    return airportRepositoryPort.findById(id);
   }
 
   public void deleteAirportById(Long id) {

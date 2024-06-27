@@ -1,5 +1,8 @@
 package com.vuelosjanbi.planeManufacturer.application;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,11 +23,15 @@ public class PlaneManufacturerService {
     planeManufacturerRepositoryPort.deleteById(id);
   }
 
-  public PlaneManufacturer getPlaneManufacturerById(Long id) {
-    return planeManufacturerRepositoryPort.findById(id).orElse(null);
+  public Optional<PlaneManufacturer> getPlaneManufacturerById(Long id) {
+    return planeManufacturerRepositoryPort.findById(id);
   }
 
-  public PlaneManufacturer getPlaneManufacturerByName(String name) {
-    return planeManufacturerRepositoryPort.findByName(name).orElse(null);
+  public Optional<PlaneManufacturer> getPlaneManufacturerByName(String name) {
+    return planeManufacturerRepositoryPort.findByName(name);
+  }
+
+  public List<PlaneManufacturer> getAllManufacturers() {
+    return planeManufacturerRepositoryPort.findAll();
   }
 }

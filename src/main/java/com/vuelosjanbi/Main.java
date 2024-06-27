@@ -37,9 +37,6 @@ public class Main implements CommandLineRunner {
     @Autowired
     private AirportConsoleAdapter airportConsoleAdapter;
 
-    // @Autowired
-    // private PlaneManufacturerConsoleAdapter planeManufacturerConsoleAdapter;
-
     @Autowired
     private CustomerConsoleAdapter customerConsoleAdapter;
 
@@ -77,7 +74,7 @@ public class Main implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         Scanner scanner = new Scanner(System.in);
-        int opcionPrincipal, opcionSubMenu;
+        int opcionPrincipal;
 
         do {
             mostrarMenuPrincipal();
@@ -119,10 +116,10 @@ public class Main implements CommandLineRunner {
 
                     break;
                 case 0:
-                    System.out.println("Saliendo...");
+                    System.out.println("Exiting...");
                     break;
                 default:
-                    System.out.println("Opción inválida. Por favor, seleccione una opción válida.");
+                    System.out.println("Ivalid Option. Please, select a valid option.");
             }
 
         } while (opcionPrincipal != 11);
@@ -149,16 +146,16 @@ public class Main implements CommandLineRunner {
                 cityConsoleAdapter.start();
                 break;
             case 3:
-                planeManufacturerConsoleAdapter.start(true);
+                planeManufacturerConsoleAdapter.start();
                 break;
             case 4:
-                planeModelConsoleAdapter.start(true);
+                planeModelConsoleAdapter.start();
                 break;
             case 5:
-                airportGateConsoleAdapter.start(true);
+                airportGateConsoleAdapter.start();
                 break;
             case 6:
-                crewRoleConsoleAdapter.start(true);
+                crewRoleConsoleAdapter.start();
                 break;
             default:
                 System.out.println("Invalid choice. Please try again.");

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import com.vuelosjanbi.planeManufacturer.application.PlaneManufacturerService;
 import com.vuelosjanbi.planeManufacturer.domain.models.PlaneManufacturer;
 
+import java.util.Optional;
 import java.util.Scanner;
 
 @Controller
@@ -16,23 +17,20 @@ public class PlaneManufacturerConsoleAdapter {
 
   private Scanner scanner = new Scanner(System.in);
 
-  public void start(boolean useJpa) {
-    if (useJpa) {
-      System.out.println("Using JPA repository.");
-    } else {
-      System.out.println("Using MySQL manual queries.");
-    }
+  public void start() {
+
     while (true) {
       System.out.println("Plane Manufacturer Management Menu:");
       System.out.println("1. Create Plane Manufacturer");
       System.out.println("2. Delete Plane Manufacturer");
       System.out.println("3. Get Plane Manufacturer by ID");
       System.out.println("4. Get Plane Manufacturer by Name");
-      System.out.println("5. Exit");
+      System.out.println("5. List all Plane Manufacturers");
+      System.out.println("6. Exit");
       System.out.print("Choose an option: ");
 
       int choice = scanner.nextInt();
-      scanner.nextLine(); // Consume newline
+      scanner.nextLine();
 
       switch (choice) {
         case 1:
@@ -48,6 +46,9 @@ public class PlaneManufacturerConsoleAdapter {
           getPlaneManufacturerByName();
           break;
         case 5:
+          listAllPlaneManufacturers();
+          break;
+        case 6:
           System.out.println("Exiting...");
           return;
         default:
@@ -69,7 +70,7 @@ public class PlaneManufacturerConsoleAdapter {
   private void deletePlaneManufacturer() {
     System.out.print("Enter Manufacturer ID to delete: ");
     Long id = scanner.nextLong();
-    scanner.nextLine(); // Consume newline
+    scanner.nextLine();
 
     planeManufacturerService.deletePlaneManufacturer(id);
     System.out.println("Plane Manufacturer deleted.");
@@ -78,10 +79,11 @@ public class PlaneManufacturerConsoleAdapter {
   private void getPlaneManufacturerById() {
     System.out.print("Enter Manufacturer ID: ");
     Long id = scanner.nextLong();
-    scanner.nextLine(); // Consume newline
+    scanner.nextLine();
 
-    PlaneManufacturer manufacturer = planeManufacturerService.getPlaneManufacturerById(id);
-    if (manufacturer != null) {
+    Optional<PlaneManufacturer> optionalManufacturer = planeManufacturerService.getPlaneManufacturerById(id);
+    if (optionalManufacturer.isPresent()) {
+      PlaneManufacturer manufacturer = optionalManufacturer.get();
       System.out.println("Manufacturer found: " + manufacturer);
     } else {
       System.out.println("Manufacturer not found.");
@@ -92,11 +94,19 @@ public class PlaneManufacturerConsoleAdapter {
     System.out.print("Enter Manufacturer Name: ");
     String name = scanner.nextLine();
 
-    PlaneManufacturer manufacturer = planeManufacturerService.getPlaneManufacturerByName(name);
-    if (manufacturer != null) {
+    Optional<PlaneManufacturer> optionalManufacturer = planeManufacturerService.getPlaneManufacturerByName(name);
+    if (optionalManufacturer.isPresent()) {
+      PlaneManufacturer manufacturer = optionalManufacturer.get();
       System.out.println("Manufacturer found: " + manufacturer);
     } else {
       System.out.println("Manufacturer not found.");
     }
+  }
+
+  private void listAllPlaneManufacturers() {
+    System.out.println("Listing all Plane Manufacturers:");
+    planeManufacturerService.getAllManufacturers().forEach(manufacturer -> {
+      System.out.printf("ID: %d, Name: %s \n", manufacturer.getId(), manufacturer.getName());
+    });
   }
 }

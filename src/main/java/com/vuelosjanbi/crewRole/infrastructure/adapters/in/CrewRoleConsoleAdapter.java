@@ -57,6 +57,8 @@ public class CrewRoleConsoleAdapter {
           });
           break;
         case 5:
+          System.out.println("Exiting...");
+          scanner.close();
           return;
         default:
           System.out.println("Invalid choice. Please try again.");
