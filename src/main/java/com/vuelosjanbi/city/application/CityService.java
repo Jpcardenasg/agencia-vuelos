@@ -1,6 +1,7 @@
 package com.vuelosjanbi.city.application;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,30 +13,34 @@ import com.vuelosjanbi.city.domain.models.City;
 public class CityService {
 
     @Autowired
-    private final CityRepositoryPort CityRepositoryPort;
+    private final CityRepositoryPort cityRepositoryPort;
 
     public CityService(CityRepositoryPort cityRepository) {
-        this.CityRepositoryPort = cityRepository;
+        this.cityRepositoryPort = cityRepository;
     }
 
     public void createCity(City city) {
-        CityRepositoryPort.save(city);
+        cityRepositoryPort.save(city);
     }
 
     public void updateCity(City city) {
-        CityRepositoryPort.save(city);
+        cityRepositoryPort.save(city);
     }
 
     public void deleteCity(Long idCity) {
-        CityRepositoryPort.deleteById(idCity);
+        cityRepositoryPort.deleteById(idCity);
     }
 
     public List<City> getAllCities() {
-        return CityRepositoryPort.findAll();
+        return cityRepositoryPort.findAll();
     }
 
-    public City getCityById(Long idCity) {
-        return CityRepositoryPort.findById(idCity).orElse(null);
+    public Optional<City> getCityById(Long idCity) {
+        return cityRepositoryPort.findById(idCity);
+    }
+
+    public List<City> getCitiesByCountryId(Long countryId) {
+        return cityRepositoryPort.findCitiesByCountryId(countryId);
     }
 
     

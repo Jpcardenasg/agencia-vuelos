@@ -25,11 +25,12 @@ public class PaymentConsoleAdapter {
 
         while (true) {
             payments = paymentService.getAllPayments();
+            System.out.println("\n");
             System.out.println("1. Create Payment.");
             System.out.println("2. Update Payment.");
             System.out.println("3. Delete Payment.");
             System.out.println("4. List all Payments.");
-            System.out.println("5. Exit.");
+            System.out.println("0. Exit.");
 
             int choice = scanner.nextInt();
             scanner.nextLine();

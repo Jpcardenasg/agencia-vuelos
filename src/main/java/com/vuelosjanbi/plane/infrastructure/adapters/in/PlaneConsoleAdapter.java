@@ -51,12 +51,13 @@ public class PlaneConsoleAdapter {
 
         while (true) {
             planes = planeService.getAllPlanes();
+            System.out.println("\n");
             System.out.println("1. Create Plane.");
             System.out.println("2. Update Plane.");
             System.out.println("3. Delete Plane.");
             System.out.println("4. List all Planes.");
             System.out.println("5. Check plane revisions");
-            System.out.println("6. Exit.");
+            System.out.println("0. Exit.");
 
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -77,10 +78,8 @@ public class PlaneConsoleAdapter {
                 case 5:
                     planeRevisionConsoleAdapter.start(true);
                     break;
-
-                case 6:
+                case 0:
                     System.out.println("Exiting...");
-                    scanner.close();
                     return;
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -117,13 +116,13 @@ public class PlaneConsoleAdapter {
         Date fabricationDate = new Date(cal.getTimeInMillis());
 
         for (PlaneModel model : models) {
-            System.out.printf("ID: %d, Model: %s\n", model.getId(), model.getName());
+            System.out.printf("ID: %d  Model: %s\n", model.getId(), model.getName());
         }
         System.out.println("Choose the model of the plane:");
         Long modelChoice = scanner.nextLong();
 
         for (PlaneStatus status : statusList) {
-            System.out.printf("ID: %d, Status: %s\n", status.getId(), status.getName());
+            System.out.printf("ID: %d  Status: %s\n", status.getId(), status.getName());
         }
         System.out.println("Choose the status of the plane:");
         Long statusChoice = scanner.nextLong();
@@ -160,7 +159,7 @@ public class PlaneConsoleAdapter {
         List<PlaneStatus> statusList = planeStatusService.getAllPlaneStatus();
 
         for (Plane p : planes) {
-            System.out.printf("ID: %d, Plate: %s\n", p.getId(), p.getPlate());
+            System.out.printf("ID: %d  Plate: %s\n", p.getId(), p.getPlate());
         }
         System.out.println("Choose the plane ID you want to modify:");
 
@@ -194,13 +193,13 @@ public class PlaneConsoleAdapter {
 
         System.out.println("Choose the new model of the plane:");
         for (PlaneModel model : models) {
-            System.out.printf("ID: %d, Model: %s\n", model.getId(), model.getName());
+            System.out.printf("ID: %d  Model: %s\n", model.getId(), model.getName());
         }
         Long newModelChoice = scanner.nextLong();
 
         System.out.println("Choose the new status of the plane:");
         for (PlaneStatus status : statusList) {
-            System.out.printf("ID: %d, Status: %s\n", status.getId(), status.getName());
+            System.out.printf("ID: %d  Status: %s\n", status.getId(), status.getName());
         }
         Long newStatusChoice = scanner.nextLong();
 
@@ -242,7 +241,7 @@ public class PlaneConsoleAdapter {
 
     private void listPlanes(List<Plane> planes) {
         for (Plane plane : planes) {
-            System.out.printf("ID: %d, Plate: %s, Capacity: %d, Fabrication Date: %s, Model: %s, Status: %s\n",
+            System.out.printf("ID: %d  Plate: %s  Capacity: %d  Fabrication Date: %s  Model: %s  Status: %s\n",
                     plane.getId(), plane.getPlate(), plane.getCapacity(), plane.getFabricationDate(),
                     plane.getModel().getName(), plane.getStatus().getName());
         }

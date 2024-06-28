@@ -50,13 +50,14 @@ public class EmployeeConsoleAdapter {
 
         while (true) {
             employees = employeeService.getAllEmployees();
+            System.out.println("\n");
             System.out.println("1. Register Employee.");
             System.out.println("2. Update Employee.");
             System.out.println("3. Delete Employee.");
             System.out.println("4. Find Employee by ID.");
             System.out.println("5. Find Employee by Rol.");
             System.out.println("6. List all Employees.");
-            System.out.println("7. Exit.");
+            System.out.println("0. Exit.");
 
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -80,8 +81,8 @@ public class EmployeeConsoleAdapter {
                 case 6:
                     listEmployees(employees);
                     break;
-                case 7:
-                    scanner.close();
+                case 0:
+                    System.out.println("Exiting...");
                     return;
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -113,21 +114,21 @@ public class EmployeeConsoleAdapter {
 
         System.out.println("Crew Roles:");
         for (CrewRole crewRole : crewRoles) {
-            System.out.printf("ID: %d, Rol: %s \n", crewRole.getId(), crewRole.getName());
+            System.out.printf("ID: %d  Rol: %s \n", crewRole.getId(), crewRole.getName());
         }
         System.out.println("Choose the ID of the rol:");
         Long crewRoleId = scanner.nextLong();
 
         System.out.println("Airlines:");
         for (Airline airline : airlines) {
-            System.out.printf("ID: %d, Airline: %s \n", airline.getId(), airline.getName());
+            System.out.printf("ID: %d  Airline: %s \n", airline.getId(), airline.getName());
         }
         System.out.println("Choose the ID of the airline:");
         Long airlineId = scanner.nextLong();
 
         System.out.println("Airports:");
         for (Airport airport : airports) {
-            System.out.printf("ID: %d, Airport: %s \n", airport.getId(), airport.getName());
+            System.out.printf("ID: %d  Airport: %s \n", airport.getId(), airport.getName());
         }
         System.out.println("Choose the ID of the airport:");
         Long airportId = scanner.nextLong();
@@ -170,7 +171,7 @@ public class EmployeeConsoleAdapter {
 
         System.out.println("Employees:");
         for (Employee employee : employees) {
-            System.out.printf("ID: %s, Name: %s \n", employee.getId(), employee.getName());
+            System.out.printf("ID: %s  Name: %s \n", employee.getId(), employee.getName());
         }
         System.out.println("Choose the ID of the employee:");
         String employeeId = scanner.nextLine();
@@ -180,7 +181,7 @@ public class EmployeeConsoleAdapter {
         } else {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             String formattedDate = dateFormat.format(chosenEmployee.getEntryDate());
-            System.out.printf("ID: %s, Name: %d, Entry Date: %s, IdRol: %d, IdAirline: %d, IdAirport: %d\n",
+            System.out.printf("ID: %s  Name: %d  Entry Date: %s  IdRol: %d  IdAirline: %d  IdAirport: %d\n",
                     chosenEmployee.getId(), chosenEmployee.getName(), formattedDate,
                     chosenEmployee.getRol().getId(), chosenEmployee.getAirline().getId(),
                     chosenEmployee.getAirport().getId());
@@ -204,21 +205,21 @@ public class EmployeeConsoleAdapter {
 
         System.out.println("Crew Roles:");
         for (CrewRole crewRole : crewRoles) {
-            System.out.printf("ID: %d, Rol: %s \n", crewRole.getId(), crewRole.getName());
+            System.out.printf("ID: %d  Rol: %s \n", crewRole.getId(), crewRole.getName());
         }
         System.out.println("Choose the ID of the rol:");
         Long newCrewRoleId = scanner.nextLong();
 
         System.out.println("Airlines:");
         for (Airline airline : airlines) {
-            System.out.printf("ID: %d, Airline: %s \n", airline.getId(), airline.getName());
+            System.out.printf("ID: %d  Airline: %s \n", airline.getId(), airline.getName());
         }
         System.out.println("Choose the ID of the airline:");
         Long newAirlineId = scanner.nextLong();
 
         System.out.println("Airports:");
         for (Airport airport : airports) {
-            System.out.printf("ID: %d, Airport: %s \n", airport.getId(), airport.getName());
+            System.out.printf("ID: %d  Airport: %s \n", airport.getId(), airport.getName());
         }
         System.out.println("Choose the ID of the airport:");
         Long newAirportId = scanner.nextLong();
@@ -274,7 +275,7 @@ public class EmployeeConsoleAdapter {
         employeeOpt.ifPresentOrElse(employee -> {
             String formattedDate = dateFormat.format(employee.getEntryDate());
             System.out.printf(
-                    "ID: %s, Name: %d, Entry Date: %s, Rol: %s, Airline: %s, Airport: %s\n",
+                    "ID: %s  Name: %d  Entry Date: %s  Rol: %s  Airline: %s  Airport: %s\n",
                     employee.getId(), employee.getName(), formattedDate,
                     employee.getRol().getName(), employee.getAirline().getName(),
                     employee.getAirport().getName());
@@ -285,7 +286,7 @@ public class EmployeeConsoleAdapter {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         List<CrewRole> crewRoles = crewRoleService.getAllCrewRoles();
         for (CrewRole crewRole : crewRoles) {
-            System.out.printf("ID: %d, Rol: %s \n", crewRole.getId(), crewRole.getName());
+            System.out.printf("ID: %d  Rol: %s \n", crewRole.getId(), crewRole.getName());
         }
         System.out.println("Choose the ID of the rol:");
         Long crewRoleId = scanner.nextLong();
@@ -295,7 +296,7 @@ public class EmployeeConsoleAdapter {
 
         for (Employee employee : employeesWithRol) {
             String formattedDate = dateFormat.format(employee.getEntryDate());
-            System.out.printf("ID: %s, Name: %d, Entry Date: %s, Rol: %s, Airline: %s, Airport: %s\n",
+            System.out.printf("ID: %s  Name: %d  Entry Date: %s  Rol: %s  Airline: %s  Airport: %s\n",
                     employee.getId(), employee.getName(), formattedDate,
                     employee.getRol().getName(), employee.getAirline().getName(),
                     employee.getAirport().getName());
@@ -306,7 +307,7 @@ public class EmployeeConsoleAdapter {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         for (Employee employee : employees) {
             String formattedDate = dateFormat.format(employee.getEntryDate());
-            System.out.printf("ID: %s, Name: %d, Entry Date: %s, Rol: %s, Airline: %s, Airport: %s\n",
+            System.out.printf("ID: %s  Name: %d  Entry Date: %s  Rol: %s  Airline: %s  Airport: %s\n",
                     employee.getId(), employee.getName(), formattedDate,
                     employee.getRol().getName(), employee.getAirline().getName(),
                     employee.getAirport().getName());

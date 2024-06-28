@@ -12,6 +12,7 @@ import com.vuelosjanbi.country.infrastructure.adapters.in.CountryConsoleAdapter;
 import com.vuelosjanbi.crewRole.infrastructure.adapters.in.CrewRoleConsoleAdapter;
 import com.vuelosjanbi.customer.infrastructure.adapters.in.CustomerConsoleAdapter;
 import com.vuelosjanbi.documentType.infrastructure.adapters.in.DocumentTypeConsoleAdapter;
+import com.vuelosjanbi.employee.infrastructure.adapters.in.EmployeeConsoleAdapter;
 import com.vuelosjanbi.flightFare.infrastructure.adapters.in.FlightFareConsoleAdapter;
 import com.vuelosjanbi.plane.infrastructure.adapters.in.PlaneConsoleAdapter;
 import com.vuelosjanbi.planeManufacturer.infrastructure.adapters.in.PlaneManufacturerConsoleAdapter;
@@ -31,6 +32,9 @@ public class SystemUserAdminController {
 
   @Autowired
   private PlaneConsoleAdapter planeConsoleAdapter;
+
+  @Autowired
+  private EmployeeConsoleAdapter employeeConsoleAdapter;
 
   @Autowired
   private TripConsoleAdapter tripConsoleAdapter;
@@ -74,9 +78,18 @@ public class SystemUserAdminController {
   public void run(String... args) throws Exception {
     Scanner scanner = new Scanner(System.in);
 
-    SystemUser loggedUser = login(scanner, systemUserService);
-
     while (true) {
+      System.out.println("Welcome to Vuelos Janbi!");
+      System.out.println("1. Log in.");
+      System.out.println("0. Exit.");
+      System.out.print("Choose an option: ");
+      int choice = scanner.nextInt();
+      scanner.nextLine();
+      if (choice == 0) {
+        System.out.println("Exiting...");
+        return;
+      }
+      SystemUser loggedUser = login(scanner, systemUserService);
       switch (loggedUser.getRole()) {
         case ADMIN:
           showAdminMenu(scanner);
@@ -125,44 +138,40 @@ public class SystemUserAdminController {
           planeConsoleAdapter.start(true);
           break;
         case 2:
-          tripCrewConsoleAdapter.start(true);
+          employeeConsoleAdapter.start(true);
           break;
         case 3:
-          tripConsoleAdapter.start(true);
+          tripCrewConsoleAdapter.start(true);
           break;
         case 4:
-          airportConsoleAdapter.start(true);
+          tripConsoleAdapter.start(true);
           break;
         case 5:
-          tripBookingConsoleAdapter.start(true);
+          airportConsoleAdapter.start(true);
           break;
         case 6:
-          customerConsoleAdapter.start(true);
+          tripBookingConsoleAdapter.start(true);
           break;
         case 7:
           flightFareConsoleAdapter.start(true);
           break;
         case 8:
-          documentTypeConsoleAdapter.start(true);
+          customerConsoleAdapter.start(true);
           break;
         case 9:
-          managementEntityMenu(scanner);
+          documentTypeConsoleAdapter.start(true);
           break;
         case 10:
-
-          break;
-        case 11:
-
+          managementEntityMenu(scanner);
           break;
         case 0:
-          System.out.println("Exiting...");
+          System.out.println("Logging out...");
           break;
         default:
           System.out.println("Invalid Option. Please, select a valid option.");
       }
 
     } while (opcionPrincipal != 0);
-    scanner.close();
   }
 
   private void showCustomerMenu(Scanner scanner) {
@@ -186,14 +195,13 @@ public class SystemUserAdminController {
           documentTypeConsoleAdapter.start(true);
           break;
         case 0:
-          System.out.println("Exiting...");
+          System.out.println("Logging out...");
           break;
         default:
           System.out.println("Invalid Option. Please, select a valid option.");
       }
 
     } while (opcionPrincipal != 0);
-    scanner.close();
   }
 
   private void showTechnicianMenu(Scanner scanner) {
@@ -217,14 +225,13 @@ public class SystemUserAdminController {
           planeModelConsoleAdapter.start();
           break;
         case 0:
-          System.out.println("Exiting...");
+          System.out.println("Logging out...");
           break;
         default:
           System.out.println("Invalid Option. Please, select a valid option.");
       }
 
     } while (opcionPrincipal != 0);
-    scanner.close();
   }
 
   private void showSalesAgentMenu(Scanner scanner) {
@@ -245,14 +252,13 @@ public class SystemUserAdminController {
           flightFareConsoleAdapter.start(true);
           break;
         case 0:
-          System.out.println("Exiting...");
+          System.out.println("Logging out...");
           break;
         default:
           System.out.println("Invalid Option. Please, select a valid option.");
       }
 
     } while (opcionPrincipal != 0);
-    scanner.close();
   }
 
   private static void showAdminMainMenu() {
@@ -260,19 +266,18 @@ public class SystemUserAdminController {
     System.out.println("             ADMIN MENU               ");
     System.out.println("======================================");
     System.out.println("1. Plane Management");
-    System.out.println("2. Crew Trip Management");
-    System.out.println("3. Fly Management");
-    System.out.println("4. Airport Management");
-    System.out.println("5. Trip Booking Management");
-    System.out.println("6. Customer Management");
+    System.out.println("2. Employee Management");
+    System.out.println("3. Crew Trip Management");
+    System.out.println("4. Fly Management");
+    System.out.println("5. Airport Management");
+    System.out.println("6. Trip Booking Management");
     System.out.println("7. Flight Fare Management");
-    System.out.println("8. Document Types Management");
-    System.out.println("9. Create Entities");
-    System.out.println("10. Consultas");
-    System.out.println("11. Gestión de Vuelos");
-    System.out.println("0. Salir");
+    System.out.println("8. Customer Management");
+    System.out.println("9. Document Types Management");
+    System.out.println("10. Other Entities Management");
+    System.out.println("0. Log out");
     System.out.println("======================================");
-    System.out.print("Seleccione una opción: ");
+    System.out.print("Choose an option: ");
   }
 
   private static void showCustomerMainMenu() {
@@ -283,9 +288,9 @@ public class SystemUserAdminController {
     System.out.println("2. Book Trips");
     System.out.println("3. Manage Profile");
     System.out.println("4. Document Types Management");
-    System.out.println("0. Salir");
+    System.out.println("0. Log out");
     System.out.println("======================================");
-    System.out.print("Seleccione una opción: ");
+    System.out.print("Choose an option: ");
   }
 
   private static void showTechnicianMainMenu() {
@@ -296,9 +301,9 @@ public class SystemUserAdminController {
     System.out.println("2. Fly Management");
     System.out.println("3. Plane Manufacturer Management");
     System.out.println("4. Plane Model Management");
-    System.out.println("0. Salir");
+    System.out.println("0. Log out");
     System.out.println("======================================");
-    System.out.print("Seleccione una opción: ");
+    System.out.print("Choose an option: ");
   }
 
   private static void showSalesAgentMainMenu() {
@@ -308,9 +313,9 @@ public class SystemUserAdminController {
     System.out.println("1. Trip Booking Management");
     System.out.println("2. Customer Management");
     System.out.println("3. Flight Fare Management");
-    System.out.println("0. Salir");
+    System.out.println("0. Log out");
     System.out.println("======================================");
-    System.out.print("Seleccione una opción: ");
+    System.out.print("Choose an option: ");
   }
 
   private void managementEntityMenu(Scanner scanner) {
@@ -320,7 +325,7 @@ public class SystemUserAdminController {
     System.out.println("4. Plane Model Management");
     System.out.println("5. Airpot Gates Management");
     System.out.println("6. Crew Rol Management");
-    System.out.println("7. Crear new System user");
+    System.out.println("7. Create new System user");
     System.out.println("8. Exit");
 
     System.out.print("Choose an option: ");
@@ -350,7 +355,7 @@ public class SystemUserAdminController {
         createUser(scanner, systemUserService);
         break;
       case 8:
-        System.out.println("Exiting...");
+        System.out.println("Logging out...");
         break;
       default:
         System.out.println("Invalid choice. Please try again.");

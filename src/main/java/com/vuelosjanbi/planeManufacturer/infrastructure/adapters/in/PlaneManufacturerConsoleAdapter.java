@@ -22,11 +22,12 @@ public class PlaneManufacturerConsoleAdapter {
     while (true) {
       System.out.println("Plane Manufacturer Management Menu:");
       System.out.println("1. Create Plane Manufacturer");
-      System.out.println("2. Delete Plane Manufacturer");
-      System.out.println("3. Get Plane Manufacturer by ID");
-      System.out.println("4. Get Plane Manufacturer by Name");
-      System.out.println("5. List all Plane Manufacturers");
-      System.out.println("6. Exit");
+      System.out.println("2. Update Plane Manufacturer");
+      System.out.println("3. Delete Plane Manufacturer");
+      System.out.println("4. Get Plane Manufacturer by ID");
+      System.out.println("5. Get Plane Manufacturer by Name");
+      System.out.println("6. List all Plane Manufacturers");
+      System.out.println("7. Exit");
       System.out.print("Choose an option: ");
 
       int choice = scanner.nextInt();
@@ -37,18 +38,21 @@ public class PlaneManufacturerConsoleAdapter {
           createPlaneManufacturer();
           break;
         case 2:
-          deletePlaneManufacturer();
+          updatePlaneManufacturer();
           break;
         case 3:
-          getPlaneManufacturerById();
+          deletePlaneManufacturer();
           break;
         case 4:
-          getPlaneManufacturerByName();
+          getPlaneManufacturerById();
           break;
         case 5:
-          listAllPlaneManufacturers();
+          getPlaneManufacturerByName();
           break;
         case 6:
+          listAllPlaneManufacturers();
+          break;
+        case 7:
           System.out.println("Exiting...");
           return;
         default:
@@ -65,6 +69,24 @@ public class PlaneManufacturerConsoleAdapter {
     manufacturer.setName(name);
     PlaneManufacturer createdManufacturer = planeManufacturerService.createPlaneManufacturer(manufacturer);
     System.out.println("Plane Manufacturer created: " + createdManufacturer);
+  }
+
+  private void updatePlaneManufacturer() {
+    System.out.print("Enter Manufacturer ID to update: ");
+    Long id = scanner.nextLong();
+    scanner.nextLine();
+
+    Optional<PlaneManufacturer> optionalManufacturer = planeManufacturerService.getPlaneManufacturerById(id);
+    if (optionalManufacturer.isPresent()) {
+      PlaneManufacturer manufacturer = optionalManufacturer.get();
+      System.out.print("Enter new Manufacturer Name: ");
+      String newName = scanner.nextLine();
+      manufacturer.setName(newName);
+      planeManufacturerService.updatePlaneManufacturer(manufacturer);
+      System.out.println("Plane Manufacturer updated: " + manufacturer);
+    } else {
+      System.out.println("Manufacturer not found.");
+    }
   }
 
   private void deletePlaneManufacturer() {
@@ -106,7 +128,7 @@ public class PlaneManufacturerConsoleAdapter {
   private void listAllPlaneManufacturers() {
     System.out.println("Listing all Plane Manufacturers:");
     planeManufacturerService.getAllManufacturers().forEach(manufacturer -> {
-      System.out.printf("ID: %d, Name: %s \n", manufacturer.getId(), manufacturer.getName());
+      System.out.printf("ID: %d  Name: %s \n", manufacturer.getId(), manufacturer.getName());
     });
   }
 }

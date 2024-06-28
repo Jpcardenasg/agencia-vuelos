@@ -78,4 +78,10 @@ public class Plane {
         this.model = model;
     }
 
+    @Override
+    public String toString() {
+        return String.format("ID: %d  Plate: %s  Model: %s  Status: %s", id, plate,
+                model != null ? model.getName() : "N/A", status != null ? status.getName() : "N/A");
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.vuelosjanbi.country.application;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,8 +27,16 @@ public class CountryService {
         return countryRepositoryPort.save(country);
     }
 
-    public void deleteCountry(Long idCountry) {
-        countryRepositoryPort.deleteById(idCountry);
+    public void deleteCountry(Long countryId) {
+        countryRepositoryPort.deleteById(countryId);
+    }
+
+    public Optional<Country> getCountryById(Long countryId) {
+        return countryRepositoryPort.findById(countryId);
+    }
+
+    public Optional<Country> getCountryByName(String countryName) {
+        return countryRepositoryPort.findByName(countryName);
     }
 
     public List<Country> getAllCountries() {

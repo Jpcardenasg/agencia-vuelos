@@ -24,12 +24,13 @@ public class AirportGateConsoleAdapter {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
+            System.out.println("\n");
             System.out.println("1. Create an Airport Gate.");
             System.out.println("2. Update an Airport Gate.");
             System.out.println("3. Delete an Airport Gate.");
             System.out.println("4. List all Airport Gates.");
             System.out.println("5. Find Airport Gate by ID.");
-            System.out.println("6. Exit.");
+            System.out.println("0. Exit.");
 
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -55,9 +56,8 @@ public class AirportGateConsoleAdapter {
                     findAirportGateById(scanner);
                     break;
 
-                case 6:
+                case 0:
                     System.out.println("Exiting...");
-                    scanner.close();
                     return;
 
                 default:
@@ -106,7 +106,7 @@ public class AirportGateConsoleAdapter {
 
     private void listAllAirportGates() {
         airportGateService.getAllAirportGates().forEach(gate -> {
-            System.out.printf("ID: %d, Gate: %s, Airport: %s \n", gate.getId(), gate.getGate(),
+            System.out.printf("ID: %d  Gate: %s  Airport: %s \n", gate.getId(), gate.getGate(),
                     gate.getAirport().getName());
         });
     }
@@ -119,7 +119,7 @@ public class AirportGateConsoleAdapter {
         Optional<AirportGate> optionalAirportGate = airportGateService.getAirportGateById(gateId);
         if (optionalAirportGate.isPresent()) {
             AirportGate airportGate = optionalAirportGate.get();
-            System.out.printf("ID: %d, Gate: %s, Airport: %s \n", airportGate.getId(), airportGate.getGate(),
+            System.out.printf("ID: %d  Gate: %s  Airport: %s \n", airportGate.getId(), airportGate.getGate(),
                     airportGate.getAirport().getName());
         } else {
             System.out.println("Airport Gate not found.");
@@ -129,7 +129,7 @@ public class AirportGateConsoleAdapter {
     private Airport selectAirport(Scanner scanner) {
         System.out.println("Choose the airport ID:");
         airportService.getAllAirports().forEach(airport -> {
-            System.out.printf("ID: %d, Name: %s \n", airport.getId(), airport.getName());
+            System.out.printf("ID: %d  Name: %s \n", airport.getId(), airport.getName());
         });
 
         Airport chosenAirport = null;
@@ -150,7 +150,7 @@ public class AirportGateConsoleAdapter {
     private AirportGate selectAirportGate(Scanner scanner) {
         System.out.println("Choose the airport gate you want to modify:");
         airportGateService.getAllAirportGates().forEach(gate -> {
-            System.out.printf("ID: %d, Gate: %s, Airport: %s \n", gate.getId(), gate.getGate(),
+            System.out.printf("ID: %d  Gate: %s  Airport: %s \n", gate.getId(), gate.getGate(),
                     gate.getAirport().getName());
         });
 

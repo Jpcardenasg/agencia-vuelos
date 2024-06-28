@@ -39,11 +39,12 @@ public class FlightConnectionConsoleAdapter {
         List<FlightConnection> flightsConnections = flightConnectionService.getAllFlightConnections();
 
         while (true) {
+            System.out.println("\n");
             System.out.println("1. Create Connection.");
             System.out.println("2. Update Connection.");
             System.out.println("3. Delete Connection.");
             System.out.println("4. List all Connections.");
-            System.out.println("5. Exit.");
+            System.out.println("0. Exit.");
 
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -55,7 +56,7 @@ public class FlightConnectionConsoleAdapter {
                 case 2:
                     System.out.println("Choose the ID of the flight connection you want to modify");
                     flightsConnections.forEach(fconn -> {
-                        System.out.printf("ID: %d, Connection Number: %s", fconn.getId(), fconn.getConnectionNumber());
+                        System.out.printf("ID: %d  Connection Number: %s", fconn.getId(), fconn.getConnectionNumber());
                     });
 
                     Long updateFlighConnection = scanner.nextLong();
@@ -72,7 +73,7 @@ public class FlightConnectionConsoleAdapter {
                 case 3:
                     System.out.println("Choose the Flight Connection ID to delete:");
                     flightsConnections.forEach(fconn -> {
-                        System.out.printf("ID: %d, Connection Number: %s", fconn.getId(), fconn.getConnectionNumber());
+                        System.out.printf("ID: %d  Connection Number: %s", fconn.getId(), fconn.getConnectionNumber());
                     });
 
                     Long deleteFlightConnection = scanner.nextLong();
@@ -83,14 +84,13 @@ public class FlightConnectionConsoleAdapter {
                 case 4:
                     System.out.println("List of Countries:");
                     flightsConnections.forEach(fconn -> {
-                        System.out.printf("ID: %d, Connection Number: %s", fconn.getId(), fconn.getConnectionNumber());
+                        System.out.printf("ID: %d  Connection Number: %s", fconn.getId(), fconn.getConnectionNumber());
                     });
                     break;
 
-                case 5:
-                    scanner.close();
-                    System.exit(0);
-                    break;
+                case 0:
+                    System.out.println("Exiting...");
+                    return;
 
                 default:
                     System.out.println("Invalid option, please try again");
@@ -104,20 +104,20 @@ public class FlightConnectionConsoleAdapter {
         System.out.println("Choose the ID of the trip you want to assign:");
         List<Trip> tripList = tripService.getAllTrips();
         tripList.forEach(trip -> {
-            System.out.printf("ID: %d, Trip Date: %s", trip.getId(), trip.getTripDate().toString());
+            System.out.printf("ID: %d  Trip Date: %s", trip.getId(), trip.getTripDate().toString());
         });
         Long tripId = scanner.nextLong();
         scanner.nextLine();
         List<Plane> planes = planeService.getAllPlanes();
         planes.forEach(plane -> {
-            System.out.printf("ID: %d, Plane Model: %s", plane.getId(), plane.getPlate());
+            System.out.printf("ID: %d  Plane Model: %s", plane.getId(), plane.getPlate());
         });
         System.out.println("Choose the ID of the plane you want to assign:");
         Long planeId = scanner.nextLong();
         scanner.nextLine();
         List<Airport> airports = airportService.getAllAirports();
         airports.forEach(airport -> {
-            System.out.printf("ID: %d, Airport Name: %s", airport.getId(), airport.getName());
+            System.out.printf("ID: %d  Airport Name: %s", airport.getId(), airport.getName());
         });
         System.out.println("Choose the ID of the origin airport:");
         Long originAirportId = scanner.nextLong();

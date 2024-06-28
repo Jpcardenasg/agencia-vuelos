@@ -19,6 +19,10 @@ public class PlaneManufacturerService {
     return planeManufacturerRepositoryPort.save(planeManufacturer);
   }
 
+  public PlaneManufacturer updatePlaneManufacturer(PlaneManufacturer planeManufacturer) {
+    return planeManufacturerRepositoryPort.save(planeManufacturer);
+  }
+
   public void deletePlaneManufacturer(Long id) {
     planeManufacturerRepositoryPort.deleteById(id);
   }

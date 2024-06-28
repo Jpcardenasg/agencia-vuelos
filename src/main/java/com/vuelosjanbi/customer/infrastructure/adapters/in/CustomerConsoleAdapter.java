@@ -42,12 +42,13 @@ public class CustomerConsoleAdapter {
 
         while (true) {
             customers = customerService.getAllCustomers();
+            System.out.println("\n");
             System.out.println("1. Register Customer.");
             System.out.println("2. Update Customer.");
             System.out.println("3. Delete Customer.");
             System.out.println("4. Find Customer by ID.");
             System.out.println("5. List all Customers.");
-            System.out.println("6. Exit.");
+            System.out.println("0. Exit.");
 
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -68,8 +69,8 @@ public class CustomerConsoleAdapter {
                 case 5:
                     listCustomers(customers);
                     break;
-                case 6:
-                    scanner.close();
+                case 0:
+                    System.out.println("Exiting...");
                     return;
                 default:
                     System.out.println("Invalid choice. Please try again.");
@@ -88,7 +89,7 @@ public class CustomerConsoleAdapter {
         scanner.nextLine();
 
         for (DocumentType dType : dTypes) {
-            System.out.printf("ID: %d, Name: %s\n", dType.getId(), dType.getName());
+            System.out.printf("ID: %d  Name: %s\n", dType.getId(), dType.getName());
         }
         System.out.println("Choose the Document Type:");
         Long dTypeChoice = scanner.nextLong();
@@ -117,7 +118,7 @@ public class CustomerConsoleAdapter {
 
     private void updateCustomer(Scanner scanner, List<DocumentType> dTypes, List<Customer> customers) {
         for (Customer customer : customers) {
-            System.out.printf("ID: %d, Name: %s\n", customer.getId(), customer.getName());
+            System.out.printf("ID: %d  Name: %s\n", customer.getId(), customer.getName());
         }
         System.out.println("Choose the customer ID you want to modify:");
 
@@ -143,7 +144,7 @@ public class CustomerConsoleAdapter {
         scanner.nextLine();
 
         for (DocumentType dType : dTypes) {
-            System.out.printf("ID: %d, Name: %s\n", dType.getId(), dType.getName());
+            System.out.printf("ID: %d  Name: %s\n", dType.getId(), dType.getName());
         }
         System.out.println("Choose the Document Type:");
         Long dTypeChoice = scanner.nextLong();
@@ -185,7 +186,7 @@ public class CustomerConsoleAdapter {
         Optional<Customer> customerOpt = customerService.getCustomer(customerId);
 
         customerOpt.ifPresentOrElse(customer -> {
-            System.out.printf("ID: %d, Name: %s, Age: %d, Document Type: %s\n",
+            System.out.printf("ID: %d  Name: %s, Age: %d, Document Type: %s\n",
                     customer.getId(), customer.getName(), customer.getAge(), customer.getDocumentType().getName());
         }, () -> System.out.println("Customer not found"));
 
@@ -193,7 +194,7 @@ public class CustomerConsoleAdapter {
 
     private void listCustomers(List<Customer> customers) {
         for (Customer customer : customers) {
-            System.out.printf("ID: %d, Name: %s, Age: %d, Document Type: %s\n",
+            System.out.printf("ID: %d  Name: %s, Age: %d, Document Type: %s\n",
                     customer.getId(), customer.getName(), customer.getAge(), customer.getDocumentType().getName());
         }
     }

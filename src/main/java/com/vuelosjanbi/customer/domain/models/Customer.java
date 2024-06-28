@@ -51,7 +51,7 @@ public class Customer {
 
   @Override
   public String toString() {
-    return String.format("Id: %d Name: %s", id, name);
+    return String.format("Id: %d  Name: %s", id, name);
   }
 
 }

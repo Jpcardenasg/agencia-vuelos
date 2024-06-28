@@ -11,7 +11,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-// import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -106,7 +105,7 @@ public class Trip {
 
   @Override
   public String toString() {
-    return String.format("Trip id: %d, Trip date: %s, Trip price: %.2f, Origin airport: %s, Destination airport: %s",
+    return String.format("Trip id: %d  Trip date: %s  Trip price: %.2f  Origin airport: %s  Destination airport: %s",
         id, tripDate, tripPrice);
   }
 

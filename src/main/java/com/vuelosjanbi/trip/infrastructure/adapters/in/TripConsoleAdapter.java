@@ -49,7 +49,7 @@ public class TripConsoleAdapter {
           case 5 -> listTrips();
           case 6 -> consultTripInfo(scanner);
           case 7 -> consultFlightConnectionsByTrip(scanner);
-          case 8 -> {
+          case 0 -> {
             System.out.println("Exiting...");
             return;
           }
@@ -60,6 +60,7 @@ public class TripConsoleAdapter {
   }
 
   private void printMenu() {
+    System.out.println("\n");
     System.out.println("1. Create Trip.");
     System.out.println("2. Manage flight Connections.");
     System.out.println("3. Update Trip.");
@@ -67,7 +68,7 @@ public class TripConsoleAdapter {
     System.out.println("5. List all Trips.");
     System.out.println("6. Consult information trip.");
     System.out.println("7. Consult scales of a trip.");
-    System.out.println("8. Exit.");
+    System.out.println("0. Exit.");
   }
 
   private void createTrip(Scanner scanner) {
@@ -76,7 +77,8 @@ public class TripConsoleAdapter {
     double tripPrice = getInputDouble(scanner, "Enter trip price: ");
 
     airports
-        .forEach(airport -> System.out.printf("Airport id: %d Airport name: %s%n", airport.getId(), airport.getName()));
+        .forEach(
+            airport -> System.out.printf("Airport id: %d  Airport name: %s%n", airport.getId(), airport.getName()));
     long originAirportId = getInputLong(scanner, "Enter origin airport id: ");
     long destinationAirportId = getInputLong(scanner, "Enter destination airport id: ");
 
@@ -133,7 +135,7 @@ public class TripConsoleAdapter {
       return;
     }
 
-    System.out.printf("Id: %d, price: %.2f, Date: %s, Origin Airport: %s, Destination Airport: %s%n",
+    System.out.printf("Id: %d  price: %.2f  Date: %s  Origin Airport: %s  Destination Airport: %s%n",
         trip.getId(), trip.getTripPrice(), trip.getTripDate(), flightConnection.getOriginAirport().getName(),
         flightConnection.getDestinationAirport().getName());
   }

@@ -24,12 +24,13 @@ public class PlaneModelConsoleAdapter {
         Scanner scanner = new Scanner(System.in);
 
         while (true) {
+            System.out.println("\n");
             System.out.println("1. Create a Plane Model.");
             System.out.println("2. Update a Plane Model.");
             System.out.println("3. Delete a Plane Model.");
             System.out.println("4. List all Plane Models.");
             System.out.println("5. Find Plane Model by ID.");
-            System.out.println("6. Exit.");
+            System.out.println("0. Exit.");
 
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -55,9 +56,8 @@ public class PlaneModelConsoleAdapter {
                     findPlaneModelById(scanner);
                     break;
 
-                case 6:
+                case 0:
                     System.out.println("Exiting...");
-                    scanner.close();
                     return;
 
                 default:
@@ -106,7 +106,7 @@ public class PlaneModelConsoleAdapter {
 
     private void listAllPlaneModels() {
         planeModelService.getAllPlaneModels().forEach(model -> {
-            System.out.printf("ID: %d, Model: %s, Manufacturer: %s \n", model.getId(), model.getName(),
+            System.out.printf("ID: %d  Model: %s  Manufacturer: %s \n", model.getId(), model.getName(),
                     model.getPlaneManufacturer().getName());
         });
     }
@@ -119,7 +119,7 @@ public class PlaneModelConsoleAdapter {
         Optional<PlaneModel> optionalPlaneModel = planeModelService.getPlaneModelById(modelId);
         if (optionalPlaneModel.isPresent()) {
             PlaneModel planeModel = optionalPlaneModel.get();
-            System.out.printf("ID: %d, Model: %s, Manufacturer: %s \n", planeModel.getId(), planeModel.getName(),
+            System.out.printf("ID: %d  Model: %s  Manufacturer: %s \n", planeModel.getId(), planeModel.getName(),
                     planeModel.getPlaneManufacturer().getName());
         } else {
             System.out.println("Plane Model not found.");
@@ -129,7 +129,7 @@ public class PlaneModelConsoleAdapter {
     private PlaneManufacturer selectPlaneManufacturer(Scanner scanner) {
         System.out.println("Choose the plane manufacturer ID:");
         planeManufacturerService.getAllManufacturers().forEach(manufacturer -> {
-            System.out.printf("ID: %d, Name: %s \n", manufacturer.getId(), manufacturer.getName());
+            System.out.printf("ID: %d  Name: %s \n", manufacturer.getId(), manufacturer.getName());
         });
 
         PlaneManufacturer chosenPlaneManufacturer = null;
@@ -151,7 +151,7 @@ public class PlaneModelConsoleAdapter {
     private PlaneModel selectPlaneModel(Scanner scanner) {
         System.out.println("Choose the plane model you want to modify:");
         planeModelService.getAllPlaneModels().forEach(model -> {
-            System.out.printf("ID: %d, Model: %s, Manufacturer: %s \n", model.getId(), model.getName(),
+            System.out.printf("ID: %d  Model: %s  Manufacturer: %s \n", model.getId(), model.getName(),
                     model.getPlaneManufacturer().getName());
         });
 

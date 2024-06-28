@@ -37,12 +37,13 @@ public class AirportConsoleAdapter {
     Scanner scanner = new Scanner(System.in);
 
     while (true) {
+      System.out.println("\n");
       System.out.println("1. Create Airport.");
       System.out.println("2. Consult Airport information.");
       System.out.println("3. Update Airport information.");
       System.out.println("4. Delete Airport.");
       System.out.println("5. List all Airports.");
-      System.out.println("6. Exit.");
+      System.out.println("0. Exit.");
 
       int choice = scanner.nextInt();
       switch (choice) {
@@ -61,7 +62,8 @@ public class AirportConsoleAdapter {
         case 5:
           listAllAirports();
           break;
-        case 6:
+        case 0:
+          System.out.println("Exiting...");
           return;
       }
     }
@@ -80,7 +82,7 @@ public class AirportConsoleAdapter {
     System.out.println("Enter city id where is the airport: ");
     long cityId = scanner.nextLong();
 
-    airport.setCity(cityService.getCityById(cityId));
+    airport.setCity(cityService.getCityById(cityId).orElse(null));
     if (airport.getCity() == null) {
       System.out.println("City not found.");
       return;
@@ -122,7 +124,7 @@ public class AirportConsoleAdapter {
     String airportNameToUpdate = scanner.nextLine();
     System.out.println("Enter the city id:");
     Long cityIdToUpdate = scanner.nextLong();
-    airportToUpdate.setCity(cityService.getCityById(cityIdToUpdate));
+    airportToUpdate.setCity(cityService.getCityById(cityIdToUpdate).orElse(null));
     airportToUpdate.setName(airportNameToUpdate);
     airportService.updateAirport(airportToUpdate);
     System.out.println("Airport updated successfully!");

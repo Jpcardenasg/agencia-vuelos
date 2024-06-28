@@ -96,7 +96,7 @@ public class TripBookingConsoleAdapter {
           getAllTripBookings();
           break;
         case 6:
-          scanner.close();
+          System.out.println("Exiting...");
           return;
         default:
           break;
@@ -141,7 +141,7 @@ public class TripBookingConsoleAdapter {
       tripBookingDetail.setTripBooking(tripBooking);
 
       List<FlightFare> flightFares = flightFareService.getAllFlightFares();
-      flightFares.forEach(flightFare -> System.out.printf("Flight fare id: %d Flight fare price: %.2f%n",
+      flightFares.forEach(flightFare -> System.out.printf("Flight fare id: %d  Flight fare price: %.2f%n",
           flightFare.getId(), flightFare.getValue()));
       long flightFareId = getInputLong(scanner, "Enter flight fare id: ");
       FlightFare flightFare = flightFareService.getFlightFareById(flightFareId).orElse(null);
@@ -182,7 +182,7 @@ public class TripBookingConsoleAdapter {
 
   private void processPayment(Scanner scanner, TripBooking tripBooking, TripBookingDetail tripBookingDetail) {
     List<PaymentMethod> paymentMethods = paymentMethodService.getAllPaymentMethods();
-    paymentMethods.forEach(paymentMethod -> System.out.printf("Payment method id: %d Payment method: %s \n",
+    paymentMethods.forEach(paymentMethod -> System.out.printf("Payment method id: %d  Payment method: %s \n",
         paymentMethod.getId(), paymentMethod.getMethod()));
     Long paymentMethod = getInputLong(scanner, "How do you want to pay? ");
     Payment payment = new Payment();
@@ -280,14 +280,14 @@ public class TripBookingConsoleAdapter {
     return scanner.nextLong();
   }
 
-  private double getInputDouble(Scanner scanner, String prompt) {
-    System.out.print(prompt);
-    while (!scanner.hasNextDouble()) {
-      System.out.print("Invalid input. " + prompt);
-      scanner.next();
-    }
-    return scanner.nextDouble();
-  }
+  // private double getInputDouble(Scanner scanner, String prompt) {
+  // System.out.print(prompt);
+  // while (!scanner.hasNextDouble()) {
+  // System.out.print("Invalid input. " + prompt);
+  // scanner.next();
+  // }
+  // return scanner.nextDouble();
+  // }
 
   private String getInputString(Scanner scanner, String prompt) {
     System.out.print(prompt);
