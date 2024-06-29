@@ -3,7 +3,6 @@ package com.vuelosjanbi.tripCrew.infrastructure.adapters.in;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import com.vuelosjanbi.customer.infrastructure.adapters.in.CustomerConsoleAdapter;
 import com.vuelosjanbi.employee.application.EmployeeService;
 import com.vuelosjanbi.employee.application.ports.out.EmployeeRepositoryPort;
 import com.vuelosjanbi.employee.domain.models.Employee;
@@ -38,9 +37,6 @@ public class TripCrewConsoleAdapter {
   private FlightConnectionService flightConnectionService;
   @Autowired
   private TripCrewService tripCrewService;
-
-  @Autowired
-  private CustomerConsoleAdapter customerConsoleAdapter;
 
   private final String url = "jdbc:mysql://localhost:3307/vuelosjanpi";
   private final String user = "root";
