@@ -178,4 +178,25 @@ public class MySQLFlightConnectionRepository implements FlightConnectionReposito
     // TODO Auto-generated method stub
     throw new UnsupportedOperationException("Unimplemented method 'findByTrip'");
   }
+
+  @Override
+  public FlightConnection findByIdWithSeats(Long flightConnectionId) {
+    try (Connection connection = DriverManager.getConnection(url, username, password)) {
+      String query = "SELECT * FROM flightConnection WHERE id = ?";
+      try (PreparedStatement statement = connection.prepareStatement(query)) {
+        statement.setLong(1, flightConnectionId);
+        try (ResultSet resultSet = statement.executeQuery()) {
+          if (resultSet.next()) {
+            FlightConnection flightConnection = new FlightConnection(resultSet.getLong("id"),
+                resultSet.getString("connection_number"));
+            // flightConnection.setSeats(seatRepositoryPort.findByFlightConnectionId(flightConnectionId));
+            return flightConnection;
+          }
+        }
+      }
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
 }

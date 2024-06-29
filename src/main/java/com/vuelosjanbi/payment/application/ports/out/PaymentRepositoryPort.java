@@ -20,4 +20,6 @@ public interface PaymentRepositoryPort {
 
   List<Payment> findAll();
 
+  List<Payment> findByCustomerId(String userId);
+
 }

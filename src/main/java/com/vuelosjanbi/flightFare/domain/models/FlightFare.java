@@ -73,13 +73,13 @@ public class FlightFare {
 
     @Override
     public String toString() {
-        return "FlightFare {" +
-                "ID: " + id + ", " +
-                "Description: '" + description + "', " +
-                "Details: '" + details + "', " +
-                "Value: $" + value + ", " +
-                "Trip Booking Details: " +
-                "}";
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName()).append(" ")
+                .append("\n\tId: ").append(id)
+                .append(",\n\tDescription: ").append(description)
+                .append(",\n\tDetails: ").append(details)
+                .append(",\n\tValue: ").append(value);
+        return sb.toString();
     }
 
 }

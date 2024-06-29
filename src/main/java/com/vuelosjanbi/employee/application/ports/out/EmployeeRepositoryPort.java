@@ -6,6 +6,7 @@ import java.util.Optional;
 import com.vuelosjanbi.employee.domain.models.Employee;
 
 public interface EmployeeRepositoryPort {
+
   Employee save(Employee employee);
 
   Optional<Employee> findById(String id);

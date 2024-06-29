@@ -2,18 +2,15 @@ package com.vuelosjanbi.systemUser.infraesctructure.adapter.in;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import java.util.Scanner;
 
 import com.vuelosjanbi.customer.infrastructure.adapters.in.CustomerConsoleAdapter;
-import com.vuelosjanbi.documentType.infrastructure.adapters.in.DocumentTypeConsoleAdapter;
-import com.vuelosjanbi.trip.infrastructure.adapters.in.TripConsoleAdapter;
+import com.vuelosjanbi.flightFare.infrastructure.adapters.in.FlightFareConsoleAdapter;
 import com.vuelosjanbi.tripBooking.infrastructure.adapters.in.TripBookingConsoleAdapter;
 
-@Controller
-public class SystemUserCustomerController {
+import java.util.Scanner;
 
-  @Autowired
-  private TripConsoleAdapter tripConsoleAdapter;
+@Controller
+public class SystemUserSalesAgentController {
 
   @Autowired
   private TripBookingConsoleAdapter tripBookingConsoleAdapter;
@@ -22,29 +19,27 @@ public class SystemUserCustomerController {
   private CustomerConsoleAdapter customerConsoleAdapter;
 
   @Autowired
-  private DocumentTypeConsoleAdapter documentTypeConsoleAdapter;
+  private FlightFareConsoleAdapter flightFareConsoleAdapter;
 
-  public void showCustomerMenu(Scanner scanner) {
+  public void showSalesAgentMenu(Scanner scanner) {
     int opcionPrincipal = -1;
+
     do {
       try {
-        showCustomerMainMenu();
+        showSalesAgentMainMenu();
         if (scanner.hasNextInt()) {
           opcionPrincipal = scanner.nextInt();
           scanner.nextLine();
 
           switch (opcionPrincipal) {
             case 1:
-              tripConsoleAdapter.start();
-              break;
-            case 2:
               tripBookingConsoleAdapter.start();
               break;
-            case 3:
+            case 2:
               customerConsoleAdapter.start();
               break;
-            case 4:
-              documentTypeConsoleAdapter.start();
+            case 3:
+              flightFareConsoleAdapter.start();
               break;
             case 0:
               System.out.println("Logging out...");
@@ -63,14 +58,13 @@ public class SystemUserCustomerController {
     } while (opcionPrincipal != 0);
   }
 
-  private static void showCustomerMainMenu() {
+  private static void showSalesAgentMainMenu() {
     System.out.println("\n======================================");
-    System.out.println("           CUSTOMER MENU              ");
+    System.out.println("          SALES AGENT MENU            ");
     System.out.println("======================================");
-    System.out.println("1. View Trips");
-    System.out.println("2. Book Trips");
-    System.out.println("3. Manage Profile");
-    System.out.println("4. Document Types Management");
+    System.out.println("1. Trip Booking Management");
+    System.out.println("2. Customer Management");
+    System.out.println("3. Flight Fare Management");
     System.out.println("0. Log out");
     System.out.println("======================================");
     System.out.print("Choose an option: ");

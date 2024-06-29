@@ -65,9 +65,9 @@ public class TripBookingDetail {
 
   @Override
   public String toString() {
-    return String.format("Id %d, \nDate %s, \nCustomer %s, \nFlightFare %s", id,
+    return String.format("Id %d, \nDate %s, \nCustomer %s, \nFlightFare %.2f", id,
         tripBooking.getDate(), customer.getName(),
-        flightFare.getDetails());
+        flightFare.getValue());
   }
 
   public int getSeatNumber() {

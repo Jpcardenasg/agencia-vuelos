@@ -58,4 +58,9 @@ public class CrewRole implements Serializable {
     this.employees = employees;
   }
 
+  @Override
+  public String toString() {
+    return "CrewRole [id=" + id + ", name=" + name + "]";
+  }
+
 }

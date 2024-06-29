@@ -6,6 +6,7 @@ import com.vuelosjanbi.trip.domain.models.Trip;
 import com.vuelosjanbi.tripBookingDetail.domain.models.TripBookingDetail;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,7 +26,7 @@ public class TripBooking {
   @ManyToOne
   private Trip trip;
 
-  @OneToMany
+  @OneToMany(mappedBy = "tripBooking", orphanRemoval = true, cascade = CascadeType.ALL)
   private List<TripBookingDetail> tripBookingDetails;
 
   public TripBooking() {
@@ -62,7 +63,12 @@ public class TripBooking {
 
   @Override
   public String toString() {
-    return "TripBooking [id=" + id + ", date=" + date + ", trip=" + trip + "]";
+    StringBuilder sb = new StringBuilder();
+    sb.append("TripBooking - ")
+        .append("ID: ").append(id).append(", ")
+        .append("Date: ").append(date).append(", ")
+        .append("Trip: ").append(trip);
+    return sb.toString();
   }
 
 }

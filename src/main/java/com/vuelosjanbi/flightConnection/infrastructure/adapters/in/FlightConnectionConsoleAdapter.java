@@ -36,9 +36,10 @@ public class FlightConnectionConsoleAdapter {
 
     public void start() {
         Scanner scanner = new Scanner(System.in);
-        List<FlightConnection> flightsConnections = flightConnectionService.getAllFlightConnections();
+        List<FlightConnection> flightsConnections;
 
         while (true) {
+            flightsConnections = flightConnectionService.getAllFlightConnections();
             System.out.println("\n");
             System.out.println("1. Create Connection.");
             System.out.println("2. Update Connection.");
@@ -56,7 +57,8 @@ public class FlightConnectionConsoleAdapter {
                 case 2:
                     System.out.println("Choose the ID of the flight connection you want to modify");
                     flightsConnections.forEach(fconn -> {
-                        System.out.printf("ID: %d  Connection Number: %s", fconn.getId(), fconn.getConnectionNumber());
+                        System.out.printf("ID: %d  Connection Number: %s\n", fconn.getId(),
+                                fconn.getConnectionNumber());
                     });
 
                     Long updateFlighConnection = scanner.nextLong();
@@ -68,30 +70,32 @@ public class FlightConnectionConsoleAdapter {
                     FlightConnection updatedfFlightConnection = new FlightConnection(updateFlighConnection,
                             newConnectionNumber);
                     flightConnectionService.updateFlightConnection(updatedfFlightConnection);
+                    System.out.println("Flight Connection updated successfully!");
                     break;
 
                 case 3:
                     System.out.println("Choose the Flight Connection ID to delete:");
                     flightsConnections.forEach(fconn -> {
-                        System.out.printf("ID: %d  Connection Number: %s", fconn.getId(), fconn.getConnectionNumber());
+                        System.out.printf("ID: %d  Connection Number: %s\n", fconn.getId(),
+                                fconn.getConnectionNumber());
                     });
 
                     Long deleteFlightConnection = scanner.nextLong();
                     scanner.nextLine();
                     flightConnectionService.deleteFlightConnection(deleteFlightConnection);
+                    System.out.println("Flight Connection deleted successfully!");
                     break;
 
                 case 4:
-                    System.out.println("List of Countries:");
+                    System.out.println("Connections:");
                     flightsConnections.forEach(fconn -> {
-                        System.out.printf("ID: %d  Connection Number: %s", fconn.getId(), fconn.getConnectionNumber());
+                        System.out.printf(fconn.toString() + "\n");
                     });
                     break;
 
                 case 0:
                     System.out.println("Exiting...");
                     return;
-
                 default:
                     System.out.println("Invalid option, please try again");
             }
@@ -128,5 +132,6 @@ public class FlightConnectionConsoleAdapter {
         newFlightConnection.setOriginAirport(airportService.getAirportById(originAirportId).orElse(null));
         newFlightConnection.setDestinationAirport(airportService.getAirportById(destinationAirportId).orElse(null));
         flightConnectionService.createFlightConnection(newFlightConnection);
+        System.out.println("Flight Connection created successfully!");
     }
 }

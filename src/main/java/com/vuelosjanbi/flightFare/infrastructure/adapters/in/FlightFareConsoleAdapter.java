@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 
 import com.vuelosjanbi.flightFare.application.FlightFareService;
 import com.vuelosjanbi.flightFare.domain.models.FlightFare;
-import com.vuelosjanbi.flightFare.infrastructure.adapters.out.MySQLFlightFareRepository;
 
 @Controller
 public class FlightFareConsoleAdapter {
@@ -15,17 +14,7 @@ public class FlightFareConsoleAdapter {
   @Autowired
   private FlightFareService flightFareService;
 
-  private final String url = "jdbc:mysql://localhost:3307/vuelosjanpi";
-  private final String user = "root";
-  private final String password = "1324";
-
-  public void start(boolean jpa) {
-    if (jpa) {
-      System.out.println("Using JPA");
-    } else {
-      System.out.println("Using MySQL Manual Queries");
-      flightFareService = new FlightFareService(new MySQLFlightFareRepository(url, user, password));
-    }
+  public void start() {
 
     Scanner scanner = new Scanner(System.in);
 
@@ -35,7 +24,7 @@ public class FlightFareConsoleAdapter {
       System.out.println("3. Update Flight Fare");
       System.out.println("4. Delete Flight Fare");
       System.out.println("5. Get All Flight Fares");
-      System.out.println("6. Exit");
+      System.out.println("0. Exit");
 
       switch (scanner.nextInt()) {
         case 1:
@@ -54,8 +43,10 @@ public class FlightFareConsoleAdapter {
           getAllFlightFares();
           break;
         case 6:
-          break;
+          System.out.println("Exiting...");
+          return;
         default:
+          System.out.println("Invalid option. Please try again.");
           break;
       }
     }
@@ -75,9 +66,9 @@ public class FlightFareConsoleAdapter {
   }
 
   private void getAllFlightFares() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getAllFlightFares'");
-
+    flightFareService.getAllFlightFares().forEach(flightFare -> {
+      System.out.println(flightFare);
+    });
   }
 
   private void deleteFlightFare(Scanner scanner) {

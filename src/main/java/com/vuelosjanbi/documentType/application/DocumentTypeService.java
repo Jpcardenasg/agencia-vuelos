@@ -31,4 +31,8 @@ public class DocumentTypeService {
         return DocumentTypeRepositoryPort.findAll();
     }
 
+    public DocumentType getDocumentTypeById(Long idDocumentType) {
+        return DocumentTypeRepositoryPort.findById(idDocumentType).orElse(null);
+    }
+
 }

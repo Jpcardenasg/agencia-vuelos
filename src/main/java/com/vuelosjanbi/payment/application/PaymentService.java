@@ -43,4 +43,8 @@ public class PaymentService {
     public List<Payment> getAllPayments() {
         return paymentRepositoryPort.findAll();
     }
+
+    public List<Payment> getPaymentsByCustomerId(String userId) {
+        return paymentRepositoryPort.findByCustomerId(userId);
+    }
 }

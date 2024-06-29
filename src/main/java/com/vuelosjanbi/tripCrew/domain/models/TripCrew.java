@@ -27,6 +27,7 @@ public class TripCrew {
   public TripCrew(Employee employee, FlightConnection flightConnection) {
     this.employee = employee;
     this.flightConnection = flightConnection;
+    this.id = new TripCrewId(employee.getId(), flightConnection.getId());
   }
 
   public TripCrewId getId() {
@@ -57,7 +58,5 @@ public class TripCrew {
   public String toString() {
     return "TripCrew [id=" + id + ", employee=" + employee + ", flightConnection=" + flightConnection + "]";
   }
-
-  
 
 }

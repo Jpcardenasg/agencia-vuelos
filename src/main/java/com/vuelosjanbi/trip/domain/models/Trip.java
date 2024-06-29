@@ -14,8 +14,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.NamedStoredProcedureQuery;
+import jakarta.persistence.StoredProcedureParameter;
+import jakarta.persistence.ParameterMode;
 
 @Entity
+@NamedStoredProcedureQuery(name = "normalizeText", procedureName = "NormalizeText", parameters = {
+    @StoredProcedureParameter(mode = ParameterMode.INOUT, name = "textToNormalize", type = String.class)
+})
 public class Trip {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -87,26 +93,14 @@ public class Trip {
     this.tripBookings = tripBookings;
   }
 
-  // public Airport getOriginAirport() {
-  // return originAirport;
-  // }
-
-  // public void setOriginAirport(Airport originAirport) {
-  // this.originAirport = originAirport;
-  // }
-
-  // public Airport getDestinationAirport() {
-  // return destinationAirport;
-  // }
-
-  // public void setDestinationAirport(Airport destinationAirport) {
-  // this.destinationAirport = destinationAirport;
-  // }
-
   @Override
   public String toString() {
-    return String.format("Trip id: %d  Trip date: %s  Trip price: %.2f  Origin airport: %s  Destination airport: %s",
-        id, tripDate, tripPrice);
+    StringBuilder sb = new StringBuilder();
+    sb.append(getClass().getSimpleName()).append(" ")
+        .append("\n\tId: ").append(id)
+        .append(",\n\tDate: ").append(tripDate)
+        .append(",\n\tPrice: ").append(tripPrice);
+    return sb.toString();
   }
 
 }

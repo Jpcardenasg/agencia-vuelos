@@ -27,33 +27,25 @@ public class TripConsoleAdapter {
   @Autowired
   private FlightConnectionConsoleAdapter flightConnectionConsoleAdapter;
 
-  // private final String url = "jdbc:mysql://localhost:3307/vuelosjanpi";
-  // private final String user = "root";
-  // private final String password = "1324";
+  public void start() {
 
-  public void start(boolean jpa) {
-    if (jpa) {
-      System.out.println("Using JPA repository.");
-    }
-
-    try (Scanner scanner = new Scanner(System.in)) {
-      while (true) {
-        printMenu();
-        int choice = getInputInt(scanner, "Choose an option: ");
-        switch (choice) {
-          case 1 -> createTrip(scanner);
-          case 2 -> flightConnectionConsoleAdapter.start();
-          case 3 -> updateTrip(scanner);
-          case 4 -> deleteTrip(scanner);
-          case 5 -> listTrips();
-          case 6 -> consultTripInfo(scanner);
-          case 7 -> consultFlightConnectionsByTrip(scanner);
-          case 0 -> {
-            System.out.println("Exiting...");
-            return;
-          }
-          default -> System.out.println("Invalid choice. Please try again.");
+    Scanner scanner = new Scanner(System.in);
+    while (true) {
+      printMenu();
+      int choice = getInputInt(scanner, "Choose an option: ");
+      switch (choice) {
+        case 1 -> createTrip(scanner);
+        case 2 -> flightConnectionConsoleAdapter.start();
+        case 3 -> updateTrip(scanner);
+        case 4 -> deleteTrip(scanner);
+        case 5 -> listTrips();
+        case 6 -> consultTripInfo(scanner);
+        case 7 -> consultFlightConnectionsByTrip(scanner);
+        case 0 -> {
+          System.out.println("Exiting trip console...");
+          return;
         }
+        default -> System.out.println("Invalid choice. Please try again.");
       }
     }
   }
@@ -131,9 +123,10 @@ public class TripConsoleAdapter {
     FlightConnection flightConnection = flightConnectionService.getConnectionByTripId(tripId).orElse(null);
     if (flightConnection == null) {
       System.out.println("Flight connection not found.");
+      System.out.printf("Id: %d  price: %.2f  Date: %s\n",
+          trip.getId(), trip.getTripPrice(), trip.getTripDate());
       return;
     }
-
     System.out.printf("Id: %d  price: %.2f  Date: %s  Origin Airport: %s  Destination Airport: %s%n",
         trip.getId(), trip.getTripPrice(), trip.getTripDate(), flightConnection.getOriginAirport().getName(),
         flightConnection.getDestinationAirport().getName());
@@ -149,6 +142,10 @@ public class TripConsoleAdapter {
     }
 
     List<FlightConnection> flightConnections = flightConnectionService.getConnectionByTripId(trip);
+    if (flightConnections == null || flightConnections.isEmpty()) {
+      System.out.println("There are not scales for this trip.");
+      return;
+    }
     flightConnections.forEach(System.out::println);
   }
 
@@ -180,10 +177,10 @@ public class TripConsoleAdapter {
     return scanner.nextDouble();
   }
 
-  private String getInputString(Scanner scanner, String prompt) {
-    System.out.print(prompt);
-    return scanner.next();
-  }
+  // private String getInputString(Scanner scanner, String prompt) {
+  // System.out.print(prompt);
+  // return scanner.next();
+  // }
 
   private Date getInputDate(Scanner scanner, String prompt) {
     System.out.print(prompt);

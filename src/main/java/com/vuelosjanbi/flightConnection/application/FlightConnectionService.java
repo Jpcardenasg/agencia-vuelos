@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.vuelosjanbi.flightConnection.application.ports.out.FlightConnectionRepositoryPort;
 import com.vuelosjanbi.flightConnection.domain.models.FlightConnection;
 import com.vuelosjanbi.trip.domain.models.Trip;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class FlightConnectionService {
@@ -29,6 +30,7 @@ public class FlightConnectionService {
         flightConnectionsRepositoryPort.deleteById(idConnection);
     }
 
+    @Transactional(readOnly = true)
     public Optional<FlightConnection> getConnectionById(Long idConnection) {
         return flightConnectionsRepositoryPort.findById(idConnection);
     }
@@ -51,6 +53,11 @@ public class FlightConnectionService {
 
     public List<FlightConnection> getConnectionByTripId(Trip trip) {
         return flightConnectionsRepositoryPort.findByTrip(trip);
+    }
+
+    @Transactional(readOnly = true)
+    public FlightConnection findFlightConnectionWithSeats(Long flightConnectionId) {
+        return flightConnectionsRepositoryPort.findByIdWithSeats(flightConnectionId);
     }
 
 }

@@ -18,7 +18,6 @@ import com.vuelosjanbi.crewRole.application.CrewRoleService;
 import com.vuelosjanbi.crewRole.domain.models.CrewRole;
 import com.vuelosjanbi.employee.application.EmployeeService;
 import com.vuelosjanbi.employee.domain.models.Employee;
-import com.vuelosjanbi.employee.infrastructure.adapters.out.MySQLEmployeeRepository;
 
 @Controller
 public class EmployeeConsoleAdapter {
@@ -32,18 +31,7 @@ public class EmployeeConsoleAdapter {
     @Autowired
     private AirportService airportService;
 
-    private final String url = "jdbc:mysql://localhost:3307/vuelosjanpi";
-    private final String user = "root";
-    private final String password = "1324";
-    private MySQLEmployeeRepository mySQLEmployeeRepository = new MySQLEmployeeRepository(url, user, password);
-
-    public void start(boolean useJpa) {
-        if (useJpa) {
-            System.out.println("Using JPA");
-        } else {
-            employeeService = new EmployeeService(new MySQLEmployeeRepository(url, user, password));
-            System.out.println("Using MYSQL");
-        }
+    public void start() {
 
         Scanner scanner = new Scanner(System.in);
         List<Employee> employees;
@@ -96,56 +84,13 @@ public class EmployeeConsoleAdapter {
         List<Airline> airlines = airlineService.getAllAirlines();
         List<Airport> airports = airportService.getAllAirports();
 
-        System.out.println("Type the Identification Number:");
-        String id = scanner.nextLine();
-        System.out.println("Type the Employee name:");
-        String name = scanner.nextLine();
-        System.out.println("Type the Employee entry date:");
-        System.out.println("Day:");
-        int day = scanner.nextInt();
-        System.out.println("Month:");
-        int month = scanner.nextInt();
-        System.out.println("Year:");
-        int year = scanner.nextInt();
-        scanner.nextLine();
-        Calendar cal = Calendar.getInstance();
-        cal.set(year, month - 1, day);
-        Date entryDate = new Date(cal.getTimeInMillis());
+        String id = getInput("Type the Identification Number:", scanner);
+        String name = getInput("Type the Employee name:", scanner);
+        Date entryDate = getEntryDate(scanner);
 
-        System.out.println("Crew Roles:");
-        for (CrewRole crewRole : crewRoles) {
-            System.out.printf("ID: %d  Rol: %s \n", crewRole.getId(), crewRole.getName());
-        }
-        System.out.println("Choose the ID of the rol:");
-        Long crewRoleId = scanner.nextLong();
-
-        System.out.println("Airlines:");
-        for (Airline airline : airlines) {
-            System.out.printf("ID: %d  Airline: %s \n", airline.getId(), airline.getName());
-        }
-        System.out.println("Choose the ID of the airline:");
-        Long airlineId = scanner.nextLong();
-
-        System.out.println("Airports:");
-        for (Airport airport : airports) {
-            System.out.printf("ID: %d  Airport: %s \n", airport.getId(), airport.getName());
-        }
-        System.out.println("Choose the ID of the airport:");
-        Long airportId = scanner.nextLong();
-        scanner.nextLine();
-
-        CrewRole chosenCrewRole = crewRoles.stream()
-                .filter(role -> role.getId().equals(crewRoleId))
-                .findFirst()
-                .orElse(null);
-        Airline chosenAirline = airlines.stream()
-                .filter(airline -> airline.getId().equals(airlineId))
-                .findFirst()
-                .orElse(null);
-        Airport chosenAirport = airports.stream()
-                .filter(airport -> airport.getId().equals(airportId))
-                .findFirst()
-                .orElse(null);
+        CrewRole chosenCrewRole = chooseCrewRole(crewRoles, scanner);
+        Airline chosenAirline = chooseAirline(airlines, scanner);
+        Airport chosenAirport = chooseAirport(airports, scanner);
 
         if (chosenCrewRole == null || chosenAirline == null || chosenAirport == null) {
             System.out.println("Invalid ID.");
@@ -169,28 +114,97 @@ public class EmployeeConsoleAdapter {
         List<Airline> airlines = airlineService.getAllAirlines();
         List<Airport> airports = airportService.getAllAirports();
 
-        System.out.println("Employees:");
-        for (Employee employee : employees) {
-            System.out.printf("ID: %s  Name: %s \n", employee.getId(), employee.getName());
-        }
-        System.out.println("Choose the ID of the employee:");
-        String employeeId = scanner.nextLine();
-        Employee chosenEmployee = employeeService.getEmployeeById(employeeId).orElse(null);
+        Employee chosenEmployee = chooseEmployee(employees, scanner);
         if (chosenEmployee == null) {
             System.out.println("Invalid Employee ID.");
-        } else {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String formattedDate = dateFormat.format(chosenEmployee.getEntryDate());
-            System.out.printf("ID: %s  Name: %d  Entry Date: %s  IdRol: %d  IdAirline: %d  IdAirport: %d\n",
-                    chosenEmployee.getId(), chosenEmployee.getName(), formattedDate,
-                    chosenEmployee.getRol().getId(), chosenEmployee.getAirline().getId(),
-                    chosenEmployee.getAirport().getId());
+            return;
         }
 
-        System.out.println("Type the new Employee identification number:");
-        String newEmployeeId = scanner.nextLine();
-        System.out.println("Type the new name:");
-        String newEmployeeName = scanner.nextLine();
+        String newEmployeeName = getInput("Type the new name:", scanner);
+        Date newEntryDate = getEntryDate(scanner);
+
+        CrewRole newChosenCrewRole = chooseCrewRole(crewRoles, scanner);
+        Airline newChosenAirline = chooseAirline(airlines, scanner);
+        Airport newChosenAirport = chooseAirport(airports, scanner);
+
+        if (newChosenCrewRole == null || newChosenAirline == null || newChosenAirport == null) {
+            System.out.println("Invalid ID.");
+            return;
+        }
+
+        chosenEmployee.setName(newEmployeeName);
+        chosenEmployee.setEntryDate(newEntryDate);
+        chosenEmployee.setRol(newChosenCrewRole);
+        chosenEmployee.setAirline(newChosenAirline);
+        chosenEmployee.setAirport(newChosenAirport);
+
+        employeeService.updateEmployee(chosenEmployee);
+
+        System.out.println("Employee updated successfully!");
+    }
+
+    private void deleteEmployee(Scanner scanner, List<Employee> employees) {
+        System.out.println("Employees:");
+        listEmployees(employees);
+        String deleteEmployeeChoice = getInput("Type the employee ID you want to delete:", scanner);
+
+        employeeService.deleteEmployeeById(deleteEmployeeChoice);
+        System.out.println("Employee deleted successfully!");
+    }
+
+    private void findEmployeeById(Scanner scanner) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String employeeId = getInput("Type the Employee ID:", scanner);
+        Optional<Employee> employeeOpt = employeeService.getEmployeeById(employeeId);
+
+        employeeOpt.ifPresentOrElse(employee -> {
+            String formattedDate = dateFormat.format(employee.getEntryDate());
+            System.out.printf(
+                    "ID: %s  Name: %s  Entry Date: %s  Rol: %s  Airline: %s  Airport: %s\n",
+                    employee.getId(), employee.getName(), formattedDate,
+                    employee.getRol().getName(), employee.getAirline().getName(),
+                    employee.getAirport().getName());
+        }, () -> System.out.println("Employee not found"));
+    }
+
+    private void findEmployeeByRolId(Scanner scanner) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        List<CrewRole> crewRoles = crewRoleService.getAllCrewRoles();
+        CrewRole chosenCrewRole = chooseCrewRole(crewRoles, scanner);
+
+        if (chosenCrewRole != null) {
+            List<Employee> employeesWithRol = employeeService.getEmployeesByRol(chosenCrewRole.getId());
+
+            for (Employee employee : employeesWithRol) {
+                String formattedDate = dateFormat.format(employee.getEntryDate());
+                System.out.printf("ID: %s  Name: %s  Entry Date: %s  Rol: %s  Airline: %s  Airport: %s\n",
+                        employee.getId(), employee.getName(), formattedDate,
+                        employee.getRol().getName(), employee.getAirline().getName(),
+                        employee.getAirport().getName());
+            }
+        } else {
+            System.out.println("Invalid Rol ID.");
+        }
+    }
+
+    private void listEmployees(List<Employee> employees) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        for (Employee employee : employees) {
+            String formattedDate = dateFormat.format(employee.getEntryDate());
+            System.out.printf("ID: %s  Name: %s  Entry Date: %s  Rol: %s  Airline: %s  Airport: %s\n",
+                    employee.getId(), employee.getName(), formattedDate,
+                    employee.getRol().getName(), employee.getAirline().getName(),
+                    employee.getAirport().getName());
+        }
+    }
+
+    // Helpers
+    private String getInput(String prompt, Scanner scanner) {
+        System.out.println(prompt);
+        return scanner.nextLine();
+    }
+
+    private Date getEntryDate(Scanner scanner) {
         System.out.println("Type the Employee entry date:");
         System.out.println("Day:");
         int day = scanner.nextInt();
@@ -201,117 +215,49 @@ public class EmployeeConsoleAdapter {
         scanner.nextLine();
         Calendar cal = Calendar.getInstance();
         cal.set(year, month - 1, day);
-        Date newEntryDate = new Date(cal.getTimeInMillis());
+        return new Date(cal.getTimeInMillis());
+    }
 
+    private CrewRole chooseCrewRole(List<CrewRole> crewRoles, Scanner scanner) {
         System.out.println("Crew Roles:");
-        for (CrewRole crewRole : crewRoles) {
-            System.out.printf("ID: %d  Rol: %s \n", crewRole.getId(), crewRole.getName());
-        }
-        System.out.println("Choose the ID of the rol:");
-        Long newCrewRoleId = scanner.nextLong();
-
-        System.out.println("Airlines:");
-        for (Airline airline : airlines) {
-            System.out.printf("ID: %d  Airline: %s \n", airline.getId(), airline.getName());
-        }
-        System.out.println("Choose the ID of the airline:");
-        Long newAirlineId = scanner.nextLong();
-
-        System.out.println("Airports:");
-        for (Airport airport : airports) {
-            System.out.printf("ID: %d  Airport: %s \n", airport.getId(), airport.getName());
-        }
-        System.out.println("Choose the ID of the airport:");
-        Long newAirportId = scanner.nextLong();
-        scanner.nextLine();
-
-        CrewRole newChosenCrewRole = crewRoles.stream()
-                .filter(role -> role.getId().equals(newCrewRoleId))
-                .findFirst()
-                .orElse(null);
-        Airline newChosenAirline = airlines.stream()
-                .filter(airline -> airline.getId().equals(newAirlineId))
-                .findFirst()
-                .orElse(null);
-        Airport newChosenAirport = airports.stream()
-                .filter(airport -> airport.getId().equals(newAirportId))
-                .findFirst()
-                .orElse(null);
-
-        if (newChosenCrewRole == null || newChosenAirline == null || newChosenAirport == null) {
-            System.out.println("Invalid ID.");
-            return;
-        }
-
-        Employee updatedEmployee = new Employee();
-        updatedEmployee.setId(newEmployeeId);
-        updatedEmployee.setName(newEmployeeName);
-        updatedEmployee.setEntryDate(newEntryDate);
-        updatedEmployee.setRol(newChosenCrewRole);
-        updatedEmployee.setAirline(newChosenAirline);
-        updatedEmployee.setAirport(newChosenAirport);
-
-        mySQLEmployeeRepository.update(updatedEmployee, employeeId);
-        System.out.println("Employee created successfully!");
-    }
-
-    private void deleteEmployee(Scanner scanner, List<Employee> employees) {
-        System.out.println("Employees:");
-        listEmployees(employees);
-        System.out.println("Type the employee Id you want to delete");
-        String deleteEmployeeChoice = scanner.nextLine();
-        scanner.nextLine();
-
-        employeeService.deleteEmployeeById(deleteEmployeeChoice);
-        System.out.println("employee deleted successfully!");
-    }
-
-    private void findEmployeeById(Scanner scanner) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        System.out.println("Type the Employee ID:");
-        String employeeId = scanner.nextLine();
-        Optional<Employee> employeeOpt = employeeService.getEmployeeById(employeeId);
-
-        employeeOpt.ifPresentOrElse(employee -> {
-            String formattedDate = dateFormat.format(employee.getEntryDate());
-            System.out.printf(
-                    "ID: %s  Name: %d  Entry Date: %s  Rol: %s  Airline: %s  Airport: %s\n",
-                    employee.getId(), employee.getName(), formattedDate,
-                    employee.getRol().getName(), employee.getAirline().getName(),
-                    employee.getAirport().getName());
-        }, () -> System.out.println("Employee not found"));
-    }
-
-    private void findEmployeeByRolId(Scanner scanner) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        List<CrewRole> crewRoles = crewRoleService.getAllCrewRoles();
         for (CrewRole crewRole : crewRoles) {
             System.out.printf("ID: %d  Rol: %s \n", crewRole.getId(), crewRole.getName());
         }
         System.out.println("Choose the ID of the rol:");
         Long crewRoleId = scanner.nextLong();
         scanner.nextLine();
-
-        List<Employee> employeesWithRol = employeeService.getEmployeesByRol(crewRoleId);
-
-        for (Employee employee : employeesWithRol) {
-            String formattedDate = dateFormat.format(employee.getEntryDate());
-            System.out.printf("ID: %s  Name: %d  Entry Date: %s  Rol: %s  Airline: %s  Airport: %s\n",
-                    employee.getId(), employee.getName(), formattedDate,
-                    employee.getRol().getName(), employee.getAirline().getName(),
-                    employee.getAirport().getName());
-        }
+        return crewRoles.stream().filter(role -> role.getId().equals(crewRoleId)).findFirst().orElse(null);
     }
 
-    private void listEmployees(List<Employee> employees) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        for (Employee employee : employees) {
-            String formattedDate = dateFormat.format(employee.getEntryDate());
-            System.out.printf("ID: %s  Name: %d  Entry Date: %s  Rol: %s  Airline: %s  Airport: %s\n",
-                    employee.getId(), employee.getName(), formattedDate,
-                    employee.getRol().getName(), employee.getAirline().getName(),
-                    employee.getAirport().getName());
+    private Airline chooseAirline(List<Airline> airlines, Scanner scanner) {
+        System.out.println("Airlines:");
+        for (Airline airline : airlines) {
+            System.out.printf("ID: %d  Airline: %s \n", airline.getId(), airline.getName());
         }
+        System.out.println("Choose the ID of the airline:");
+        Long airlineId = scanner.nextLong();
+        scanner.nextLine();
+        return airlines.stream().filter(airline -> airline.getId().equals(airlineId)).findFirst().orElse(null);
+    }
+
+    private Airport chooseAirport(List<Airport> airports, Scanner scanner) {
+        System.out.println("Airports:");
+        for (Airport airport : airports) {
+            System.out.printf("ID: %d  Airport: %s \n", airport.getId(), airport.getName());
+        }
+        System.out.println("Choose the ID of the airport:");
+        Long airportId = scanner.nextLong();
+        scanner.nextLine();
+        return airports.stream().filter(airport -> airport.getId().equals(airportId)).findFirst().orElse(null);
+    }
+
+    private Employee chooseEmployee(List<Employee> employees, Scanner scanner) {
+        System.out.println("Employees:");
+        for (Employee employee : employees) {
+            System.out.printf("ID: %s  Name: %s \n", employee.getId(), employee.getName());
+        }
+        String employeeId = getInput("Choose the ID of the employee:", scanner);
+        return employeeService.getEmployeeById(employeeId).orElse(null);
     }
 
 }
