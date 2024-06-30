@@ -3,6 +3,9 @@ package com.vuelosjanbi.trip.application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
+import java.time.LocalDate;
+
 import com.vuelosjanbi.trip.application.ports.out.TripRepositoryPort;
 import com.vuelosjanbi.trip.domain.models.Trip;
 
@@ -44,7 +47,7 @@ public class TripService {
   }
 
   public List<Trip> getTripsByOriginCityAndFinalDestinationCityWithStopover(String originCityName,
-      String finalDestinationCityName, String tripDate) {
+      String finalDestinationCityName, Date tripDate) {
     return tripRepositoryPort.findByOriginCityAndFinalDestinationCityWithStopover(originCityName,
         finalDestinationCityName, tripDate);
   }

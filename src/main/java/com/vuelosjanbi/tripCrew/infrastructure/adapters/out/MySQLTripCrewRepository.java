@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.vuelosjanbi.employee.application.ports.out.EmployeeRepositoryPort;
 import com.vuelosjanbi.employee.domain.models.Employee;
 import com.vuelosjanbi.flightConnection.application.ports.out.FlightConnectionRepositoryPort;
+import com.vuelosjanbi.trip.domain.models.Trip;
 import com.vuelosjanbi.tripCrew.application.ports.out.TripCrewRepositoryPort;
 import com.vuelosjanbi.tripCrew.domain.models.TripCrew;
 import com.vuelosjanbi.tripCrew.domain.models.TripCrewId;

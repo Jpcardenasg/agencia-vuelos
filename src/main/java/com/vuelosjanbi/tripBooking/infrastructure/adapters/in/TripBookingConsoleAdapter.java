@@ -110,9 +110,12 @@ public class TripBookingConsoleAdapter {
     Date tripDate = getInputDate(scanner, "Enter trip date (YYYY-MM-DD): ");
 
     List<Trip> trips = tripService.getTripsByOriginCityAndFinalDestinationCityWithStopover(originCityName,
-        destinationCityName, tripDate.toString());
+        destinationCityName, tripDate);
     trips.forEach(System.out::println);
-
+    if (trips.isEmpty()) {
+      System.out.println("No trips available.");
+      return;
+    }
     if (getInputString(scanner, "Do you want to book a trip? (y/n): ").equalsIgnoreCase("y")) {
       bookTrip(scanner, trips);
     }

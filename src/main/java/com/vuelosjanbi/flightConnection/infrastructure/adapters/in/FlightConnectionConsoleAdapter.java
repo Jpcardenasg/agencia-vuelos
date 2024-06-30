@@ -104,26 +104,23 @@ public class FlightConnectionConsoleAdapter {
         System.out.println("Choose the ID of the trip you want to assign:");
         List<Trip> tripList = tripService.getAllTrips();
         tripList.forEach(trip -> {
-            System.out.printf("ID: %d  Trip Date: %s", trip.getId(), trip.getTripDate().toString());
+            System.out.printf("ID: %d  Trip Date: %s \n", trip.getId(), trip.getTripDate().toString());
         });
         Long tripId = scanner.nextLong();
-        scanner.nextLine();
         List<Plane> planes = planeService.getAllPlanes();
         planes.forEach(plane -> {
-            System.out.printf("ID: %d  Plane Model: %s", plane.getId(), plane.getPlate());
+            System.out.printf("ID: %d  Plane Model: %s \n", plane.getId(), plane.getPlate());
         });
         System.out.println("Choose the ID of the plane you want to assign:");
         Long planeId = scanner.nextLong();
-        scanner.nextLine();
         List<Airport> airports = airportService.getAllAirports();
         airports.forEach(airport -> {
-            System.out.printf("ID: %d  Airport Name: %s", airport.getId(), airport.getName());
+            System.out.printf("ID: %d  Airport Name: %s \n", airport.getId(), airport.getName());
         });
         System.out.println("Choose the ID of the origin airport:");
         Long originAirportId = scanner.nextLong();
         System.out.println("Choose the ID of the destination airport:");
         Long destinationAirportId = scanner.nextLong();
-        scanner.nextLine();
 
         FlightConnection newFlightConnection = new FlightConnection(connectionNumber);
         newFlightConnection.setTrip(tripService.getTripById(tripId));

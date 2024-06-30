@@ -49,42 +49,47 @@ public class PlaneConsoleAdapter {
         Scanner scanner = new Scanner(System.in);
         List<Plane> planes;
 
-        while (true) {
-            planes = planeService.getAllPlanes();
-            System.out.println("\n");
-            System.out.println("1. Create Plane.");
-            System.out.println("2. Update Plane.");
-            System.out.println("3. Delete Plane.");
-            System.out.println("4. List all Planes.");
-            System.out.println("5. Check plane revisions");
-            System.out.println("0. Exit.");
+        try {
+            while (true) {
+                planes = planeService.getAllPlanes();
+                System.out.println("\n");
+                System.out.println("1. Create Plane.");
+                System.out.println("2. Update Plane.");
+                System.out.println("3. Delete Plane.");
+                System.out.println("4. List all Planes.");
+                System.out.println("5. Check plane revisions");
+                System.out.println("0. Exit.");
 
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+                int choice = scanner.nextInt();
+                scanner.nextLine();
 
-            switch (choice) {
-                case 1:
-                    createPlane(scanner, planes);
-                    break;
-                case 2:
-                    updatePlane(scanner, planes);
-                    break;
-                case 3:
-                    deletePlane(scanner, planes);
-                    break;
-                case 4:
-                    listPlanes(planes);
-                    break;
-                case 5:
-                    planeRevisionConsoleAdapter.start(true);
-                    break;
-                case 0:
-                    System.out.println("Exiting...");
-                    return;
-                default:
-                    System.out.println("Invalid choice. Please try again.");
-                    break;
+                switch (choice) {
+                    case 1:
+                        createPlane(scanner, planes);
+                        break;
+                    case 2:
+                        updatePlane(scanner, planes);
+                        break;
+                    case 3:
+                        deletePlane(scanner, planes);
+                        break;
+                    case 4:
+                        listPlanes(planes);
+                        break;
+                    case 5:
+                        planeRevisionConsoleAdapter.start(true);
+                        break;
+                    case 0:
+                        System.out.println("Exiting...");
+                        return;
+                    default:
+                        System.out.println("Invalid choice. Please try again.");
+                        break;
+                }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("An error occurred. Exiting...");
         }
     }
 

@@ -44,6 +44,7 @@ public class AirportConsoleAdapter {
       System.out.println("4. Delete Airport.");
       System.out.println("5. List all Airports.");
       System.out.println("0. Exit.");
+      System.out.println("Choose an option: ");
 
       int choice = scanner.nextInt();
       switch (choice) {
@@ -79,6 +80,7 @@ public class AirportConsoleAdapter {
     for (City city : citieList) {
       System.out.println(city.getId() + " - " + city.getName());
     }
+    scanner.nextLine();
     System.out.println("Enter city id where is the airport: ");
     long cityId = scanner.nextLong();
 
@@ -88,6 +90,7 @@ public class AirportConsoleAdapter {
       return;
     }
     airportService.createAirport(airport);
+    System.out.println("Airport created successfully!");
   }
 
   public void consultAiportDetails(Scanner scanner) {
