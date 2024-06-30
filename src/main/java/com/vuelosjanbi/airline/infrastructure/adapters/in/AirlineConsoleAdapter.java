@@ -6,7 +6,6 @@ import java.util.Scanner;
 
 import com.vuelosjanbi.airline.application.AirlineService;
 import com.vuelosjanbi.airline.domain.models.Airline;
-import com.vuelosjanbi.airline.infrastructure.adapters.out.MySQLAirlineRepository;
 
 @Controller
 public class AirlineConsoleAdapter {
@@ -14,18 +13,8 @@ public class AirlineConsoleAdapter {
   @Autowired
   private AirlineService airlineService;
 
-  private final String url = "jdbc:mysql://localhost:3307/vuelosjanpi";
-  private final String user = "root";
-  private final String password = "1324";
-
-  public void start(boolean useJpa) {
-    if (useJpa) {
-      System.out.println("Using JPA");
-    } else {
-      System.out.println("Using MySQL Manual Queries");
-      airlineService = new AirlineService(new MySQLAirlineRepository(url, user, password));
-    }
-
+  public void start() {
+    System.out.println("\n");
     System.out.println("1. Create Airline");
     System.out.println("2. Update Airline");
     System.out.println("3. Delete Airline");

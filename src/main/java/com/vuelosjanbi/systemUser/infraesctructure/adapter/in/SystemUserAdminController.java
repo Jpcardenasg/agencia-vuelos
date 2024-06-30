@@ -5,6 +5,7 @@ import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
+import com.vuelosjanbi.airline.infrastructure.adapters.in.AirlineConsoleAdapter;
 import com.vuelosjanbi.airport.infrastructure.adapters.in.AirportConsoleAdapter;
 import com.vuelosjanbi.airportGate.infrastructure.adapters.in.AirportGateConsoleAdapter;
 import com.vuelosjanbi.city.infrastructure.adapters.in.CityConsoleAdapter;
@@ -44,6 +45,9 @@ public class SystemUserAdminController {
 
   @Autowired
   private AirportConsoleAdapter airportConsoleAdapter;
+
+  @Autowired
+  private AirlineConsoleAdapter airlineConsoleAdapter;
 
   @Autowired
   private CustomerConsoleAdapter customerConsoleAdapter;
@@ -87,6 +91,7 @@ public class SystemUserAdminController {
       scanner.nextLine();
       if (choice == 0) {
         System.out.println("Exiting...");
+        scanner.close();
         return;
       }
       SystemUser loggedUser = login(scanner, systemUserService);
@@ -144,10 +149,10 @@ public class SystemUserAdminController {
           tripCrewConsoleAdapter.start(true);
           break;
         case 4:
-          tripConsoleAdapter.start(true);
+          tripConsoleAdapter.start();
           break;
         case 5:
-          airportConsoleAdapter.start(true);
+          airportConsoleAdapter.start();
           break;
         case 6:
           tripBookingConsoleAdapter.start(true);
@@ -183,7 +188,7 @@ public class SystemUserAdminController {
 
       switch (opcionPrincipal) {
         case 1:
-          tripConsoleAdapter.start(true);
+          tripConsoleAdapter.start();
           break;
         case 2:
           tripBookingConsoleAdapter.start(true);
@@ -216,7 +221,7 @@ public class SystemUserAdminController {
           planeConsoleAdapter.start(true);
           break;
         case 2:
-          tripConsoleAdapter.start(true);
+          tripConsoleAdapter.start();
           break;
         case 3:
           planeManufacturerConsoleAdapter.start();
@@ -319,14 +324,18 @@ public class SystemUserAdminController {
   }
 
   private void managementEntityMenu(Scanner scanner) {
+    System.out.println("\n======================================");
+    System.out.println("          ENTITY MENU                  ");
+    System.out.println("======================================");
     System.out.println("1. Country Management");
     System.out.println("2. City Management");
     System.out.println("3. Plane Manufacturer Management");
     System.out.println("4. Plane Model Management");
     System.out.println("5. Airpot Gates Management");
-    System.out.println("6. Crew Rol Management");
-    System.out.println("7. Create new System user");
-    System.out.println("8. Exit");
+    System.out.println("6. Airline Management");
+    System.out.println("7. Crew Rol Management");
+    System.out.println("8. Create new System user");
+    System.out.println("0. Exit");
 
     System.out.print("Choose an option: ");
     int choice = scanner.nextInt();
@@ -349,12 +358,15 @@ public class SystemUserAdminController {
         airportGateConsoleAdapter.start();
         break;
       case 6:
-        crewRoleConsoleAdapter.start();
+        airlineConsoleAdapter.start();
         break;
       case 7:
-        createUser(scanner, systemUserService);
+        crewRoleConsoleAdapter.start();
         break;
       case 8:
+        createUser(scanner, systemUserService);
+        break;
+      case 0:
         System.out.println("Logging out...");
         break;
       default:

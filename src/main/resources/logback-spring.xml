@@ -10,4 +10,8 @@
         <appender-ref ref="STDOUT"/>
     </root>
 
+    <!-- Hibernate SQL loggers -->
+    <logger name="org.hibernate.SQL" level="ERROR"/>
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="ERROR"/>
+
 </configuration>

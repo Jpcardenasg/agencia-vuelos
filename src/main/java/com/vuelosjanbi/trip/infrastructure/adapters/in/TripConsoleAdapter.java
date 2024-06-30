@@ -31,29 +31,25 @@ public class TripConsoleAdapter {
   // private final String user = "root";
   // private final String password = "1324";
 
-  public void start(boolean jpa) {
-    if (jpa) {
-      System.out.println("Using JPA repository.");
-    }
+  public void start() {
 
-    try (Scanner scanner = new Scanner(System.in)) {
-      while (true) {
-        printMenu();
-        int choice = getInputInt(scanner, "Choose an option: ");
-        switch (choice) {
-          case 1 -> createTrip(scanner);
-          case 2 -> flightConnectionConsoleAdapter.start();
-          case 3 -> updateTrip(scanner);
-          case 4 -> deleteTrip(scanner);
-          case 5 -> listTrips();
-          case 6 -> consultTripInfo(scanner);
-          case 7 -> consultFlightConnectionsByTrip(scanner);
-          case 0 -> {
-            System.out.println("Exiting...");
-            return;
-          }
-          default -> System.out.println("Invalid choice. Please try again.");
+    Scanner scanner = new Scanner(System.in);
+    while (true) {
+      printMenu();
+      int choice = getInputInt(scanner, "Choose an option: ");
+      switch (choice) {
+        case 1 -> createTrip(scanner);
+        case 2 -> flightConnectionConsoleAdapter.start();
+        case 3 -> updateTrip(scanner);
+        case 4 -> deleteTrip(scanner);
+        case 5 -> listTrips();
+        case 6 -> consultTripInfo(scanner);
+        case 7 -> consultFlightConnectionsByTrip(scanner);
+        case 0 -> {
+          System.out.println("Exiting trip console...");
+          return;
         }
+        default -> System.out.println("Invalid choice. Please try again.");
       }
     }
   }
@@ -180,10 +176,10 @@ public class TripConsoleAdapter {
     return scanner.nextDouble();
   }
 
-  private String getInputString(Scanner scanner, String prompt) {
-    System.out.print(prompt);
-    return scanner.next();
-  }
+  // private String getInputString(Scanner scanner, String prompt) {
+  // System.out.print(prompt);
+  // return scanner.next();
+  // }
 
   private Date getInputDate(Scanner scanner, String prompt) {
     System.out.print(prompt);

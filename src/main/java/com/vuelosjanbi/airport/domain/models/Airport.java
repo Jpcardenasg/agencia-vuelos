@@ -43,7 +43,8 @@ public class Airport {
 
   @Override
   public String toString() {
-    return "Airport(id: " + id + ", name: " + name + ", city: " + city.getName() + city.getCountry() + ")";
+    return "id: " + id + ", Name: " + name + ", City: " + city.getName() + ", Country: "
+        + city.getCountry().getName();
   }
 
 }

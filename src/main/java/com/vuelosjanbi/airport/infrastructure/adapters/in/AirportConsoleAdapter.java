@@ -8,10 +8,8 @@ import org.springframework.stereotype.Controller;
 
 import com.vuelosjanbi.airport.application.AirportService;
 import com.vuelosjanbi.airport.domain.models.Airport;
-import com.vuelosjanbi.airport.infrastructure.adapters.out.MySQLAirportRepository;
 import com.vuelosjanbi.city.application.CityService;
 import com.vuelosjanbi.city.domain.models.City;
-import com.vuelosjanbi.city.infrastructure.adapters.out.MySQLCityRepository;
 
 @Controller
 public class AirportConsoleAdapter {
@@ -22,17 +20,7 @@ public class AirportConsoleAdapter {
   @Autowired
   private CityService cityService;
 
-  private final String url = "jdbc:mysql://localhost:3307/vuelosjanpi";
-  private final String user = "root";
-  private final String password = "1324";
-
-  public void start(boolean jpa) {
-    if (jpa) {
-      System.out.println("Using JPA");
-    } else {
-      airportService = new AirportService(new MySQLAirportRepository(url, user, password));
-      cityService = new CityService(new MySQLCityRepository(url, user, password));
-    }
+  public void start() {
 
     Scanner scanner = new Scanner(System.in);
 

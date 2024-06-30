@@ -172,6 +172,7 @@ public class TripCrewConsoleAdapter {
   }
 
   public void tripCrewInformationByTripId(Scanner scanner) {
+    System.out.println("Trip ID:");
     flightConnectionService.getAllFlightConnections().forEach(flightConnection -> {
       System.out.println(flightConnection.getTrip().getId());
     });

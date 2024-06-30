@@ -35,7 +35,7 @@ public class FlightFareConsoleAdapter {
       System.out.println("3. Update Flight Fare");
       System.out.println("4. Delete Flight Fare");
       System.out.println("5. Get All Flight Fares");
-      System.out.println("6. Exit");
+      System.out.println("0. Exit");
 
       switch (scanner.nextInt()) {
         case 1:
@@ -54,8 +54,10 @@ public class FlightFareConsoleAdapter {
           getAllFlightFares();
           break;
         case 6:
-          break;
+          System.out.println("Exiting...");
+          return;
         default:
+          System.out.println("Invalid option. Please try again.");
           break;
       }
     }
