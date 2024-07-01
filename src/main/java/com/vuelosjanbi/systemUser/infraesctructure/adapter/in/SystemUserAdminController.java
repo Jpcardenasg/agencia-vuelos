@@ -194,7 +194,7 @@ public class SystemUserAdminController {
     System.out.println("======================================");
     System.out.println("1. Plane Management");
     System.out.println("2. Employee Management");
-    System.out.println("3. Crew Trip Management");
+    System.out.println("3. Trip Crew Management");
     System.out.println("4. Fly Management");
     System.out.println("5. Airport Management");
     System.out.println("6. Trip Booking Management");

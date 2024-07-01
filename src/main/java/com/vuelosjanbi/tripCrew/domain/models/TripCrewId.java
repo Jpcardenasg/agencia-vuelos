@@ -13,6 +13,11 @@ public class TripCrewId implements Serializable {
   public TripCrewId() {
   }
 
+  public TripCrewId(String employeeId, Long flightConnectionId) {
+    this.employeeId = employeeId;
+    this.flightConnectionId = flightConnectionId;
+  }
+
   public String getEmployeeId() {
     return employeeId;
   }
