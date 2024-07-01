@@ -44,7 +44,7 @@ public class PaymentService {
         return paymentRepositoryPort.findAll();
     }
 
-    public List<Payment> getPaymentsByCustomerId(Long userId) {
+    public List<Payment> getPaymentsByCustomerId(String userId) {
         return paymentRepositoryPort.findByCustomerId(userId);
     }
 }
