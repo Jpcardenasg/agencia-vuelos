@@ -92,12 +92,12 @@ public class FlightConnection {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append(getClass().getSimpleName()).append(" ")
-        .append("\n\tid: ").append(id)
-        .append(",\n\tconnectionNumber: ").append(connectionNumber)
-        .append(",\n\ttrip: ").append(trip)
-        .append(",\n\tplane: ").append(plane)
-        .append(",\n\tairport origin: ").append(originAirport)
-        .append(",\n\tairport destination: ").append(destinationAirport);
+        .append("\n\tId: ").append(id)
+        .append(",\n\tConnection Number: ").append(connectionNumber)
+        .append(",\n\tTrip: ").append(trip)
+        .append(",\n\tPlane: ").append(plane)
+        .append(",\n\tOrigin Airport: ").append(originAirport)
+        .append(",\n\tDestination Airport: ").append(destinationAirport);
     return sb.toString();
   }
 

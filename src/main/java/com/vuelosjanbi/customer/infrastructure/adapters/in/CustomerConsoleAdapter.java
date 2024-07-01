@@ -9,10 +9,8 @@ import org.springframework.stereotype.Controller;
 
 import com.vuelosjanbi.customer.application.CustomerService;
 import com.vuelosjanbi.customer.domain.models.Customer;
-import com.vuelosjanbi.customer.infrastructure.adapters.out.MySQLCustomerRepository;
 import com.vuelosjanbi.documentType.application.DocumentTypeService;
 import com.vuelosjanbi.documentType.domain.models.DocumentType;
-import com.vuelosjanbi.documentType.infrastructure.adapters.out.MySQLDocumentTypeRepository;
 
 @Controller
 public class CustomerConsoleAdapter {
@@ -22,19 +20,7 @@ public class CustomerConsoleAdapter {
     @Autowired
     private DocumentTypeService documentTypeService;
 
-    private final String url = "jdbc:mysql://localhost:3307/vuelosjanpi";
-    private final String user = "root";
-    private final String password = "1324";
-
-    public void start(boolean useJpa) {
-        if (useJpa) {
-            System.out.println("Using JPA");
-        } else {
-            documentTypeService = new DocumentTypeService(new MySQLDocumentTypeRepository(url, user, password));
-            customerService = new CustomerService(new MySQLCustomerRepository(url, user, password,
-                    new MySQLDocumentTypeRepository(url, user, password)));
-            System.out.println("Using MYSQL");
-        }
+    public void start() {
 
         Scanner scanner = new Scanner(System.in);
         List<Customer> customers;

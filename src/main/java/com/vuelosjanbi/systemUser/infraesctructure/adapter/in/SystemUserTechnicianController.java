@@ -36,7 +36,7 @@ public class SystemUserTechnicianController {
 
           switch (opcionPrincipal) {
             case 1:
-              planeConsoleAdapter.start(true);
+              planeConsoleAdapter.start();
               break;
             case 2:
               tripConsoleAdapter.start();

@@ -105,7 +105,7 @@ public class Trip {
 
   @Override
   public String toString() {
-    return String.format("Trip id: %d  Trip date: %s  Trip price: %.2f  Origin airport: %s  Destination airport: %s",
+    return String.format("Trip id: %d  Trip date: %s  Trip price: %.2f",
         id, tripDate, tripPrice);
   }
 

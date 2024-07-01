@@ -10,14 +10,11 @@ import org.springframework.stereotype.Controller;
 
 import com.vuelosjanbi.plane.application.PlaneService;
 import com.vuelosjanbi.plane.domain.models.Plane;
-import com.vuelosjanbi.plane.infrastructure.adapters.out.MySQLPlaneRepository;
 import com.vuelosjanbi.planeModel.application.PlaneModelService;
 import com.vuelosjanbi.planeModel.domain.models.PlaneModel;
-import com.vuelosjanbi.planeModel.infrastructure.adapters.out.MySQLPlaneModelRepository;
 import com.vuelosjanbi.planeRevision.infrastructure.adapters.in.PlaneRevisionConsoleAdapter;
 import com.vuelosjanbi.planeStatus.application.PlaneStatusService;
 import com.vuelosjanbi.planeStatus.domain.models.PlaneStatus;
-import com.vuelosjanbi.planeStatus.infrastructure.adapters.out.MySQLPlaneStatusRepository;
 
 @Controller
 public class PlaneConsoleAdapter {
@@ -32,19 +29,18 @@ public class PlaneConsoleAdapter {
     @Autowired
     private PlaneRevisionConsoleAdapter planeRevisionConsoleAdapter;
 
-    private final String url = "jdbc:mysql://localhost:3307/vuelosjanpi";
-    private final String username = "root";
-    private final String password = "1324";
-
-    public void start(boolean useJpa) {
-        if (useJpa) {
-            System.out.println("Using JPA");
-        } else {
-            planeModelService = new PlaneModelService(new MySQLPlaneModelRepository(url, username, password));
-            planeStatusService = new PlaneStatusService(new MySQLPlaneStatusRepository(url, username, password));
-            planeService = new PlaneService(new MySQLPlaneRepository(url, username, password));
-            System.out.println("Using MYSQL");
-        }
+    public void start() {
+        // if (useJpa) {
+        // System.out.println("Using JPA");
+        // } else {
+        // planeModelService = new PlaneModelService(new MySQLPlaneModelRepository(url,
+        // username, password));
+        // planeStatusService = new PlaneStatusService(new
+        // MySQLPlaneStatusRepository(url, username, password));
+        // planeService = new PlaneService(new MySQLPlaneRepository(url, username,
+        // password));
+        // System.out.println("Using MYSQL");
+        // }
 
         Scanner scanner = new Scanner(System.in);
         List<Plane> planes;

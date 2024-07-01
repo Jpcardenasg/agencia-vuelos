@@ -31,20 +31,20 @@ public class SystemUserCustomerController {
         showCustomerMainMenu();
         if (scanner.hasNextInt()) {
           opcionPrincipal = scanner.nextInt();
-          scanner.nextLine(); // Clear the buffer
+          scanner.nextLine();
 
           switch (opcionPrincipal) {
             case 1:
               tripConsoleAdapter.start();
               break;
             case 2:
-              tripBookingConsoleAdapter.start(true);
+              tripBookingConsoleAdapter.start();
               break;
             case 3:
-              customerConsoleAdapter.start(true);
+              customerConsoleAdapter.start();
               break;
             case 4:
-              documentTypeConsoleAdapter.start(true);
+              documentTypeConsoleAdapter.start();
               break;
             case 0:
               System.out.println("Logging out...");

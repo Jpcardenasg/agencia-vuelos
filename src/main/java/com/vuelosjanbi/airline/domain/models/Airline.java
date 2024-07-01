@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.vuelosjanbi.employee.domain.models.Employee;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,7 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 
 @Entity
-public class Airline implements java.io.Serializable {
+public class Airline implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,6 +60,11 @@ public class Airline implements java.io.Serializable {
 
   public void setEmployees(List<Employee> employees) {
     this.employees = employees;
+  }
+
+  @Override
+  public String toString() {
+    return "Airline [id=" + id + ", name=" + name + "]";
   }
 
 }

@@ -4,17 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import com.vuelosjanbi.employee.application.EmployeeService;
-import com.vuelosjanbi.employee.application.ports.out.EmployeeRepositoryPort;
 import com.vuelosjanbi.employee.domain.models.Employee;
-import com.vuelosjanbi.employee.infrastructure.adapters.out.MySQLEmployeeRepository;
 import com.vuelosjanbi.flightConnection.application.FlightConnectionService;
-import com.vuelosjanbi.flightConnection.application.ports.out.FlightConnectionRepositoryPort;
 import com.vuelosjanbi.flightConnection.domain.models.FlightConnection;
-import com.vuelosjanbi.flightConnection.infrastructure.adapters.out.MySQLFlightConnectionRepository;
 import com.vuelosjanbi.tripCrew.application.TripCrewService;
-import com.vuelosjanbi.tripCrew.application.ports.out.TripCrewRepositoryPort;
 import com.vuelosjanbi.tripCrew.domain.models.TripCrew;
-import com.vuelosjanbi.tripCrew.infrastructure.adapters.out.MySQLTripCrewRepository;
 
 import java.util.List;
 import java.util.Scanner;
@@ -23,46 +17,15 @@ import java.util.Scanner;
 public class TripCrewConsoleAdapter {
 
   @Autowired
-  private TripCrewRepositoryPort tripCrewRepositoryPort;
-
-  @Autowired
-  private EmployeeRepositoryPort employeeRepositoryPort;
-
-  @Autowired
-  private FlightConnectionRepositoryPort flightConnectionRepositoryPort;
-
-  @Autowired
   private EmployeeService employeeService;
+
   @Autowired
   private FlightConnectionService flightConnectionService;
+
   @Autowired
   private TripCrewService tripCrewService;
 
-  private final String url = "jdbc:mysql://localhost:3307/vuelosjanpi";
-  private final String user = "root";
-  private final String password = "1324";
-
-  public TripCrewConsoleAdapter() {
-  }
-
-  public TripCrewConsoleAdapter(TripCrewRepositoryPort tripCrewRepositoryPort,
-      EmployeeRepositoryPort employeeRepositoryPort, FlightConnectionRepositoryPort flightConnectionRepositoryPort) {
-    this.tripCrewRepositoryPort = tripCrewRepositoryPort;
-    this.employeeRepositoryPort = employeeRepositoryPort;
-    this.flightConnectionRepositoryPort = flightConnectionRepositoryPort;
-  }
-
-  public void start(boolean useJpa) {
-    if (useJpa) {
-      tripCrewService = new TripCrewService(tripCrewRepositoryPort);
-      employeeService = new EmployeeService(employeeRepositoryPort);
-      flightConnectionService = new FlightConnectionService(flightConnectionRepositoryPort);
-    } else {
-      flightConnectionService = new FlightConnectionService(new MySQLFlightConnectionRepository(url, user, password));
-      employeeService = new EmployeeService(new MySQLEmployeeRepository(url, user, password));
-      tripCrewService = new TripCrewService(new MySQLTripCrewRepository(url, user, password,
-          new MySQLEmployeeRepository(url, user, password), new MySQLFlightConnectionRepository(url, user, password)));
-    }
+  public void start() {
 
     Scanner scanner = new Scanner(System.in);
 
@@ -82,7 +45,7 @@ public class TripCrewConsoleAdapter {
           addEmployeeToFlightConnection(scanner);
           break;
         case 2:
-          RemoveEmployeeFromFlightConnection(scanner);
+          removeEmployeeFromFlightConnection(scanner);
           break;
         case 3:
           listEmplosyeesInFlightConnection();
@@ -107,7 +70,7 @@ public class TripCrewConsoleAdapter {
     System.out.println("Enter the flight connection id:");
     Long flightConnectionId = scanner.nextLong();
     scanner.nextLine();
-    FlightConnection flightConnection = flightConnectionRepositoryPort.findById(flightConnectionId).orElse(null);
+    FlightConnection flightConnection = flightConnectionService.getConnectionById(flightConnectionId).orElse(null);
     while (true) {
       List<Employee> employees = employeeService.getAllEmployees();
       if (employees.isEmpty()) {
@@ -119,8 +82,7 @@ public class TripCrewConsoleAdapter {
       });
       System.out.println("Enter the employee id:");
       String employeeId = scanner.nextLine();
-      scanner.nextLine();
-      Employee employee = employeeRepositoryPort.findById(employeeId).orElse(null);
+      Employee employee = employeeService.getEmployeeById(employeeId).orElse(null);
       if (employee == null) {
         System.out.println("Employee not found.");
         continue;
@@ -135,14 +97,14 @@ public class TripCrewConsoleAdapter {
     }
   }
 
-  public void RemoveEmployeeFromFlightConnection(Scanner scanner) {
+  public void removeEmployeeFromFlightConnection(Scanner scanner) {
     flightConnectionService.getAllFlightConnections().forEach(flightConnection -> {
       System.out.println(flightConnection);
     });
     System.out.println("Enter the flight connection id:");
     Long flightConnectionId = scanner.nextLong();
     scanner.nextLine();
-    FlightConnection flightConnection = flightConnectionRepositoryPort.findById(flightConnectionId).orElse(null);
+    FlightConnection flightConnection = flightConnectionService.getConnectionById(flightConnectionId).orElse(null);
     while (true) {
       employeeService.getAllEmployees().forEach(employee -> {
         System.out.println(employee);
@@ -150,7 +112,7 @@ public class TripCrewConsoleAdapter {
       System.out.println("Enter the employee id:");
       String employeeId = scanner.nextLine();
       scanner.nextLine();
-      Employee employee = employeeRepositoryPort.findById(employeeId).orElse(null);
+      Employee employee = employeeService.getEmployeeById(employeeId).orElse(null);
       if (employee == null) {
         System.out.println("Employee not found.");
         continue;

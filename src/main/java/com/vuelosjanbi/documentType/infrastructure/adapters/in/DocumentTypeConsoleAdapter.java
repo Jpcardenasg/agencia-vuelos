@@ -17,7 +17,7 @@ public class DocumentTypeConsoleAdapter {
         this.documentTypeService = documentTypeService;
     }
 
-    public void start(boolean useJpa) {
+    public void start() {
         Scanner scanner = new Scanner(System.in);
         List<DocumentType> documentTypes;
 

@@ -29,17 +29,17 @@ public class SystemUserSalesAgentController {
         showSalesAgentMainMenu();
         if (scanner.hasNextInt()) {
           opcionPrincipal = scanner.nextInt();
-          scanner.nextLine(); // Clear the buffer
+          scanner.nextLine();
 
           switch (opcionPrincipal) {
             case 1:
-              tripBookingConsoleAdapter.start(true);
+              tripBookingConsoleAdapter.start();
               break;
             case 2:
-              customerConsoleAdapter.start(true);
+              customerConsoleAdapter.start();
               break;
             case 3:
-              flightFareConsoleAdapter.start(true);
+              flightFareConsoleAdapter.start();
               break;
             case 0:
               System.out.println("Logging out...");

@@ -27,10 +27,6 @@ public class TripConsoleAdapter {
   @Autowired
   private FlightConnectionConsoleAdapter flightConnectionConsoleAdapter;
 
-  // private final String url = "jdbc:mysql://localhost:3307/vuelosjanpi";
-  // private final String user = "root";
-  // private final String password = "1324";
-
   public void start() {
 
     Scanner scanner = new Scanner(System.in);

@@ -79,10 +79,15 @@ public class Employee {
 
   @Override
   public String toString() {
-    return "Employee [id=" + id + ", name=" + name + ", entryDate=" + entryDate + ", rol=" + rol + ", airline="
-        + airline + ", airport=" + airport + "]";
+    StringBuilder sb = new StringBuilder();
+    sb.append(getClass().getSimpleName()).append(" ")
+        .append("\n\tId: ").append(id)
+        .append(",\n\tName: ").append(name)
+        .append(",\n\tEntry Date: ").append(entryDate)
+        .append(",\n\tRol: ").append(rol != null ? rol.getName() : "null")
+        .append(",\n\tAirline: ").append(airline != null ? airline.getName() : "null")
+        .append(",\n\tAirport: ").append(airport != null ? airport.getName() : "null");
+    return sb.toString();
   }
-
-  
 
 }

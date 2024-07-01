@@ -142,13 +142,13 @@ public class SystemUserAdminController {
 
           switch (opcionPrincipal) {
             case 1:
-              planeConsoleAdapter.start(true);
+              planeConsoleAdapter.start();
               break;
             case 2:
-              employeeConsoleAdapter.start(true);
+              employeeConsoleAdapter.start();
               break;
             case 3:
-              tripCrewConsoleAdapter.start(true);
+              tripCrewConsoleAdapter.start();
               break;
             case 4:
               tripConsoleAdapter.start();
@@ -157,16 +157,16 @@ public class SystemUserAdminController {
               airportConsoleAdapter.start();
               break;
             case 6:
-              tripBookingConsoleAdapter.start(true);
+              tripBookingConsoleAdapter.start();
               break;
             case 7:
-              flightFareConsoleAdapter.start(true);
+              flightFareConsoleAdapter.start();
               break;
             case 8:
-              customerConsoleAdapter.start(true);
+              customerConsoleAdapter.start();
               break;
             case 9:
-              documentTypeConsoleAdapter.start(true);
+              documentTypeConsoleAdapter.start();
               break;
             case 10:
               managementEntityMenu(scanner);

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 
 import com.vuelosjanbi.flightFare.application.FlightFareService;
 import com.vuelosjanbi.flightFare.domain.models.FlightFare;
-import com.vuelosjanbi.flightFare.infrastructure.adapters.out.MySQLFlightFareRepository;
 
 @Controller
 public class FlightFareConsoleAdapter {
@@ -15,17 +14,7 @@ public class FlightFareConsoleAdapter {
   @Autowired
   private FlightFareService flightFareService;
 
-  private final String url = "jdbc:mysql://localhost:3307/vuelosjanpi";
-  private final String user = "root";
-  private final String password = "1324";
-
-  public void start(boolean jpa) {
-    if (jpa) {
-      System.out.println("Using JPA");
-    } else {
-      System.out.println("Using MySQL Manual Queries");
-      flightFareService = new FlightFareService(new MySQLFlightFareRepository(url, user, password));
-    }
+  public void start() {
 
     Scanner scanner = new Scanner(System.in);
 
