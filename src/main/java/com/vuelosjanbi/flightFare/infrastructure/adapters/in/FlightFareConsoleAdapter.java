@@ -66,9 +66,9 @@ public class FlightFareConsoleAdapter {
   }
 
   private void getAllFlightFares() {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'getAllFlightFares'");
-
+    flightFareService.getAllFlightFares().forEach(flightFare -> {
+      System.out.println(flightFare);
+    });
   }
 
   private void deleteFlightFare(Scanner scanner) {

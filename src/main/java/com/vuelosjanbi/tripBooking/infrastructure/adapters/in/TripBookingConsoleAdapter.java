@@ -58,7 +58,7 @@ public class TripBookingConsoleAdapter {
         Scanner scanner = new Scanner(System.in);
         while (true) {
             try {
-                System.out.println("1. Look available trips");
+                System.out.println("1. Search available trips");
                 System.out.println("2. Get all details about Trip Booking");
                 System.out.println("3. Update Trip Booking");
                 System.out.println("4. Delete Trip Booking");
@@ -72,7 +72,7 @@ public class TripBookingConsoleAdapter {
 
                     switch (option) {
                         case 1:
-                            lookAvailableTrips(scanner);
+                            searchAvailableTrips(scanner);
                             break;
                         case 2:
                             detailsTripBooking(scanner);
@@ -104,7 +104,7 @@ public class TripBookingConsoleAdapter {
         }
     }
 
-    private void lookAvailableTrips(Scanner scanner) {
+    private void searchAvailableTrips(Scanner scanner) {
         String originCityName = getInputString(scanner, "Enter origin city name: ");
         String destinationCityName = getInputString(scanner, "Enter destination city name: ");
         Date tripDate = getInputDate(scanner, "Enter trip date (YYYY-MM-DD): ");
@@ -177,13 +177,13 @@ public class TripBookingConsoleAdapter {
             tripBookingDetail.setFlightFare(flightFare);
 
             if (getInputString(scanner, "Do you want to add another passenger? (y/n): ").equalsIgnoreCase("n")) {
-                processPayment(scanner, tripBooking, tripBookingDetail);
+                paymentProcess(scanner, tripBooking, tripBookingDetail);
                 break;
             }
         }
     }
 
-    private void processPayment(Scanner scanner, TripBooking tripBooking, TripBookingDetail tripBookingDetail) {
+    private void paymentProcess(Scanner scanner, TripBooking tripBooking, TripBookingDetail tripBookingDetail) {
         List<PaymentMethod> paymentMethods = paymentMethodService.getAllPaymentMethods();
         paymentMethods.forEach(paymentMethod -> System.out.printf("Payment method id: %d  Payment method: %s \n",
                 paymentMethod.getId(), paymentMethod.getMethod()));

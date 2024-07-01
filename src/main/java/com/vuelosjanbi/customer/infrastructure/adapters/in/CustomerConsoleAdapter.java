@@ -24,7 +24,6 @@ public class CustomerConsoleAdapter {
 
         Scanner scanner = new Scanner(System.in);
         List<Customer> customers;
-        List<DocumentType> dTypes = documentTypeService.getAllDocumentTypes();
 
         while (true) {
             customers = customerService.getAllCustomers();
@@ -41,10 +40,10 @@ public class CustomerConsoleAdapter {
 
             switch (choice) {
                 case 1:
-                    createCustomer(scanner, dTypes);
+                    createCustomer(scanner);
                     break;
                 case 2:
-                    updateCustomer(scanner, dTypes, customers);
+                    updateCustomer(scanner, customers);
                     break;
                 case 3:
                     deleteCustomer(scanner, customers);
@@ -65,7 +64,8 @@ public class CustomerConsoleAdapter {
         }
     }
 
-    private void createCustomer(Scanner scanner, List<DocumentType> dTypes) {
+    private void createCustomer(Scanner scanner) {
+        List<DocumentType> dTypes = documentTypeService.getAllDocumentTypes();
         System.out.println("Type the Identification Number:");
         String id = scanner.nextLine();
         System.out.println("Type the Customer name:");
@@ -102,31 +102,22 @@ public class CustomerConsoleAdapter {
         System.out.println("Customer created successfully!");
     }
 
-    private void updateCustomer(Scanner scanner, List<DocumentType> dTypes, List<Customer> customers) {
-        for (Customer customer : customers) {
-            System.out.printf("ID: %d  Name: %s\n", customer.getId(), customer.getName());
+    private void updateCustomer(Scanner scanner, List<Customer> customers) {
+        List<DocumentType> dTypes = documentTypeService.getAllDocumentTypes();
+
+        if (customers.isEmpty()) {
+            System.out.println("There are not customers registered.");
+            return;
         }
-        System.out.println("Choose the customer ID you want to modify:");
 
-        String customerId = scanner.nextLine();
-
-        Customer customerToUpdate = customers.stream()
-                .filter(c -> c.getId().equals(customerId))
-                .findFirst()
-                .orElse(null);
-
-        if (customerToUpdate == null) {
+        Customer chosenCustomer = choosecustomer(customers, scanner);
+        if (chosenCustomer == null) {
             System.out.println("Invalid Customer ID.");
             return;
         }
 
-        System.out.println("Type the new ID:");
-        String newId = scanner.nextLine();
-
-        System.out.println("Type the new customer name:");
-        String newName = scanner.nextLine();
-        System.out.println("Type the new customer age:");
-        Integer newAge = scanner.nextInt();
+        String newCustomerName = getInput("Type the new name:", scanner);
+        Integer newCustomerAge = getInt("Type the new customer age:", scanner);
         scanner.nextLine();
 
         for (DocumentType dType : dTypes) {
@@ -145,12 +136,11 @@ public class CustomerConsoleAdapter {
             System.out.println("Invalid document type ID.");
             return;
         }
-        customerToUpdate.setId(newId);
-        customerToUpdate.setName(newName);
-        customerToUpdate.setAge(newAge);
-        customerToUpdate.setDocumentType(chosenDocumentType);
+        chosenCustomer.setName(newCustomerName);
+        chosenCustomer.setAge(newCustomerAge);
+        chosenCustomer.setDocumentType(chosenDocumentType);
 
-        customerService.updateCustomer(customerToUpdate);
+        customerService.updateCustomer(chosenCustomer);
 
         System.out.println("Customer updated successfully!");
     }
@@ -172,7 +162,7 @@ public class CustomerConsoleAdapter {
         Optional<Customer> customerOpt = customerService.getCustomer(customerId);
 
         customerOpt.ifPresentOrElse(customer -> {
-            System.out.printf("ID: %d  Name: %s, Age: %d, Document Type: %s\n",
+            System.out.printf("ID: %s  Name: %s, Age: %d, Document Type: %s\n",
                     customer.getId(), customer.getName(), customer.getAge(), customer.getDocumentType().getName());
         }, () -> System.out.println("Customer not found"));
 
@@ -180,8 +170,28 @@ public class CustomerConsoleAdapter {
 
     private void listCustomers(List<Customer> customers) {
         for (Customer customer : customers) {
-            System.out.printf("ID: %d  Name: %s, Age: %d, Document Type: %s\n",
+            System.out.printf("ID: %s  Name: %s, Age: %d, Document Type: %s\n",
                     customer.getId(), customer.getName(), customer.getAge(), customer.getDocumentType().getName());
         }
+    }
+
+    // Input Helpers
+    private String getInput(String prompt, Scanner scanner) {
+        System.out.println(prompt);
+        return scanner.nextLine();
+    }
+
+    private Integer getInt(String prompt, Scanner scanner) {
+        System.out.println(prompt);
+        return scanner.nextInt();
+    }
+
+    private Customer choosecustomer(List<Customer> customers, Scanner scanner) {
+        System.out.println("Customers:");
+        for (Customer customer : customers) {
+            System.out.printf("ID: %s  Name: %s \n", customer.getId(), customer.getName());
+        }
+        String customerId = getInput("Choose the ID of the customer:", scanner);
+        return customerService.getCustomer(customerId).orElse(null);
     }
 }

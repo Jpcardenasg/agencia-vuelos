@@ -123,9 +123,10 @@ public class TripConsoleAdapter {
     FlightConnection flightConnection = flightConnectionService.getConnectionByTripId(tripId).orElse(null);
     if (flightConnection == null) {
       System.out.println("Flight connection not found.");
+      System.out.printf("Id: %d  price: %.2f  Date: %s\n",
+          trip.getId(), trip.getTripPrice(), trip.getTripDate());
       return;
     }
-
     System.out.printf("Id: %d  price: %.2f  Date: %s  Origin Airport: %s  Destination Airport: %s%n",
         trip.getId(), trip.getTripPrice(), trip.getTripDate(), flightConnection.getOriginAirport().getName(),
         flightConnection.getDestinationAirport().getName());
@@ -141,6 +142,10 @@ public class TripConsoleAdapter {
     }
 
     List<FlightConnection> flightConnections = flightConnectionService.getConnectionByTripId(trip);
+    if (flightConnections == null || flightConnections.isEmpty()) {
+      System.out.println("There are not scales for this trip.");
+      return;
+    }
     flightConnections.forEach(System.out::println);
   }
 
