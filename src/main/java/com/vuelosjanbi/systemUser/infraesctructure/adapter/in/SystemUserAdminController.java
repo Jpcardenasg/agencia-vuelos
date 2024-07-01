@@ -2,7 +2,6 @@ package com.vuelosjanbi.systemUser.infraesctructure.adapter.in;
 
 import java.util.Scanner;
 
-import org.antlr.v4.runtime.InputMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -80,6 +79,15 @@ public class SystemUserAdminController {
   @Autowired
   private CrewRoleConsoleAdapter crewRoleConsoleAdapter;
 
+  @Autowired
+  private SystemUserCustomerController systemUserCustomerController;
+
+  @Autowired
+  private SystemUserTechnicianController systemUserTechnicianController;
+
+  @Autowired
+  private SystemUserSalesAgentController systemUserSalesAgentController;
+
   public void run(String... args) throws Exception {
     Scanner scanner = new Scanner(System.in);
     try {
@@ -89,13 +97,13 @@ public class SystemUserAdminController {
           showAdminMenu(scanner);
           break;
         case CUSTOMER:
-          showCustomerMenu(scanner);
+          systemUserCustomerController.showCustomerMenu(scanner);
           break;
         case TECHNICIAN:
-          showTechnicianMenu(scanner);
+          systemUserTechnicianController.showTechnicianMenu(scanner);
           break;
         case SALE_AGENT:
-          showSalesAgentMenu(scanner);
+          systemUserSalesAgentController.showSalesAgentMenu(scanner);
           break;
         default:
           System.out.println("Invalid role. Please contact the system administrator.");
@@ -180,123 +188,6 @@ public class SystemUserAdminController {
     } while (opcionPrincipal != 0);
   }
 
-  private void showCustomerMenu(Scanner scanner) {
-    int opcionPrincipal = -1;
-
-    do {
-      try {
-        showCustomerMainMenu();
-        if (scanner.hasNextInt()) {
-          opcionPrincipal = scanner.nextInt();
-          scanner.nextLine(); // Clear the buffer
-
-          switch (opcionPrincipal) {
-            case 1:
-              tripConsoleAdapter.start();
-              break;
-            case 2:
-              tripBookingConsoleAdapter.start(true);
-              break;
-            case 3:
-              customerConsoleAdapter.start(true);
-              break;
-            case 4:
-              documentTypeConsoleAdapter.start(true);
-              break;
-            case 0:
-              System.out.println("Logging out...");
-              break;
-            default:
-              System.out.println("Invalid Option. Please, select a valid option.");
-          }
-        } else {
-          System.out.println("Invalid input. Please enter a number.");
-          scanner.next(); // Clear the invalid input
-        }
-      } catch (Exception e) {
-        System.out.println("An unexpected error occurred: " + e.getMessage());
-        e.printStackTrace();
-      }
-    } while (opcionPrincipal != 0);
-  }
-
-  private void showTechnicianMenu(Scanner scanner) {
-    int opcionPrincipal = -1;
-
-    do {
-      try {
-        showTechnicianMainMenu();
-        if (scanner.hasNextInt()) {
-          opcionPrincipal = scanner.nextInt();
-          scanner.nextLine(); // Clear the buffer
-
-          switch (opcionPrincipal) {
-            case 1:
-              planeConsoleAdapter.start(true);
-              break;
-            case 2:
-              tripConsoleAdapter.start();
-              break;
-            case 3:
-              planeManufacturerConsoleAdapter.start();
-              break;
-            case 4:
-              planeModelConsoleAdapter.start();
-              break;
-            case 0:
-              System.out.println("Logging out...");
-              break;
-            default:
-              System.out.println("Invalid Option. Please, select a valid option.");
-          }
-        } else {
-          System.out.println("Invalid input. Please enter a number.");
-          scanner.next(); // Clear the invalid input
-        }
-      } catch (Exception e) {
-        System.out.println("An unexpected error occurred: " + e.getMessage());
-        e.printStackTrace();
-      }
-    } while (opcionPrincipal != 0);
-  }
-
-  private void showSalesAgentMenu(Scanner scanner) {
-    int opcionPrincipal = -1;
-
-    do {
-      try {
-        showSalesAgentMainMenu();
-        if (scanner.hasNextInt()) {
-          opcionPrincipal = scanner.nextInt();
-          scanner.nextLine(); // Clear the buffer
-
-          switch (opcionPrincipal) {
-            case 1:
-              tripBookingConsoleAdapter.start(true);
-              break;
-            case 2:
-              customerConsoleAdapter.start(true);
-              break;
-            case 3:
-              flightFareConsoleAdapter.start(true);
-              break;
-            case 0:
-              System.out.println("Logging out...");
-              break;
-            default:
-              System.out.println("Invalid Option. Please, select a valid option.");
-          }
-        } else {
-          System.out.println("Invalid input. Please enter a number.");
-          scanner.next(); // Clear the invalid input
-        }
-      } catch (Exception e) {
-        System.out.println("An unexpected error occurred: " + e.getMessage());
-        e.printStackTrace();
-      }
-    } while (opcionPrincipal != 0);
-  }
-
   private static void showAdminMainMenu() {
     System.out.println("\n======================================");
     System.out.println("             ADMIN MENU               ");
@@ -311,44 +202,6 @@ public class SystemUserAdminController {
     System.out.println("8. Customer Management");
     System.out.println("9. Document Types Management");
     System.out.println("10. Other Entities Management");
-    System.out.println("0. Log out");
-    System.out.println("======================================");
-    System.out.print("Choose an option: ");
-  }
-
-  private static void showCustomerMainMenu() {
-    System.out.println("\n======================================");
-    System.out.println("           CUSTOMER MENU              ");
-    System.out.println("======================================");
-    System.out.println("1. View Trips");
-    System.out.println("2. Book Trips");
-    System.out.println("3. Manage Profile");
-    System.out.println("4. Document Types Management");
-    System.out.println("0. Log out");
-    System.out.println("======================================");
-    System.out.print("Choose an option: ");
-  }
-
-  private static void showTechnicianMainMenu() {
-    System.out.println("\n======================================");
-    System.out.println("          TECHNICIAN MENU             ");
-    System.out.println("======================================");
-    System.out.println("1. Plane Management");
-    System.out.println("2. Fly Management");
-    System.out.println("3. Plane Manufacturer Management");
-    System.out.println("4. Plane Model Management");
-    System.out.println("0. Log out");
-    System.out.println("======================================");
-    System.out.print("Choose an option: ");
-  }
-
-  private static void showSalesAgentMainMenu() {
-    System.out.println("\n======================================");
-    System.out.println("          SALES AGENT MENU            ");
-    System.out.println("======================================");
-    System.out.println("1. Trip Booking Management");
-    System.out.println("2. Customer Management");
-    System.out.println("3. Flight Fare Management");
     System.out.println("0. Log out");
     System.out.println("======================================");
     System.out.print("Choose an option: ");

@@ -15,8 +15,6 @@ public class PaymentConsoleAdapter {
 
     @Autowired
     private PaymentService paymentService;
-    @Autowired
-    private PaymentMethodService paymentMethodService;
 
     public void start() {
 
@@ -37,7 +35,10 @@ public class PaymentConsoleAdapter {
 
             switch (choice) {
                 case 1:
-
+                    Payment payment = new Payment();
+                    System.out.println("Enter the card number:");
+                    payment.setCardNumber(scanner.nextLong());
+                    System.out.println("Enter the payment method id:");
                     break;
 
                 default:

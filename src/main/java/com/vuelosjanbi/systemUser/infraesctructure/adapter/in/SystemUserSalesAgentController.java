@@ -2,50 +2,44 @@ package com.vuelosjanbi.systemUser.infraesctructure.adapter.in;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+
+import com.vuelosjanbi.customer.infrastructure.adapters.in.CustomerConsoleAdapter;
+import com.vuelosjanbi.flightFare.infrastructure.adapters.in.FlightFareConsoleAdapter;
+import com.vuelosjanbi.tripBooking.infrastructure.adapters.in.TripBookingConsoleAdapter;
+
 import java.util.Scanner;
 
-import com.vuelosjanbi.plane.infrastructure.adapters.in.PlaneConsoleAdapter;
-import com.vuelosjanbi.planeManufacturer.infrastructure.adapters.in.PlaneManufacturerConsoleAdapter;
-import com.vuelosjanbi.planeModel.infrastructure.adapters.in.PlaneModelConsoleAdapter;
-import com.vuelosjanbi.trip.infrastructure.adapters.in.TripConsoleAdapter;
-
 @Controller
-public class SystemUserTechnicianController {
+public class SystemUserSalesAgentController {
 
   @Autowired
-  private PlaneConsoleAdapter planeConsoleAdapter;
+  private TripBookingConsoleAdapter tripBookingConsoleAdapter;
 
   @Autowired
-  private TripConsoleAdapter tripConsoleAdapter;
+  private CustomerConsoleAdapter customerConsoleAdapter;
 
   @Autowired
-  private PlaneManufacturerConsoleAdapter planeManufacturerConsoleAdapter;
+  private FlightFareConsoleAdapter flightFareConsoleAdapter;
 
-  @Autowired
-  private PlaneModelConsoleAdapter planeModelConsoleAdapter;
-
-  public void showTechnicianMenu(Scanner scanner) {
+  public void showSalesAgentMenu(Scanner scanner) {
     int opcionPrincipal = -1;
 
     do {
       try {
-        showTechnicianMainMenu();
+        showSalesAgentMainMenu();
         if (scanner.hasNextInt()) {
           opcionPrincipal = scanner.nextInt();
           scanner.nextLine(); // Clear the buffer
 
           switch (opcionPrincipal) {
             case 1:
-              planeConsoleAdapter.start(true);
+              tripBookingConsoleAdapter.start(true);
               break;
             case 2:
-              tripConsoleAdapter.start();
+              customerConsoleAdapter.start(true);
               break;
             case 3:
-              planeManufacturerConsoleAdapter.start();
-              break;
-            case 4:
-              planeModelConsoleAdapter.start();
+              flightFareConsoleAdapter.start(true);
               break;
             case 0:
               System.out.println("Logging out...");
@@ -64,16 +58,16 @@ public class SystemUserTechnicianController {
     } while (opcionPrincipal != 0);
   }
 
-  private static void showTechnicianMainMenu() {
+  private static void showSalesAgentMainMenu() {
     System.out.println("\n======================================");
-    System.out.println("          TECHNICIAN MENU             ");
+    System.out.println("          SALES AGENT MENU            ");
     System.out.println("======================================");
-    System.out.println("1. Plane Management");
-    System.out.println("2. Fly Management");
-    System.out.println("3. Plane Manufacturer Management");
-    System.out.println("4. Plane Model Management");
+    System.out.println("1. Trip Booking Management");
+    System.out.println("2. Customer Management");
+    System.out.println("3. Flight Fare Management");
     System.out.println("0. Log out");
     System.out.println("======================================");
     System.out.print("Choose an option: ");
   }
+
 }
