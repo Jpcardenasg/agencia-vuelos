@@ -69,37 +69,53 @@ public class TripBookingConsoleAdapter {
       tripBookingDetailService = new TripBookingDetailService(
           new MySQLTripBookingDetailRepository(url, user, password));
       customerService = new CustomerService(new MySQLCustomerRepository(url, user, password));
-
     }
+
     Scanner scanner = new Scanner(System.in);
     while (true) {
-      System.out.println("1. Look available trips");
-      System.out.println("2. Get all details about Trip Booking");
-      System.out.println("3. Update Trip Booking");
-      System.out.println("4. Delete Trip Booking");
-      System.out.println("5. Get All Trip Bookings");
-      System.out.println("6. Exit");
-      switch (scanner.nextInt()) {
-        case 1:
-          lookAvailableTrips(scanner);
-          break;
-        case 2:
-          detailsTripBooking(scanner);
-          break;
-        case 3:
-          updateTripBooking(scanner);
-          break;
-        case 4:
-          deleteTripBooking(scanner);
-          break;
-        case 5:
-          getAllTripBookings();
-          break;
-        case 6:
-          System.out.println("Exiting...");
-          return;
-        default:
-          break;
+      try {
+        System.out.println("1. Look available trips");
+        System.out.println("2. Get all details about Trip Booking");
+        System.out.println("3. Update Trip Booking");
+        System.out.println("4. Delete Trip Booking");
+        System.out.println("5. Get All Trip Bookings");
+        System.out.println("6. Exit");
+        System.out.print("Choose an option: ");
+
+        if (scanner.hasNextInt()) {
+          int option = scanner.nextInt();
+          scanner.nextLine(); // Clear the buffer
+
+          switch (option) {
+            case 1:
+              lookAvailableTrips(scanner);
+              break;
+            case 2:
+              detailsTripBooking(scanner);
+              break;
+            case 3:
+              updateTripBooking(scanner);
+              break;
+            case 4:
+              deleteTripBooking(scanner);
+              break;
+            case 5:
+              getAllTripBookings();
+              break;
+            case 6:
+              System.out.println("Exiting...");
+              return;
+            default:
+              System.out.println("Invalid option. Please select a valid option.");
+          }
+        } else {
+          System.out.println("Invalid input. Please enter a number.");
+          scanner.next(); // Clear the invalid input
+        }
+      } catch (Exception e) {
+        System.out.println("An unexpected error occurred: " + e.getMessage());
+        e.printStackTrace();
+        scanner.next(); // Clear the buffer in case of an error
       }
     }
   }

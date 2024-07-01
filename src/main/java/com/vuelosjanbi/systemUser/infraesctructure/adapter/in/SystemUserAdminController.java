@@ -2,6 +2,7 @@ package com.vuelosjanbi.systemUser.infraesctructure.adapter.in;
 
 import java.util.Scanner;
 
+import org.antlr.v4.runtime.InputMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -81,21 +82,9 @@ public class SystemUserAdminController {
 
   public void run(String... args) throws Exception {
     Scanner scanner = new Scanner(System.in);
-
-    while (true) {
-      System.out.println("Welcome to Vuelos Janbi!");
-      System.out.println("1. Log in.");
-      System.out.println("0. Exit.");
-      System.out.print("Choose an option: ");
-      int choice = scanner.nextInt();
-      scanner.nextLine();
-      if (choice == 0) {
-        System.out.println("Exiting...");
-        scanner.close();
-        return;
-      }
-      SystemUser loggedUser = login(scanner, systemUserService);
-      switch (loggedUser.getRole()) {
+    try {
+      SystemUser user = login(scanner, systemUserService);
+      switch (user.getRole()) {
         case ADMIN:
           showAdminMenu(scanner);
           break;
@@ -109,9 +98,11 @@ public class SystemUserAdminController {
           showSalesAgentMenu(scanner);
           break;
         default:
-          System.out.println("Unknown role. Exiting...");
-          return;
+          System.out.println("Invalid role. Please contact the system administrator.");
       }
+    } catch (Exception e) {
+      System.out.println("An error occurred: " + e.getMessage());
+      e.printStackTrace();
     }
   }
 
@@ -132,137 +123,177 @@ public class SystemUserAdminController {
   }
 
   private void showAdminMenu(Scanner scanner) {
-    int opcionPrincipal;
+    int opcionPrincipal = -1;
+
     do {
-      showAdminMainMenu();
-      opcionPrincipal = scanner.nextInt();
-      scanner.nextLine();
+      try {
+        showAdminMainMenu();
+        if (scanner.hasNextInt()) {
+          opcionPrincipal = scanner.nextInt();
+          scanner.nextLine(); // Clear the buffer
 
-      switch (opcionPrincipal) {
-        case 1:
-          planeConsoleAdapter.start(true);
-          break;
-        case 2:
-          employeeConsoleAdapter.start(true);
-          break;
-        case 3:
-          tripCrewConsoleAdapter.start(true);
-          break;
-        case 4:
-          tripConsoleAdapter.start();
-          break;
-        case 5:
-          airportConsoleAdapter.start();
-          break;
-        case 6:
-          tripBookingConsoleAdapter.start(true);
-          break;
-        case 7:
-          flightFareConsoleAdapter.start(true);
-          break;
-        case 8:
-          customerConsoleAdapter.start(true);
-          break;
-        case 9:
-          documentTypeConsoleAdapter.start(true);
-          break;
-        case 10:
-          managementEntityMenu(scanner);
-          break;
-        case 0:
-          System.out.println("Logging out...");
-          break;
-        default:
-          System.out.println("Invalid Option. Please, select a valid option.");
+          switch (opcionPrincipal) {
+            case 1:
+              planeConsoleAdapter.start(true);
+              break;
+            case 2:
+              employeeConsoleAdapter.start(true);
+              break;
+            case 3:
+              tripCrewConsoleAdapter.start(true);
+              break;
+            case 4:
+              tripConsoleAdapter.start();
+              break;
+            case 5:
+              airportConsoleAdapter.start();
+              break;
+            case 6:
+              tripBookingConsoleAdapter.start(true);
+              break;
+            case 7:
+              flightFareConsoleAdapter.start(true);
+              break;
+            case 8:
+              customerConsoleAdapter.start(true);
+              break;
+            case 9:
+              documentTypeConsoleAdapter.start(true);
+              break;
+            case 10:
+              managementEntityMenu(scanner);
+              break;
+            case 0:
+              System.out.println("Logging out...");
+              break;
+            default:
+              System.out.println("Invalid Option. Please, select a valid option.");
+          }
+        } else {
+          System.out.println("Invalid input. Please enter a number.");
+          scanner.next(); // Clear the invalid input
+        }
+      } catch (Exception e) {
+        System.out.println("An unexpected error occurred: " + e.getMessage());
+        e.printStackTrace();
       }
-
     } while (opcionPrincipal != 0);
   }
 
   private void showCustomerMenu(Scanner scanner) {
-    int opcionPrincipal;
+    int opcionPrincipal = -1;
+
     do {
-      showCustomerMainMenu();
-      opcionPrincipal = scanner.nextInt();
-      scanner.nextLine();
+      try {
+        showCustomerMainMenu();
+        if (scanner.hasNextInt()) {
+          opcionPrincipal = scanner.nextInt();
+          scanner.nextLine(); // Clear the buffer
 
-      switch (opcionPrincipal) {
-        case 1:
-          tripConsoleAdapter.start();
-          break;
-        case 2:
-          tripBookingConsoleAdapter.start(true);
-          break;
-        case 3:
-          customerConsoleAdapter.start(true);
-          break;
-        case 4:
-          documentTypeConsoleAdapter.start(true);
-          break;
-        case 0:
-          System.out.println("Logging out...");
-          break;
-        default:
-          System.out.println("Invalid Option. Please, select a valid option.");
+          switch (opcionPrincipal) {
+            case 1:
+              tripConsoleAdapter.start();
+              break;
+            case 2:
+              tripBookingConsoleAdapter.start(true);
+              break;
+            case 3:
+              customerConsoleAdapter.start(true);
+              break;
+            case 4:
+              documentTypeConsoleAdapter.start(true);
+              break;
+            case 0:
+              System.out.println("Logging out...");
+              break;
+            default:
+              System.out.println("Invalid Option. Please, select a valid option.");
+          }
+        } else {
+          System.out.println("Invalid input. Please enter a number.");
+          scanner.next(); // Clear the invalid input
+        }
+      } catch (Exception e) {
+        System.out.println("An unexpected error occurred: " + e.getMessage());
+        e.printStackTrace();
       }
-
     } while (opcionPrincipal != 0);
   }
 
   private void showTechnicianMenu(Scanner scanner) {
-    int opcionPrincipal;
+    int opcionPrincipal = -1;
+
     do {
-      showTechnicianMainMenu();
-      opcionPrincipal = scanner.nextInt();
-      scanner.nextLine();
+      try {
+        showTechnicianMainMenu();
+        if (scanner.hasNextInt()) {
+          opcionPrincipal = scanner.nextInt();
+          scanner.nextLine(); // Clear the buffer
 
-      switch (opcionPrincipal) {
-        case 1:
-          planeConsoleAdapter.start(true);
-          break;
-        case 2:
-          tripConsoleAdapter.start();
-          break;
-        case 3:
-          planeManufacturerConsoleAdapter.start();
-          break;
-        case 4:
-          planeModelConsoleAdapter.start();
-          break;
-        case 0:
-          System.out.println("Logging out...");
-          break;
-        default:
-          System.out.println("Invalid Option. Please, select a valid option.");
+          switch (opcionPrincipal) {
+            case 1:
+              planeConsoleAdapter.start(true);
+              break;
+            case 2:
+              tripConsoleAdapter.start();
+              break;
+            case 3:
+              planeManufacturerConsoleAdapter.start();
+              break;
+            case 4:
+              planeModelConsoleAdapter.start();
+              break;
+            case 0:
+              System.out.println("Logging out...");
+              break;
+            default:
+              System.out.println("Invalid Option. Please, select a valid option.");
+          }
+        } else {
+          System.out.println("Invalid input. Please enter a number.");
+          scanner.next(); // Clear the invalid input
+        }
+      } catch (Exception e) {
+        System.out.println("An unexpected error occurred: " + e.getMessage());
+        e.printStackTrace();
       }
-
     } while (opcionPrincipal != 0);
   }
 
   private void showSalesAgentMenu(Scanner scanner) {
-    int opcionPrincipal;
+    int opcionPrincipal = -1;
+
     do {
-      showSalesAgentMainMenu();
-      opcionPrincipal = scanner.nextInt();
-      scanner.nextLine();
+      try {
+        showSalesAgentMainMenu();
+        if (scanner.hasNextInt()) {
+          opcionPrincipal = scanner.nextInt();
+          scanner.nextLine(); // Clear the buffer
 
-      switch (opcionPrincipal) {
-        case 1:
-          tripBookingConsoleAdapter.start(true);
-          break;
-        case 2:
-          customerConsoleAdapter.start(true);
-          break;
-        case 3:
-          flightFareConsoleAdapter.start(true);
-          break;
-        case 0:
-          System.out.println("Logging out...");
-          break;
-        default:
-          System.out.println("Invalid Option. Please, select a valid option.");
+          switch (opcionPrincipal) {
+            case 1:
+              tripBookingConsoleAdapter.start(true);
+              break;
+            case 2:
+              customerConsoleAdapter.start(true);
+              break;
+            case 3:
+              flightFareConsoleAdapter.start(true);
+              break;
+            case 0:
+              System.out.println("Logging out...");
+              break;
+            default:
+              System.out.println("Invalid Option. Please, select a valid option.");
+          }
+        } else {
+          System.out.println("Invalid input. Please enter a number.");
+          scanner.next(); // Clear the invalid input
+        }
+      } catch (Exception e) {
+        System.out.println("An unexpected error occurred: " + e.getMessage());
+        e.printStackTrace();
       }
-
     } while (opcionPrincipal != 0);
   }
 
