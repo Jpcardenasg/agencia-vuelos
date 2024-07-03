@@ -1,5 +1,7 @@
 # Proyecto Agencia de Vuelos Globales
 
+Autores: Juan Pablo Cárdenas González y Brayan Alejandro Martinez
+
 ## Descripción del Proyecto
 
 Este proyecto es una aplicación desarrollada en Java para gestionar las operaciones de una agencia de vuelos globales. La aplicación está diseñada con una arquitectura hexagonal y utiliza slicing vertical para organizar las funcionalidades. La base de datos está alojada en Railway y utiliza MySQL. Además, incluye un sistema de inicio de sesión que redirige a los usuarios a diferentes menús según su rol (administrador, agente de ventas, técnico de mantenimiento).
